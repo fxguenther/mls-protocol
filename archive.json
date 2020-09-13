@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-09-10T00:42:43.815482+00:00",
+  "timestamp": "2020-09-13T00:47:24.356337+00:00",
   "repo": "mlswg/mls-protocol",
   "labels": [
     {
@@ -3342,7 +3342,7 @@
       "id": "MDU6SXNzdWU1NjExNzE5NTc=",
       "title": "Use masking instead of AES-GCM for sender data",
       "url": "https://github.com/mlswg/mls-protocol/issues/302",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "bifurcation",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -3355,9 +3355,17 @@
       ],
       "body": "Earlier, we had considered a \"masking\" approach for sender data, much like QUIC does for [encrypting packet sequence numbers](https://github.com/quicwg/base-drafts/blob/master/draft-ietf-quic-tls.md#header-protection-header-protect).  This approach would save 28 bytes of overhead (nonce + tag), but was abandoned because of uncertainty around the security of the masking approach.\r\n\r\nSince then, Bellare et al. published [\"Nonces are Noticed\"](https://eprint.iacr.org/2019/624.pdf), which includes what is effectively a proof of the security properties of the QUIC scheme.  The QUIC scheme is essentially scheme HN1 of the paper, the main difference being that QUIC encrypt not the nonce directly, but a packet number which is used to compute the nonce.  Our application would be similar, since we would encrypt metadata used to encrypt the key and the nonce.\r\n\r\nGiven this new analysis, is it time to bring back masking?",
       "createdAt": "2020-02-06T17:51:16Z",
-      "updatedAt": "2020-07-12T20:16:25Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2020-09-10T15:01:09Z",
+      "closedAt": "2020-09-10T15:01:09Z",
+      "comments": [
+        {
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed by #360 ",
+          "createdAt": "2020-09-10T15:01:09Z",
+          "updatedAt": "2020-09-10T15:01:09Z"
+        }
+      ]
     },
     {
       "number": 312,
@@ -25078,24 +25086,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDQ4NjA1ODMx",
       "title": "#302: Reduce encryption overhead to just auth tag",
       "url": "https://github.com/mlswg/mls-protocol/pull/360",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "Bren2010",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2020-07-14T02:34:30Z",
-      "updatedAt": "2020-09-04T22:43:53Z",
+      "updatedAt": "2020-09-10T15:00:27Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "1d5e14d79435834bc5cab6c7aa9e2fcdd6afeabc",
       "headRepository": "mlswg/mls-protocol",
       "headRefName": "brendan/masking",
       "headRefOid": "1b57be612b2f58ca248f78e6373ffad3463be36c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-09-10T15:00:27Z",
+      "mergedAt": "2020-09-10T15:00:27Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "bb303085f3748a7ba171f9f12fdbeef22d063283"
+      },
       "comments": [
         {
           "author": "bifurcation",
@@ -25189,6 +25199,19 @@
               "updatedAt": "2020-09-04T22:43:53Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDg2MDI4NDM0",
+          "commit": {
+            "abbreviatedOid": "1b57be6"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-09-10T15:00:16Z",
+          "updatedAt": "2020-09-10T15:00:16Z",
+          "comments": []
         }
       ]
     },
@@ -26855,18 +26878,33 @@
       "labels": [],
       "body": "[Jo\u00ebl pointed out on the list](https://mailarchive.ietf.org/arch/msg/mls/LFz5nC4BnNTf7-OGIac5_QdlCRs/) that MLSPlaintext does not currently authenticate the sender's membership on the group, and as a result, some important attacks arise.  Discussion on the list indicated that adding a MAC with a key derived from the key schedule would provide this authentication.  This PR implements that suggestion.",
       "createdAt": "2020-08-18T18:57:31Z",
-      "updatedAt": "2020-08-25T19:00:11Z",
+      "updatedAt": "2020-09-12T00:56:43Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
-      "baseRefOid": "28c6099e92f2b4767e247cd2016abd760a6620d0",
+      "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
       "headRepository": "mlswg/mls-protocol",
       "headRefName": "member-pt",
-      "headRefOid": "52a06e4021d654c60afea85681f4cb2c91bd05f1",
+      "headRefOid": "0275142a6ae16d4268c8e6d1954efc084c543fae",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Lgtm. Rebase and I'll properly approve.",
+          "createdAt": "2020-09-10T17:12:14Z",
+          "updatedAt": "2020-09-10T17:12:14Z"
+        },
+        {
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Generally not a fan of rebasing, but here you go.",
+          "createdAt": "2020-09-10T17:23:10Z",
+          "updatedAt": "2020-09-10T17:23:10Z"
+        }
+      ],
       "reviews": [
         {
           "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDczODU2NTM0",
@@ -26884,25 +26922,25 @@
               "originalPosition": 13,
               "body": "You didn't fix this issue?",
               "createdAt": "2020-08-24T21:05:59Z",
-              "updatedAt": "2020-08-25T19:00:11Z"
+              "updatedAt": "2020-09-10T17:22:51Z"
             },
             {
               "originalPosition": 30,
               "body": "\"contains the content\"",
               "createdAt": "2020-08-24T21:11:12Z",
-              "updatedAt": "2020-08-25T19:00:11Z"
+              "updatedAt": "2020-09-10T17:22:51Z"
             },
             {
               "originalPosition": 32,
               "body": "\"the AEAD authenticates\"",
               "createdAt": "2020-08-24T21:12:04Z",
-              "updatedAt": "2020-08-25T19:00:11Z"
+              "updatedAt": "2020-09-10T17:22:51Z"
             },
             {
               "originalPosition": 25,
               "body": "Using a KDF output for authentication feels wrong",
               "createdAt": "2020-08-24T21:15:05Z",
-              "updatedAt": "2020-08-25T19:00:11Z"
+              "updatedAt": "2020-09-10T17:22:51Z"
             }
           ]
         },
@@ -26922,7 +26960,7 @@
               "originalPosition": 13,
               "body": "I thought about it, and decided not to worry about it.  If you feel strongly, we can keep it.",
               "createdAt": "2020-08-25T14:29:33Z",
-              "updatedAt": "2020-08-25T19:00:11Z"
+              "updatedAt": "2020-09-10T17:22:51Z"
             }
           ]
         },
@@ -26942,7 +26980,7 @@
               "originalPosition": 25,
               "body": "We already do this elsewhere:\r\n```\r\nMLSPlaintext.confirmation_tag =\r\n    KDF.Extract(confirmation_key, GroupContext.confirmed_transcript_hash)\r\n```\r\n\r\nThis seems OK with HKDF, since Extract is just HMAC.  But I agree that we should confirm that this generalizes properly.",
               "createdAt": "2020-08-25T14:31:28Z",
-              "updatedAt": "2020-08-25T19:00:11Z"
+              "updatedAt": "2020-09-10T17:22:51Z"
             }
           ]
         },
@@ -26962,7 +27000,60 @@
               "originalPosition": 25,
               "body": "Agreements on the 2020-08-25 call:\r\n* Use an explicit MAC here instead of KDF.Extract\r\n* Use a separate key from the key schedule, different from the confirmation_key\r\n\r\n```\r\nepoch\r\n  |\r\n  +-- confirmation_key\r\n  |\r\n  +-- membership_key\r\n  |\r\n  +-- authentication_secret (todo)\r\n```",
               "createdAt": "2020-08-25T16:41:54Z",
-              "updatedAt": "2020-08-25T19:00:11Z"
+              "updatedAt": "2020-09-10T17:22:51Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDg2MzUxOTQw",
+          "commit": {
+            "abbreviatedOid": "0275142"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-09-10T22:23:07Z",
+          "updatedAt": "2020-09-10T22:23:07Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDg3MTg3Mjgw",
+          "commit": {
+            "abbreviatedOid": "0275142"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-09-12T00:49:09Z",
+          "updatedAt": "2020-09-12T00:49:09Z",
+          "comments": [
+            {
+              "originalPosition": 37,
+              "body": "Actually this isn't quite right because the signature doesn't cover the membership token",
+              "createdAt": "2020-09-12T00:49:09Z",
+              "updatedAt": "2020-09-12T00:49:09Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDg3MTg4MDg1",
+          "commit": {
+            "abbreviatedOid": "0275142"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-09-12T00:56:14Z",
+          "updatedAt": "2020-09-12T00:56:14Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "Please make this its own sub-section titled \"Plaintext Authentication\" or similar, and add an explainer that `membership_tag` is only necessary when sending MLSPlaintext over-the-wire",
+              "createdAt": "2020-09-12T00:56:14Z",
+              "updatedAt": "2020-09-12T00:56:43Z"
             }
           ]
         }
@@ -27155,6 +27246,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 400,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDg1NTg1MjY3",
+      "title": "Update security considerations.",
+      "url": "https://github.com/mlswg/mls-protocol/pull/400",
+      "state": "OPEN",
+      "author": "Bren2010",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Security considerations has gotten a little outdated. Updated with new info",
+      "createdAt": "2020-09-12T00:10:01Z",
+      "updatedAt": "2020-09-12T00:43:50Z",
+      "baseRepository": "mlswg/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
+      "headRepository": "Bren2010/mls-protocol",
+      "headRefName": "brendan/2020.9.0",
+      "headRefOid": "51850fb1507f684677187f45f92a02813d1a18e4",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
