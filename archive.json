@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-09-15T00:45:59.811407+00:00",
+  "timestamp": "2020-09-17T00:46:23.388914+00:00",
   "repo": "mlswg/mls-protocol",
   "labels": [
     {
@@ -27259,7 +27259,7 @@
       "labels": [],
       "body": "Security considerations has gotten a little outdated. Updated with new info",
       "createdAt": "2020-09-12T00:10:01Z",
-      "updatedAt": "2020-09-15T00:39:34Z",
+      "updatedAt": "2020-09-15T06:59:43Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
@@ -27415,6 +27415,26 @@
               "updatedAt": "2020-09-15T00:39:34Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDg4Mzc5Mzg3",
+          "commit": {
+            "abbreviatedOid": "a0f96a5"
+          },
+          "author": "kkohbrok",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-09-15T06:59:42Z",
+          "updatedAt": "2020-09-15T06:59:43Z",
+          "comments": [
+            {
+              "originalPosition": 112,
+              "body": "It's true that it must be deleted. It's just that deleting it doesn't give you FS within an epoch.",
+              "createdAt": "2020-09-15T06:59:42Z",
+              "updatedAt": "2020-09-15T06:59:43Z"
+            }
+          ]
         }
       ]
     },
@@ -27437,6 +27457,84 @@
       "headRepository": "mlswg/mls-protocol",
       "headRefName": "brendan/2020.9.2",
       "headRefOid": "74835564f15280a6ed4ae6f5876bbc5ff8c0294c",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 402,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDg4MTE5OTAz",
+      "title": "Allow for credentials supporting multiple signature schemes",
+      "url": "https://github.com/mlswg/mls-protocol/pull/402",
+      "state": "OPEN",
+      "author": "kkohbrok",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The credentials we have defined at the moment only contain a single public key and no information regarding what signature scheme that keypair works with (even though the Spec actually says it should include the signature scheme as well).\r\n\r\nIt would be nice, however, to support potential CredentialTypes that, similar to KeyPackages, include multiple supported signature schemes, each accompanied by a corresponding public key.\r\n\r\nThe Key that should be used in any given group is then determined by the CipherSuite of the group (which includes a Signature Scheme). When choosing a KeyPackage of a new member, it has to be one that contains a Credential which supports that Signature Scheme.\r\n\r\nNote, that I'm not suggesting that this be the case in all Credentials, or even that we change the BasicCredential.\r\n\r\nI understand that it's possible to have multiple credentials per identity, but in some authentication settings it can be beneficial to have a 1-to-1 mapping between Credential and identity.",
+      "createdAt": "2020-09-16T16:53:31Z",
+      "updatedAt": "2020-09-16T16:53:31Z",
+      "baseRepository": "mlswg/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
+      "headRepository": "kkohbrok/mls-protocol",
+      "headRefName": "multiple_signature_schemes",
+      "headRefOid": "46ea7d6089a55d72dc67494138d44da81d519414",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 403,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDg4MTIxMTg5",
+      "title": "Rename identity key to signature key",
+      "url": "https://github.com/mlswg/mls-protocol/pull/403",
+      "state": "OPEN",
+      "author": "kkohbrok",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The public key in a credential is introduced without a special name and the field in the BasicCredential is currently called public_key, which is not very expressive. A few paragraphs below, it is referenced as \"Identity Key\" or simply \"Identity\", which is a bit misleading, as Credentials are supposed to contain an additional \"identity\" which is not the key.\r\n\r\nI propose we clear up the terminology a bit here and refer to the public key contained in a Credential as \"Signature Key\". ",
+      "createdAt": "2020-09-16T16:56:03Z",
+      "updatedAt": "2020-09-16T16:56:03Z",
+      "baseRepository": "mlswg/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
+      "headRepository": "kkohbrok/mls-protocol",
+      "headRefName": "identity_key_rename",
+      "headRefOid": "ffa13ae56d54fff10d51c9829e14dbd7a1d7ca05",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 404,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDg4MTIyNjU5",
+      "title": "Remove long term and explicitly prevent changing of identity",
+      "url": "https://github.com/mlswg/mls-protocol/pull/404",
+      "state": "OPEN",
+      "author": "kkohbrok",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Rotating keys is important and in some cases, Signature Keys are not going to be very \"long-term\". Instead they're going to be rotated periodically.\r\n\r\nI thus propose we simply remove the assumption that Signature Keys are of a \"long-term\" nature (or otherwise \"long-lived\"). \r\n\r\nThe second change in this PR is that I added a few words indicating explicitly that the identity must not change when updating a KeyPackage.",
+      "createdAt": "2020-09-16T16:58:59Z",
+      "updatedAt": "2020-09-16T16:58:59Z",
+      "baseRepository": "mlswg/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
+      "headRepository": "kkohbrok/mls-protocol",
+      "headRefName": "remove_long_term",
+      "headRefOid": "96cd22d52c7017171fb47fb37d724b09a18e45f8",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
