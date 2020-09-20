@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-09-17T00:46:23.388914+00:00",
+  "timestamp": "2020-09-20T00:48:48.069592+00:00",
   "repo": "mlswg/mls-protocol",
   "labels": [
     {
@@ -27476,7 +27476,7 @@
       "labels": [],
       "body": "The credentials we have defined at the moment only contain a single public key and no information regarding what signature scheme that keypair works with (even though the Spec actually says it should include the signature scheme as well).\r\n\r\nIt would be nice, however, to support potential CredentialTypes that, similar to KeyPackages, include multiple supported signature schemes, each accompanied by a corresponding public key.\r\n\r\nThe Key that should be used in any given group is then determined by the CipherSuite of the group (which includes a Signature Scheme). When choosing a KeyPackage of a new member, it has to be one that contains a Credential which supports that Signature Scheme.\r\n\r\nNote, that I'm not suggesting that this be the case in all Credentials, or even that we change the BasicCredential.\r\n\r\nI understand that it's possible to have multiple credentials per identity, but in some authentication settings it can be beneficial to have a 1-to-1 mapping between Credential and identity.",
       "createdAt": "2020-09-16T16:53:31Z",
-      "updatedAt": "2020-09-16T16:53:31Z",
+      "updatedAt": "2020-09-18T15:21:35Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
@@ -27487,7 +27487,36 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> It would be nice, however, to support potential CredentialTypes that, similar to KeyPackages, include multiple supported signature schemes, each accompanied by a corresponding public key.\r\n\r\nKeyPackages don't support multiple signature schemes?\r\n\r\n> I understand that it's possible to have multiple credentials per identity, but in some authentication settings it can be beneficial to have a 1-to-1 mapping between Credential and identity.\r\n\r\nIn what scenario is it beneficial?",
+          "createdAt": "2020-09-17T20:43:41Z",
+          "updatedAt": "2020-09-17T20:43:41Z"
+        },
+        {
+          "author": "kkohbrok",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> KeyPackages don't support multiple signature schemes?\r\n\r\nAh, right. I think that was the case in the past, but you're right, they don't.\r\n\r\n> In what scenario is it beneficial?\r\n\r\nOf course it's always possible to just bundle a bunch of certificates, each supporting a different signature scheme and then treat that as your \"Multi-Scheme Credential\" in the grand scheme of things. \r\n\r\nHowever, if you end up rotating them a lot, where you have to sign them and potentially store the whole chain for a longer period of time, being able to support multiple signature schemes in only one credential means less overhead.",
+          "createdAt": "2020-09-18T06:09:32Z",
+          "updatedAt": "2020-09-18T06:09:32Z"
+        },
+        {
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> However, if you end up rotating them a lot, where you have to sign them and potentially store the whole chain for a longer period of time, being able to support multiple signature schemes in only one credential means less overhead.\r\n\r\nCredentials are stored in each group's ratchet tree though, so you're keeping a bunch of unnecessary key material in the group's tree which everyone has to store",
+          "createdAt": "2020-09-18T15:17:01Z",
+          "updatedAt": "2020-09-18T15:17:01Z"
+        },
+        {
+          "author": "kkohbrok",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "That's fair. And it's not something you have to do if you don't want to. I'm just proposing for MLS to support that type of Credential in general.",
+          "createdAt": "2020-09-18T15:21:11Z",
+          "updatedAt": "2020-09-18T15:21:35Z"
+        }
+      ],
       "reviews": []
     },
     {
@@ -27502,7 +27531,7 @@
       "labels": [],
       "body": "The public key in a credential is introduced without a special name and the field in the BasicCredential is currently called public_key, which is not very expressive. A few paragraphs below, it is referenced as \"Identity Key\" or simply \"Identity\", which is a bit misleading, as Credentials are supposed to contain an additional \"identity\" which is not the key.\r\n\r\nI propose we clear up the terminology a bit here and refer to the public key contained in a Credential as \"Signature Key\". ",
       "createdAt": "2020-09-16T16:56:03Z",
-      "updatedAt": "2020-09-16T16:56:03Z",
+      "updatedAt": "2020-09-17T20:39:46Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
@@ -27514,7 +27543,21 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDkwOTcyMTU2",
+          "commit": {
+            "abbreviatedOid": "ffa13ae"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-09-17T20:39:46Z",
+          "updatedAt": "2020-09-17T20:39:46Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 404,
@@ -27528,19 +27571,59 @@
       "labels": [],
       "body": "Rotating keys is important and in some cases, Signature Keys are not going to be very \"long-term\". Instead they're going to be rotated periodically.\r\n\r\nI thus propose we simply remove the assumption that Signature Keys are of a \"long-term\" nature (or otherwise \"long-lived\"). \r\n\r\nThe second change in this PR is that I added a few words indicating explicitly that the identity must not change when updating a KeyPackage.",
       "createdAt": "2020-09-16T16:58:59Z",
-      "updatedAt": "2020-09-16T16:58:59Z",
+      "updatedAt": "2020-09-18T15:15:28Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
       "headRepository": "kkohbrok/mls-protocol",
       "headRefName": "remove_long_term",
-      "headRefOid": "96cd22d52c7017171fb47fb37d724b09a18e45f8",
+      "headRefOid": "c6aae6fdc6a4e27fd589e33a052e04727889d8ff",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDkwOTY4MzEw",
+          "commit": {
+            "abbreviatedOid": "96cd22d"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-09-17T20:34:40Z",
+          "updatedAt": "2020-09-17T20:38:39Z",
+          "comments": [
+            {
+              "originalPosition": 15,
+              "body": "```suggestion\r\n* An identity key provider which allows clients to authenticate\r\n```",
+              "createdAt": "2020-09-17T20:34:40Z",
+              "updatedAt": "2020-09-18T06:10:52Z"
+            },
+            {
+              "originalPosition": 34,
+              "body": "This doesn't necessarily make sense because not all credentials have an `identity`",
+              "createdAt": "2020-09-17T20:38:25Z",
+              "updatedAt": "2020-09-18T06:10:53Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDkxNTU4NTM4",
+          "commit": {
+            "abbreviatedOid": "c6aae6f"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-09-18T15:15:28Z",
+          "updatedAt": "2020-09-18T15:15:28Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
