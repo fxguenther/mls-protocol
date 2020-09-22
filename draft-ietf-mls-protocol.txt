@@ -424,8 +424,8 @@ Internet-Draft                     MLS                    September 2020
       a client, which other clients can use to introduce the client to a
       new group.
 
-   Identity Key:  A long-lived signing key pair used to authenticate the
-      sender of a message.
+   Signature Key:  A long-lived signing key pair used to authenticate
+      the sender of a message.
 
    Terminology specific to tree computations is described in Section 5.
 
@@ -438,7 +438,7 @@ Internet-Draft                     MLS                    September 2020
    Provider (SP) as described in [I-D.ietf-mls-architecture].  In
    particular, we assume the SP provides the following services:
 
-   *  A long-term identity key provider which allows clients to
+   *  A long-term signature key provider which allows clients to
       authenticate protocol messages in a group.
 
 
@@ -1183,7 +1183,7 @@ Internet-Draft                     MLS                    September 2020
 
    struct {
        opaque identity<0..2^16-1>;
-       opaque public_key<0..2^16-1>;
+       opaque signature_key<0..2^16-1>;
    } BasicCredential;
 
    struct {
@@ -1222,10 +1222,10 @@ Internet-Draft                     MLS                    September 2020
 
    A KeyPackage object specifies a ciphersuite that the client supports,
    as well as providing a public key that others can use for key
-   agreement.  The client's identity key can be updated throughout the
+   agreement.  The client's signature key can be updated throughout the
    lifetime of the group by sending a new KeyPackage with a new
-   identity; the new identity MUST be validated by the authentication
-   service.
+   signature key; the new signature key MUST be validated by the
+   authentication service.
 
 
 
@@ -1245,7 +1245,7 @@ Internet-Draft                     MLS                    September 2020
 
    The value for hpke_init_key MUST be a public key for the asymmetric
    encryption scheme defined by cipher_suite.  The whole structure is
-   signed using the client's identity key.  A KeyPackage object with an
+   signed using the client's signature key.  A KeyPackage object with an
    invalid signature field MUST be considered malformed.  The input to
    the signature computation comprises all of the fields except for the
    signature field.
@@ -3317,7 +3317,7 @@ Internet-Draft                     MLS                    September 2020
    creator, because they are derived from an authenticated key exchange
    protocol.  Subsequent leaf keys are known only by their owner.
 
-   Note that the long-term identity keys used by the protocol MUST be
+   Note that the long-term signature keys used by the protocol MUST be
    distributed by an "honest" authentication service for clients to
    authenticate their legitimate peers.
 
@@ -3336,7 +3336,7 @@ Internet-Draft                     MLS                    September 2020
    The second form considers authentication with respect to the sender,
    meaning the group members can verify that a message originated from a
    particular member of the group.  This property is provided by digital
-   signatures on the messages under identity keys.
+   signatures on the messages under signature keys.
 
 14.3.  Forward and post-compromise security
 
