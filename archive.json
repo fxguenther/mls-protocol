@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-09-20T00:48:48.069592+00:00",
+  "timestamp": "2020-09-22T00:47:36.989486+00:00",
   "repo": "mlswg/mls-protocol",
   "labels": [
     {
@@ -4021,6 +4021,22 @@
           "updatedAt": "2020-08-25T18:13:18Z"
         }
       ]
+    },
+    {
+      "number": 405,
+      "id": "MDU6SXNzdWU3MDU1NDMyMDc=",
+      "title": "Mandatory Extensions vs. Fields",
+      "url": "https://github.com/mlswg/mls-protocol/issues/405",
+      "state": "OPEN",
+      "author": "kkohbrok",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Why are extensions that MUST be present in an instance of a struct (e.g. `capabilities` and `lifetime` in a `KeyPackage`) not just fields in that struct?\r\n\r\nShouldn't `extensions` be used for custom extensions or maybe optional parts of the struct? (Although those should probably be `optional` fields, I would think.)",
+      "createdAt": "2020-09-21T12:16:00Z",
+      "updatedAt": "2020-09-21T14:22:59Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -27476,7 +27492,7 @@
       "labels": [],
       "body": "The credentials we have defined at the moment only contain a single public key and no information regarding what signature scheme that keypair works with (even though the Spec actually says it should include the signature scheme as well).\r\n\r\nIt would be nice, however, to support potential CredentialTypes that, similar to KeyPackages, include multiple supported signature schemes, each accompanied by a corresponding public key.\r\n\r\nThe Key that should be used in any given group is then determined by the CipherSuite of the group (which includes a Signature Scheme). When choosing a KeyPackage of a new member, it has to be one that contains a Credential which supports that Signature Scheme.\r\n\r\nNote, that I'm not suggesting that this be the case in all Credentials, or even that we change the BasicCredential.\r\n\r\nI understand that it's possible to have multiple credentials per identity, but in some authentication settings it can be beneficial to have a 1-to-1 mapping between Credential and identity.",
       "createdAt": "2020-09-16T16:53:31Z",
-      "updatedAt": "2020-09-18T15:21:35Z",
+      "updatedAt": "2020-09-21T16:39:38Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
@@ -27515,6 +27531,41 @@
           "body": "That's fair. And it's not something you have to do if you don't want to. I'm just proposing for MLS to support that type of Credential in general.",
           "createdAt": "2020-09-18T15:21:11Z",
           "updatedAt": "2020-09-18T15:21:35Z"
+        },
+        {
+          "author": "br-hale",
+          "authorAssociation": "NONE",
+          "body": "To support hybrid PQ/standard schemes at any point in the future, allowing for multiple schemes is reasonable (in addition to the above arguments for it). Most applications probably will not use the feature, especially to start with, but providing support for just the option is not going to cause any of the problems noted. ",
+          "createdAt": "2020-09-21T15:48:15Z",
+          "updatedAt": "2020-09-21T15:48:15Z"
+        },
+        {
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> To support hybrid PQ/standard schemes at any point in the future, allowing for multiple schemes is reasonable\r\n\r\nPQ schemes can be used by switching the entire group to a new ciphersuite using those schemes. Requiring everybody in the group to store a bunch of unused key material isn't reasonable",
+          "createdAt": "2020-09-21T16:26:02Z",
+          "updatedAt": "2020-09-21T16:26:02Z"
+        },
+        {
+          "author": "br-hale",
+          "authorAssociation": "NONE",
+          "body": "The statement was not about PQ, but hybrid PQ/standard schemes. Those require use to two signature schemes, for which both types of keying material are used.",
+          "createdAt": "2020-09-21T16:27:57Z",
+          "updatedAt": "2020-09-21T16:27:57Z"
+        },
+        {
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Then you need a ciphersuite that specifies a hybrid scheme.",
+          "createdAt": "2020-09-21T16:30:20Z",
+          "updatedAt": "2020-09-21T16:30:20Z"
+        },
+        {
+          "author": "br-hale",
+          "authorAssociation": "NONE",
+          "body": "It would be ideal to have a ciphersuite specifying a single hybrid scheme, but even that does not imply use of a single credential, unfortunately. In fact, hybrid schemes may rely on two separate credentials, with the ciphersuite specifying the hybrid algorithm for combining them. Since the \"main\" method of building a solo hybrid credential is under patent, there is also additional motivation for applications to use two.",
+          "createdAt": "2020-09-21T16:39:38Z",
+          "updatedAt": "2020-09-21T16:39:38Z"
         }
       ],
       "reviews": []
@@ -27624,6 +27675,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 406,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDkwNDczOTI0",
+      "title": "External Commits",
+      "url": "https://github.com/mlswg/mls-protocol/pull/406",
+      "state": "OPEN",
+      "author": "raphaelrobert",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-09-21T18:13:54Z",
+      "updatedAt": "2020-09-21T18:41:40Z",
+      "baseRepository": "mlswg/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
+      "headRepository": "mlswg/mls-protocol",
+      "headRefName": "external_commit",
+      "headRefOid": "71f630a67e4ecfca314050d6a87294addb12d537",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
