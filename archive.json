@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-09-24T00:49:01.915520+00:00",
+  "timestamp": "2020-09-27T00:50:40.238852+00:00",
   "repo": "mlswg/mls-protocol",
   "labels": [
     {
@@ -28052,19 +28052,190 @@
       "labels": [],
       "body": "This PR adds clarification around X509 cert structure, the chain and its encoding X509.",
       "createdAt": "2020-09-23T21:22:59Z",
-      "updatedAt": "2020-09-23T21:22:59Z",
+      "updatedAt": "2020-09-25T17:09:41Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "ca187c70d7a5a5ac38f027526e78a72fa043bdf5",
       "headRepository": "suhasHere/mls-protocol",
       "headRefName": "master",
-      "headRefOid": "7df46d740b30d8a5963a8de03c2cd6a4c0d7a881",
+      "headRefOid": "9e6d452fca5334a7746108680651b2c159373594",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "comments": [
+        {
+          "author": "suhasHere",
+          "authorAssociation": "NONE",
+          "body": "@Bren2010  thanks for the suggestions. updated PR to reflect the changes . pls let me know .. ",
+          "createdAt": "2020-09-24T23:14:06Z",
+          "updatedAt": "2020-09-24T23:14:06Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk1NjMwMDkz",
+          "commit": {
+            "abbreviatedOid": "7df46d7"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thanks, @suhasHere.  I agree that separating out the certificates is a good idea.  While it's different from how TLS does things, I'm ready to declare TLS wrong here, since this saves mixing TLS-syntax and X.509 parsing logic.\r\n\r\nAs for the chain ordering, I really thought we had this in here already, so I'm glad to have it back.",
+          "createdAt": "2020-09-24T14:25:01Z",
+          "updatedAt": "2020-09-24T14:25:01Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk1NzM0NTI2",
+          "commit": {
+            "abbreviatedOid": "7df46d7"
+          },
+          "author": "DemiMarie",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "Looks good.  In particular, requiring that certificates be ordered from leaf to root allows for arbitrarily long certificate chains to be verified in O(1) memory.",
+          "createdAt": "2020-09-24T16:11:36Z",
+          "updatedAt": "2020-09-24T16:11:36Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk1ODQ0NjIy",
+          "commit": {
+            "abbreviatedOid": "7df46d7"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2020-09-24T18:26:30Z",
+          "updatedAt": "2020-09-24T18:32:30Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "remove newline",
+              "createdAt": "2020-09-24T18:26:30Z",
+              "updatedAt": "2020-09-24T23:12:53Z"
+            },
+            {
+              "originalPosition": 25,
+              "body": "```suggestion\r\nFor X509Credential, each entry in the chain represents a single DER-encoded\r\n```",
+              "createdAt": "2020-09-24T18:27:35Z",
+              "updatedAt": "2020-09-24T23:12:53Z"
+            },
+            {
+              "originalPosition": 26,
+              "body": "```suggestion\r\nX509 certificate. The chain is ordered such that the first entry (chain[0])\r\n```",
+              "createdAt": "2020-09-24T18:27:55Z",
+              "updatedAt": "2020-09-24T23:12:53Z"
+            },
+            {
+              "originalPosition": 27,
+              "body": "```suggestion\r\nis the end-entity certificate and each subsequent certificate in the chain MUST be\r\n```",
+              "createdAt": "2020-09-24T18:28:15Z",
+              "updatedAt": "2020-09-24T23:12:53Z"
+            },
+            {
+              "originalPosition": 28,
+              "body": "```suggestion\r\nthe issuer of the previous certificate. The algorithm for the `public_key` in the\r\n```",
+              "createdAt": "2020-09-24T18:28:43Z",
+              "updatedAt": "2020-09-24T23:12:53Z"
+            },
+            {
+              "originalPosition": 29,
+              "body": "```suggestion\r\nend-entity certificate MUST match the relevant ciphersuite.\r\n```",
+              "createdAt": "2020-09-24T18:31:09Z",
+              "updatedAt": "2020-09-24T23:12:53Z"
+            },
+            {
+              "originalPosition": 30,
+              "body": "```suggestion\r\n\r\n```",
+              "createdAt": "2020-09-24T18:31:49Z",
+              "updatedAt": "2020-09-24T23:12:53Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk2MDMwNjA0",
+          "commit": {
+            "abbreviatedOid": "9e6d452"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "Many lines still have trailing spaces, please fix",
+          "createdAt": "2020-09-25T00:16:07Z",
+          "updatedAt": "2020-09-25T00:16:23Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "```suggestion\r\nciphersuite.\r\n```",
+              "createdAt": "2020-09-25T00:16:07Z",
+              "updatedAt": "2020-09-25T00:16:23Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk2MTkwMzc3",
+          "commit": {
+            "abbreviatedOid": "9e6d452"
+          },
+          "author": "franziskuskiefer",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-09-25T07:54:34Z",
+          "updatedAt": "2020-09-25T07:54:35Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "This wasn't clearly defined before so I appreciate making it clear.\r\nHowever, this `MUST` makes the mandatory ciphersuite pretty hard to use with x509 certificates. Public CAs don't issue ed25519 certificates.",
+              "createdAt": "2020-09-25T07:54:34Z",
+              "updatedAt": "2020-09-25T07:54:35Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk2NDk1NjAw",
+          "commit": {
+            "abbreviatedOid": "9e6d452"
+          },
+          "author": "DemiMarie",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-09-25T14:51:41Z",
+          "updatedAt": "2020-09-25T14:51:41Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "Most uses for MLS don\u2019t involve public CAs.",
+              "createdAt": "2020-09-25T14:51:41Z",
+              "updatedAt": "2020-09-25T14:51:41Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk2NjAwNzkw",
+          "commit": {
+            "abbreviatedOid": "9e6d452"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-09-25T17:09:40Z",
+          "updatedAt": "2020-09-25T17:09:41Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "It seems a bit early to talk about \"most uses for MLS\", since AFAIK there aren't any yet :) \r\n\r\nBut I think the overall point still stands -- precedent in the Web PKI doesn't really matter here, because (again in most of the envisioned use cases), these certificates will be for user identifiers that aren't even allowed in Web PKI certificates.  I suppose it's possible to have a bunch of entities with domain names and Web PKI certificates doing MLS, but (a) that doesn't seem like a core use cases and (b) they can just use a ciphersuite that is lines up with those certs.",
+              "createdAt": "2020-09-25T17:09:40Z",
+              "updatedAt": "2020-09-25T17:09:41Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
