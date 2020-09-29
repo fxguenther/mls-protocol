@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-09-27T00:50:40.238852+00:00",
+  "timestamp": "2020-09-29T00:49:09.358097+00:00",
   "repo": "mlswg/mls-protocol",
   "labels": [
     {
@@ -4027,15 +4027,15 @@
       "id": "MDU6SXNzdWU3MDU1NDMyMDc=",
       "title": "Mandatory Extensions vs. Fields",
       "url": "https://github.com/mlswg/mls-protocol/issues/405",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "kkohbrok",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Why are extensions that MUST be present in an instance of a struct (e.g. `capabilities` and `lifetime` in a `KeyPackage`) not just fields in that struct?\r\n\r\nShouldn't `extensions` be used for custom extensions or maybe optional parts of the struct? (Although those should probably be `optional` fields, I would think.)",
       "createdAt": "2020-09-21T12:16:00Z",
-      "updatedAt": "2020-09-23T06:02:30Z",
-      "closedAt": null,
+      "updatedAt": "2020-09-28T13:31:10Z",
+      "closedAt": "2020-09-28T13:31:09Z",
       "comments": [
         {
           "author": "bifurcation",
@@ -22693,13 +22693,13 @@
       ],
       "body": "Changes to key schedule and corresponding directions on use of PSKs for group recovery, re-initialization, sub-group branching, and external PSK injection.",
       "createdAt": "2020-05-16T19:48:40Z",
-      "updatedAt": "2020-09-23T09:42:42Z",
+      "updatedAt": "2020-09-28T21:19:46Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "28c6099e92f2b4767e247cd2016abd760a6620d0",
       "headRepository": "br-hale/mls-protocol",
       "headRefName": "exporters",
-      "headRefOid": "90323762150795ba06f49fa3af6253e877f1bab1",
+      "headRefOid": "850704b5fdf98a711d63524ebeb28eb82552fbd8",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -22730,7 +22730,7 @@
               "originalPosition": 532,
               "body": "There already is a struct called `KeyPackage`",
               "createdAt": "2020-05-19T16:06:11Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -22750,7 +22750,7 @@
               "originalPosition": 532,
               "body": "Hm. Not sure how that got there. I don't think we intended renaming the struct. The change was supposed to be that the `psk`s are included in the Welcome message.",
               "createdAt": "2020-05-20T05:34:41Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -22770,7 +22770,7 @@
               "originalPosition": 158,
               "body": "Over in TLS, we worked on an interface for injecting PSKs:\r\n\r\n   https://tools.ietf.org/html/draft-ietf-tls-external-psk-importer-05\r\n\r\nWe concluded binding the imported PSK to the target protocol and KDF was sufficient. Maybe the same thing should be done here, i.e., to ensure that an injected PSK for MLS v1.0 does not collide with one injected for a different version?",
               "createdAt": "2020-06-09T03:22:17Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -22790,7 +22790,7 @@
               "originalPosition": 265,
               "body": "Are \"external\" PSKs fixed? Would it make sense for them to also include an epoch, to allow applications to roll them forward for some FS?",
               "createdAt": "2020-06-09T03:24:05Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -22810,7 +22810,7 @@
               "originalPosition": 265,
               "body": "External PSKs are required to be of an \"equivalent security level\" (although that terminology was added to the draft a long time ago and not yet defined). As such, any FS guarantees or other requirements must be met before being injected. It does not make sense to ratchet external PSK forward per MLS spec, as then we would be trying to correlate the time of existence of the PSK to MLS (i.e. parallel ratcheting); in that case the PSK is no longer external to the protocol but somehow correlated to it. The nonce prevents reuse, but any additional guarantees should be met by the application, not the protocol (going back to meeting requirements before being injected). ",
               "createdAt": "2020-06-09T03:52:23Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -22830,7 +22830,7 @@
               "originalPosition": 158,
               "body": "Adding the MLS version number to the PSK type sounds like a solid addition.",
               "createdAt": "2020-06-09T03:54:07Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -22850,7 +22850,7 @@
               "originalPosition": 265,
               "body": "I\u2019m not sure I agree. You can certainly do the ratcheting outside of the protocol, but you can also do it inside. For example, send an epoch and psk_id, and hash forward the external PSK corresponding to the ID based on the epoch. Some applications might not be able to augment their external PSK provision machinery to ratchet, so handling it in the protocol can be appealing. Food for thought.",
               "createdAt": "2020-06-09T03:55:58Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -22870,7 +22870,7 @@
               "originalPosition": 265,
               "body": "So the proposal would be to extend MLS to allow ratcheting of \"external\" PSKs that continuously get injected into the protocol?\r\n\r\nIt's interesting, but it seems to me like we'd be creating a degree of redundancy here. MLS doesn't have very good FS capabilities (although they can be improved by something like RTreeKEM), so it's tempting to create a secondary mechanism, i.e. ratcheting a PSK along the epoch-chain. However, then the FS guarantees hinge on the FS properties of whatever means was used to distribute the PSK. So what is a scenario where the means of PSK distribution gives you better FS than MLS? If you have this really good out-of-band distribution channel for PSKs, do you really still need MLS?\r\n\r\nI don't think it's a bad idea, but I'm not sure how often it will be used and if it warrants the added complexity in the protocol. But that's maybe an issue we should discuss on the list or in the next virtual interim? \r\n\r\nIn any case, I think it's a good idea that's worth thinking about and that might match the use case of a number of people, but it's relatively orthogonal enough to our PR. Maybe it would be worth a new github issue?",
               "createdAt": "2020-06-09T06:15:37Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -22890,7 +22890,7 @@
               "originalPosition": 265,
               "body": "This proposal it about taking in an external PSK, and then maintaining it in sync to protocol ratcheting. As FS is the main benefit of this, the working assumption/use case that it addresses is one where:\r\n\r\nA) the application does not have the capability of aligning security level of the PSK to the current epoch but provides it directly to the protocol (which begs the question of whether the application is checking \"equivalent security level\" for the PSK to begin with) and \r\n\r\nB) the external PSK will be used at multiple epochs (FS benefits become relevant when the external PSK has already been used in a past epoch).\r\n\r\nThis is a very specific case. Although it has clear benefits, those benefits derive from poor application choices or machinery.\r\n\r\nMany of the MLS protocol design choices have been made with the explicit goal of separating out necessary protocol actions and peripheral behavior that can be determined by the application, even if it has security implications (e.g. the entire key management of the AS is out of scope). In the same way, this proposal seems to be more suited to the architecture than the core protocol. Perhaps you can draft a PR on the architecture document for this? \r\n\r\nI will add a new github issue so people get a chance to comment as a relevant, separate issue.\r\n",
               "createdAt": "2020-06-10T17:29:12Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -22910,7 +22910,7 @@
               "originalPosition": 265,
               "body": "Yeah, it's certainly orthogonal. We can address it elsewhere (if at all)!",
               "createdAt": "2020-06-10T18:23:49Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -22930,7 +22930,7 @@
               "originalPosition": 78,
               "body": "Seems like the `confirmation_key` got duplicated accidentally\r\n\r\n```suggestion\r\n| `confirmation_key`      | \"confirm\"     |\r\n```",
               "createdAt": "2020-08-10T09:05:35Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -22950,7 +22950,7 @@
               "originalPosition": 78,
               "body": "Whoops you're right. For some reason I can't commit your suggestion, but I'll change the PR accordingly.",
               "createdAt": "2020-08-10T09:07:59Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -22970,79 +22970,79 @@
               "originalPosition": 183,
               "body": "```suggestion\r\n```",
               "createdAt": "2020-08-10T14:53:18Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 110,
               "body": "Nit: Please format OPEN ISSUEs with the `<!-- -->` bracketing as below.",
               "createdAt": "2020-08-10T14:54:16Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 134,
               "body": "It's not \"either/or\" -- when you signal to the existing members in Commit, you MUST include the same instructions in the Welcome.  So I would rephrase this more declaratively:\r\n\r\n> The injection of one or more PSKs into the key schedule is signalied by including a PreSharedKeys value in two places: (1) As an extension in the Commit that initiates a new epoch, and (2) in the GroupSecrets object carried in the Welcome message sent to members added in that epoch.",
               "createdAt": "2020-08-10T14:57:22Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 165,
               "body": "\"... or a GroupSecrets object with the `psks` field set\"",
               "createdAt": "2020-08-10T14:58:25Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 118,
               "body": "This seems like a good spot to indicate that PSKs are typed.\r\n\r\n> Each PSK in MLS has a type that designates how it was provisioned.  External PSKs are provided by the application logic.  Resumption PSKs are derived from the MLS key schedule, and used in cases where it is necessary to authenticate a member's participation in a prior group state:",
               "createdAt": "2020-08-10T15:01:37Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 123,
               "body": "Instead of \"reboot\", suggest \"carry entropy from the old group forward into a new group with the desired parameters\"",
               "createdAt": "2020-08-10T15:02:56Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 126,
               "body": "Just to confirm, \"securely\" here means, \"continuing members can verify that the newly added member was a prior participant.\r\n\r\nNote that this will have some complexity in practice, since the continuing members *also* have to have been in the group at that time.  So you couldn't have the following sequence:\r\n\r\n```\r\nEpoch 1: Group = {A, B, C}\r\n=== B loses sync with group ===\r\nEpoch 2: D added, Group = {A, B, C, D}\r\nEpoch 3: B is re-added with PSK to prove that they were in epoch 1\r\n```\r\n\r\n... because D won't have the PSK.",
               "createdAt": "2020-08-10T15:05:46Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 162,
               "body": "```suggestion\r\n```",
               "createdAt": "2020-08-10T15:18:01Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 139,
               "body": "Nit: I'm not sure if the `-` is allowed in the TLS syntax, but folks tend to reuse notation in programming, and it's definitely not allowed in variable/const names in typical programming languages.  Suggest `reinit`.",
               "createdAt": "2020-08-10T15:20:14Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 139,
               "body": "I wonder whether all of these specializations are necessary, or whether a single `resumption` case would suffice.  If you include the *destination* group ID / epoch in the label as well, then you would have even better separation/context than you do here.",
               "createdAt": "2020-08-10T15:21:34Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 152,
               "body": "Explicitly enumerating the cases here will be better for future extensibility.",
               "createdAt": "2020-08-10T15:21:58Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 157,
               "body": "```suggestion\r\n} PreSharedKeyID;\r\n```",
               "createdAt": "2020-08-10T15:22:25Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 175,
               "body": "`PreSharedKey(type);` doesn't make sense syntactically.  I think you can just replace these top two fields with `PreSharedKey psk_id`, since that specifies both the type and the value.",
               "createdAt": "2020-08-10T15:23:48Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23062,7 +23062,7 @@
               "originalPosition": 139,
               "body": "Dash removed to address first comment.\r\n\r\nFor second comment: a single resumption case does not cover key differences between the three options here, and mixing them into one (which was considered at length) causes issues down the line. In reinit, the original group must be fully terminated as a requirement, which is not the case in branching and recovery. Branching \"copies\" a subset of the current group into a new one, and it is essential that members know that this is not done with recovery (where a member is added back in, but there is no divergence in history). If the PSKtype does not signal distinctions sufficiently well, then there will likely be group authentication attacks over the history of group evolution (i.e. disagreement on what has occurred).",
               "createdAt": "2020-08-10T16:28:58Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23082,7 +23082,7 @@
               "originalPosition": 126,
               "body": "Good observation. Clarification added.",
               "createdAt": "2020-08-10T17:04:56Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23102,7 +23102,7 @@
               "originalPosition": 118,
               "body": "Addressed.",
               "createdAt": "2020-08-10T19:13:21Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23122,7 +23122,7 @@
               "originalPosition": 152,
               "body": "Addressed, according to what you seem to be requesting.",
               "createdAt": "2020-08-10T19:20:37Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23142,7 +23142,7 @@
               "originalPosition": 175,
               "body": "Good point. Should be fixed now.",
               "createdAt": "2020-08-26T11:34:09Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23162,49 +23162,49 @@
               "originalPosition": 115,
               "body": "I think this Open Issue can be removed -- it is closed by this PR!\r\n",
               "createdAt": "2020-08-26T18:42:45Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 122,
               "body": "Is it really necessary to distinguish all of these cases at this level?\r\n\r\nIf so, then the above text needs to change from \"how it was provisioned\", because these types relate to *use*, not provisioning.",
               "createdAt": "2020-08-26T18:48:21Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 246,
               "body": "Please revert these changes.",
               "createdAt": "2020-08-26T18:55:52Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 269,
               "body": "Maybe \"Associating a New Group to a Previous Group\"",
               "createdAt": "2020-08-26T18:56:39Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 281,
               "body": "Need to specify how big the nonce is.  `KDF.Nh`?\r\n\r\nBut I'm not clear on what the nonce reuse criterion here is.  TLS session resumption PSKs can be used for an arbitrary number of sessions, since the sessions into which the PSKs are injected are distinct for other reasons.  The same seems like it is true here: In both the branching and reinit cases, you have a fresh init secret that will cause the resulting secrets to diverge.",
               "createdAt": "2020-08-26T19:01:37Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 281,
               "body": "It would be helpful to say here that in both of these cases, the association is signaled by including the PreSharedKeyID in the Welcome initiating the new group.",
               "createdAt": "2020-08-26T19:02:16Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 349,
               "body": "Honestly, I'm not sure how much value this adds.  The new group already has a pointer to the old group (by way of the PSK ID).  The best that this can do is cause folks not to use the old group any more, and it seems like doing that at the application layer is sufficient.  The only thing doing it in MLS adds is that it gets into the transcript -- and by definition, the transcript doesn't matter after this!\r\n\r\nIf we're going to have a message here, I would propose we do it a bit differently:\r\n\r\n* Use a different message type, parallel to Proposal or Commit.  Commit advances the group to a new epoch; this operation does not.\r\n* ... and explain that this needs the same sequencing as Commit.\r\n* Have the semantic be just \"close\", with an optional forward pointer.\r\n* For the forward pointer, just use a hash of the Welcome message.\r\n\r\n```\r\nopaque WelcomeID<0..255>; \r\n\r\nstruct {\r\n    optional<WelcomeID> welcome_hash;\r\n} Close;\r\n```",
               "createdAt": "2020-08-26T20:40:37Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 549,
               "body": "Please revert these unrelated changes.",
               "createdAt": "2020-08-26T20:45:45Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23224,7 +23224,7 @@
               "originalPosition": 115,
               "body": "Actually not -- the \"security level\" is mentioned at different points in the document and still requires clarification as it is never defined. \r\n\r\nFor example, what does it mean for a PSK to be of the same security level as the intended group? In reality, we need to match intended PCS and FS levels, and that is determined by how often keys are ratcheted (including signature keys). If there is a mis-match with incoming external PSKs, then the value of use of a PSK may be minor. If the external PSK was a TLS exporter key for example, then its PCS/FS guarantees are partially dependent on its freshness. \r\n\r\nIf deniable signature keys are ever considered, then PSKs should also not undermine that \"security level\".\r\n\r\nSecurity level explanation is something probably belongs in the architecture doc.",
               "createdAt": "2020-08-26T22:08:22Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23244,7 +23244,7 @@
               "originalPosition": 122,
               "body": "Good point in that the types relate their use rather than their provisioning. What do you mean by \"at this level\"? We do agree that we need strong key separation between the different PSK types, right? That was one of the lessons of various TLS Key Schedule analysis. It's not quite clear to me what you are suggesting we change.",
               "createdAt": "2020-08-27T07:03:24Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23264,7 +23264,7 @@
               "originalPosition": 246,
               "body": "Sorry about that. There must have been a mixup when merging. I'll fix it.",
               "createdAt": "2020-08-27T07:04:02Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23284,7 +23284,7 @@
               "originalPosition": 269,
               "body": "Works for me.",
               "createdAt": "2020-08-27T07:04:21Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23304,7 +23304,7 @@
               "originalPosition": 349,
               "body": "I understand that you're reluctant to bloat the proposal space like this. However, I think a ReInit proposal serves two purposes. 1) It allows an external party (e.g. the DS) to indicate to the group that they should change/upgrade the group. A ReInit proposal authenticates the DS' intent and even the upgrade/change it wants to do.\r\n2) It makes sure that the group agrees on the ReInit. The PSK in the Welcome message is derived from the epoch _after_ the commit, so everyone must have processed it and registered that the group should be closed.\r\n\r\nI think both authentication and agreement are valuable properties for an action that has the power to change ciphersuite, version and extensions.\r\n\r\nOther than potentially bloating the number of proposals we have: Why not have a ReInit proposal?",
               "createdAt": "2020-08-27T07:41:46Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23324,7 +23324,7 @@
               "originalPosition": 246,
               "body": "Never mind. It was actually emacs, which \"cleared up\" all markdown tables upon saving the file -.-",
               "createdAt": "2020-08-27T08:15:16Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23344,19 +23344,19 @@
               "originalPosition": 115,
               "body": "Sorry, I meant the \"external coordination via proposal\" open issue.",
               "createdAt": "2020-08-27T17:22:53Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 122,
               "body": "Concretely, do we need different `PSKType` values for these different cases, or would a single `recovery` value be sufficient?",
               "createdAt": "2020-08-27T17:23:43Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 349,
               "body": "As to \"why not\" -- typically we try not to put things in the protocol that don't do anything ;)\r\n\r\nBut your two points are a convincing argument that this does do something, namely (1) provides an authenticated \"nudge\" to re-init, and more importantly (2) advances the group to a final \"tail epoch\" that is used only for initializing the next group.\r\n\r\nI think I still prefer that it be a Handshake message rather than a Proposal. That way you don't have to worry about what it means to have other Proposals or a `path` in the Commit.  And you can specify that a `Close` message is processed by \"closing off\" the key schedule:\r\n\r\n```\r\n                  init_secret_[n]\r\n                         |\r\n                         V\r\n          0 ------> KDF.Extract = final_secret\r\n```\r\n\r\nThe only additional complexity would be that now the rule is \"you can only have one Commit **or Close** message per epoch\", where the bold bit is the addition.  Doesn't seem too bad.  I kind of like that it rounds out the key schedule, complementing the \"initial fresh init secret\" discussion we had recently:\r\n\r\n```\r\n                   init_secret_[0]\r\n                         |\r\n                         V\r\n          [normal key schedule diagram as above]\r\n                         |\r\n                         V\r\n                   init_secret_[1]\r\n                         |\r\n                         V\r\n                        ...\r\n                         |\r\n                         V\r\n                   init_secret_[n]\r\n                         |\r\n                         V\r\n               0 -> KDF.Extract \r\n                         |\r\n                         V\r\n                    final_secret\r\n```\r\n",
               "createdAt": "2020-08-27T18:00:03Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23376,7 +23376,7 @@
               "originalPosition": 349,
               "body": "> As to \"why not\" -- typically we try not to put things in the protocol that don't do anything ;)\r\n\r\nPoint taken  :smile: \r\n\r\nRegarding the handshake message: I wasn't aware that they're also pretty extensible, so sure, that would work as well. Just to make sure I understand correctly: The server would be able to send the message themselves (if they're \"preconfigured\") and the message would be authenticated, right? Also, we would have to add the data fields to the handshake message instead like so:\r\n```\r\nstruct {\r\n    opaque group_id<0..255>;\r\n    uint64 epoch;\r\n    Sender sender;\r\n    opaque authenticated_data<0..2^32-1>;\r\n\r\n    ContentType content_type;\r\n    select (MLSPlaintext.content_type) {\r\n        case application:\r\n          opaque application_data<0..2^32-1>;\r\n\r\n        case proposal:\r\n          Proposal proposal;\r\n\r\n        case commit:\r\n          Commit commit;\r\n          opaque confirmation_tag<0..255>;\r\n\r\n        case close:\r\n          ProtocolVersion version;\r\n          CipherSuite cipher_suite;\r\n          Extension extensions<0..2^32-1>;\r\n    }\r\n\r\n    opaque signature<0..2^16-1>;\r\n} MLSPlaintext;\r\n```\r\nFor maximum security guarantees, we could also add a `confirmation_tag` just like for the commit.",
               "createdAt": "2020-08-28T14:57:41Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23396,7 +23396,7 @@
               "originalPosition": 122,
               "body": "I think we do to properly separate the keys depending on their use. This is comparable to TLS, where improper separation between application- and resumption PSKs led to problems down the road. However, we sill only need to derive a single value off of the Key Schedule, as the type is used later when the PSK gets injected into the Key Schedule.",
               "createdAt": "2020-08-28T15:00:33Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23416,7 +23416,7 @@
               "originalPosition": 269,
               "body": "Tweaked the title a little. It's now \"Linking a New Group to an Existing Group\".",
               "createdAt": "2020-09-02T18:36:39Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23436,7 +23436,7 @@
               "originalPosition": 281,
               "body": "I've specified the nonce length to be `KDF.Nh` and added an open issue regarding the possibility to avoid the nonce altogether using the GroupId of the new group.",
               "createdAt": "2020-09-02T18:37:40Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23456,25 +23456,25 @@
               "originalPosition": 122,
               "body": "OK, I can live with this.",
               "createdAt": "2020-09-02T18:47:28Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 281,
               "body": "^^^ still outstanding",
               "createdAt": "2020-09-02T18:48:31Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 115,
               "body": "^^^ still outstanding",
               "createdAt": "2020-09-02T18:48:38Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 349,
               "body": "> The server would be able to send the message themselves (if they're \"preconfigured\") and the message would be authenticated, right?\r\n\r\nYep, it would be sent as an MLSPlaintext, so the normal authentication stuff applies.  \r\n\r\nSyntactically, I think it would be even simpler than what you lay out.  We would just define a Close object parallel to commit that has the forward-pointer to the new group (NB: see below).  So where you have the version/cipher_suite fields, we would just have Close object.\r\n\r\nCouple of other points:\r\n\r\n* Is this message useful when closing the group *without a successor*?\r\n    * If so, then the forward pointer needs to be optional\r\n    * If not (so there's always a successor), suggest renaming Close -> Replace\r\n* `version+cipher_suite` seems like an odd way to refer to a new group.  Propose we just send the Welcome or H(Welcome) here, since that will implicitly bind to these fields as well as the group ID, membership, etc.  \r\n\r\n```\r\nstruct {\r\n    opaque welcome_hash<0..255>; // or \r\n    Welcome welcome;\r\n} Replace;\r\n```\r\n\r\n* Just to confirm, the receiver processing of this message is:\r\n    * Ratchet the key schedule forward with commit_secret = 0 to get the last epoch\r\n    * Verify the confirmation tag in the new/last epoch\r\n    * Produce a PSK of type `reinit` (or maybe `replace`), which can be referenced in the new Welcome\r\n* ... which means the sender processing would be:\r\n    * Create a Welcome for the new group referencing the reinit PSK (as groupID + last_epoch)\r\n    * Ratchet to the last epoch => reinit PSK\r\n    * Create MLSPlaintext(Replace(H(Welcome)))\r\n\r\nA little convoluted, but not an unexpected amount of interlock.\r\n\r\n",
               "createdAt": "2020-09-02T18:54:04Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23494,7 +23494,7 @@
               "originalPosition": 349,
               "body": "Very good points. Using the Welcome message seems like an elegant way to link the groups.\r\nRegarding ReInit vs. Replace, I have no strong opinion on that. Replace seems a little more direct, so I'll go with that for now. I'll make the changes either today or over the weekend so hopefully we can get the green light for a merge on Tuesday :-)",
               "createdAt": "2020-09-04T06:35:00Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23514,7 +23514,7 @@
               "originalPosition": 349,
               "body": "I just noticed that if we use a Welcome message (or its hash) in the Replace message, then the Server won't be able to send it, because it lacks the necessary information to craft it. So until we find a better way of doing it, I'm going with the way I originally sketched. Let me know if you have another idea.\r\n\r\n(The `Capabilities` struct is pretty close to what we need, but the name is a little misleading in that context.)",
               "createdAt": "2020-09-06T07:05:35Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23534,7 +23534,7 @@
               "originalPosition": 349,
               "body": "If we go for a Handshake Message as opposed to a Proposal, it's also not clear, which group member sends the Welcome message for the new group, as the Close message can come from the Server itself. The Server could nominate a member, but it doesn't know if that member is online and so there is a risk that other members would then have to wait for that member to come online. The other possibility is to just have any member do it, which would create a race condition and possibly multiple follow-up groups.\r\n\r\n Do you have an idea on how to deal with that? Since there is otherwise not that much of a difference between Handshake Message and Proposal, I'm inclined to stick with a Proposal, but rename it to \"Close\" and make the content optional.",
               "createdAt": "2020-09-06T07:55:03Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23554,49 +23554,49 @@
               "originalPosition": 139,
               "body": "Not an extension, a new Proposal.  Seems like the content of the Proposal and the extension can be the same object?  Or since we're doing multiplicities here, the Welcome extension would have the union of the Proposals.",
               "createdAt": "2020-09-22T14:23:41Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 318,
               "body": "Nit: I would prefer to spell out PreSharedKey.\r\n\r\nDo we need a separate structure here, or could we re-use the PreSharedKeys struct defined above?",
               "createdAt": "2020-09-22T14:25:10Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 343,
               "body": "Do we want to specify a PSK that carries over from the old group to the new group?  So you would define here something like: The new Welcome MUST have a PreSharedKey extension with a `reinit` entry pointing to the epoch initiated by the Commit that covers the ReInit proposal.",
               "createdAt": "2020-09-22T14:30:22Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 354,
               "body": "I would strike this.  It's up to the committer to decide what they commit.  For example, if someone proposes adding a nonsense PSK, that shouldn't get committed.",
               "createdAt": "2020-09-22T14:32:13Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 364,
               "body": "```suggestion\r\nIf there are multiple ReInit proposals during an epoch, the committer MUST choose exactly one to include in the Commit message.  The `version` field in the ReInit proposal MUST be no less than the version for the current group.  A client processing a Commit that covers multiple ReInit proposals or a ReInit proposal with a lower version MUST reject it as malformed.  The committer SHOULD choose a ReInit proposal with a unique `group_id` and parameters that are supported by all clients in the group.\r\n```",
               "createdAt": "2020-09-22T14:37:17Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 378,
               "body": "```suggestion\r\n  * A ReInit proposal is applied by marking the group as \"closed\".  Further proposals and commits for this group MUST be rejected.  The group's only further purpose is to provide a PSK used by the successor group.\r\n```",
               "createdAt": "2020-09-22T14:39:10Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 378,
               "body": "Actually, this probably goes in the receiver processing below...",
               "createdAt": "2020-09-22T14:40:09Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 430,
               "body": "```suggestion\r\n* Verify that at most one ReInit proposal is present and that the `mls_version`\r\n```",
               "createdAt": "2020-09-22T14:40:26Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23616,31 +23616,31 @@
               "originalPosition": 191,
               "body": "Maybe for the sake of efficiency, concat all the `psk_[i]` before they're put into Extract?",
               "createdAt": "2020-09-22T15:30:37Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 211,
               "body": "```suggestion\r\nThere are three ways in which a `recovery_secret` can be used: to re-initialize\r\n```",
               "createdAt": "2020-09-22T15:33:23Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 229,
               "body": "I think you definitely need to elaborate on what this means / how it would be done?",
               "createdAt": "2020-09-22T15:34:41Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 154,
               "body": "- empty line",
               "createdAt": "2020-09-22T15:38:13Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             },
             {
               "originalPosition": 132,
               "body": "Please elaborate on how recovery happens. From skimming, it's not clear how I would do this",
               "createdAt": "2020-09-22T15:39:54Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23660,7 +23660,7 @@
               "originalPosition": 139,
               "body": "Right, it's a Proposal (again). Hm. Right now, the Proposal contains a single `PreSharedKeyID`, while the `Welcome` contains an array of `PreSharedKeyID`s. So the `Welcome` needs to contain the PSKs referenced by the Proposals in the order in which the individual Proposals are contained in the Commit. Is that what you meant?",
               "createdAt": "2020-09-23T08:25:34Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23680,7 +23680,7 @@
               "originalPosition": 318,
               "body": "I'll change it such that it spells it out. As I mentioned in my comment above, the Proposal only contains a single `PreSharedKeyID`, while `PreSharedKeys` contains an array. We could change that, though. I don't have a strong opinion on this, so I'll leave it as it is for now.",
               "createdAt": "2020-09-23T08:27:56Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23700,7 +23700,7 @@
               "originalPosition": 343,
               "body": "That's exactly what we want to do, so you're right indeed.",
               "createdAt": "2020-09-23T08:28:52Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23720,7 +23720,7 @@
               "originalPosition": 132,
               "body": "Good point. That's a relic from a past design that actually supported recovery. I'll remove it, as it is not relevant anymore.",
               "createdAt": "2020-09-23T08:41:22Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23740,7 +23740,7 @@
               "originalPosition": 139,
               "body": "Note, that it's not an extension in the `Welcome` anymore, but instead an optional `PreSharedKeys` field in the `GroupSecrets` object.",
               "createdAt": "2020-09-23T08:49:49Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
             }
           ]
         },
@@ -23760,7 +23760,134 @@
               "originalPosition": 318,
               "body": "Terminology is a bit tricky. We have \"PSK\"s (i.e. the concrete keys), but now we also have \"PreSharedKey\" which is the name of the Proposal. However, the Proposal in turn only contains `PreSharedKeyID`s, i.e. pointers to how the PSK can be derived.",
               "createdAt": "2020-09-23T09:40:39Z",
-              "updatedAt": "2020-09-23T09:42:42Z"
+              "updatedAt": "2020-09-28T13:16:28Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk3NTAyMTQ4",
+          "commit": {
+            "abbreviatedOid": "850704b"
+          },
+          "author": "kkohbrok",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-09-28T13:18:51Z",
+          "updatedAt": "2020-09-28T13:18:51Z",
+          "comments": [
+            {
+              "originalPosition": 229,
+              "body": "I've added another sentence or two on what this is supposed to achieve and how.",
+              "createdAt": "2020-09-28T13:18:51Z",
+              "updatedAt": "2020-09-28T13:18:51Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk3NTExNzM0",
+          "commit": {
+            "abbreviatedOid": "850704b"
+          },
+          "author": "kkohbrok",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-09-28T13:29:03Z",
+          "updatedAt": "2020-09-28T13:29:04Z",
+          "comments": [
+            {
+              "originalPosition": 191,
+              "body": "I'm not sure what the assumptions would be under which we could prove that secure. Other than a random oracle that is. Since I don't think it's likely that people will inject more than one PSK at once very often, I'd rather leave this as it is.",
+              "createdAt": "2020-09-28T13:29:04Z",
+              "updatedAt": "2020-09-28T13:29:04Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk3ODE5Mjc2",
+          "commit": {
+            "abbreviatedOid": "850704b"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-09-28T19:09:25Z",
+          "updatedAt": "2020-09-28T19:09:25Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk3ODI5MjAz",
+          "commit": {
+            "abbreviatedOid": "850704b"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2020-09-28T19:24:30Z",
+          "updatedAt": "2020-09-28T21:19:46Z",
+          "comments": [
+            {
+              "originalPosition": 109,
+              "body": "```suggestion\r\n<!-- OPEN ISSUE: Clarify lifetime vs security level mandated above. E.g. if\r\n```",
+              "createdAt": "2020-09-28T19:24:30Z",
+              "updatedAt": "2020-09-28T21:19:46Z"
+            },
+            {
+              "originalPosition": 113,
+              "body": "```suggestion\r\n<!-- OPEN ISSUE: Define \"security level\", and what it means to match the\r\n```",
+              "createdAt": "2020-09-28T19:24:38Z",
+              "updatedAt": "2020-09-28T21:19:46Z"
+            },
+            {
+              "originalPosition": 139,
+              "body": "Please make zero `reserved`",
+              "createdAt": "2020-09-28T21:00:18Z",
+              "updatedAt": "2020-09-28T21:19:46Z"
+            },
+            {
+              "originalPosition": 147,
+              "body": "```suggestion\r\n  select (PreSharedKeyID.psktype) {\r\n```",
+              "createdAt": "2020-09-28T21:01:03Z",
+              "updatedAt": "2020-09-28T21:19:46Z"
+            },
+            {
+              "originalPosition": 159,
+              "body": "Never used",
+              "createdAt": "2020-09-28T21:04:19Z",
+              "updatedAt": "2020-09-28T21:19:46Z"
+            },
+            {
+              "originalPosition": 489,
+              "body": "```suggestion\r\n  optional<PreSharedKeys> psks;\r\n```",
+              "createdAt": "2020-09-28T21:05:13Z",
+              "updatedAt": "2020-09-28T21:19:46Z"
+            },
+            {
+              "originalPosition": 173,
+              "body": "References Commit extensions",
+              "createdAt": "2020-09-28T21:06:39Z",
+              "updatedAt": "2020-09-28T21:19:46Z"
+            },
+            {
+              "originalPosition": 182,
+              "body": "```suggestion\r\npsk_input_[i] = KDF.Extract(psk_[i], \"\")\r\n```",
+              "createdAt": "2020-09-28T21:10:38Z",
+              "updatedAt": "2020-09-28T21:19:46Z"
+            },
+            {
+              "originalPosition": 212,
+              "body": "Probably can get rid of the last sentence in this paragraph, it comes off as hostile",
+              "createdAt": "2020-09-28T21:15:38Z",
+              "updatedAt": "2020-09-28T21:19:46Z"
+            },
+            {
+              "originalPosition": 225,
+              "body": "Try to compress this section into one paragraph",
+              "createdAt": "2020-09-28T21:18:56Z",
+              "updatedAt": "2020-09-28T21:19:46Z"
             }
           ]
         }
@@ -27734,7 +27861,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-09-14T20:24:24Z",
-      "updatedAt": "2020-09-14T20:24:24Z",
+      "updatedAt": "2020-09-28T12:52:37Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
@@ -27746,7 +27873,28 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDk3NDc4Mjc2",
+          "commit": {
+            "abbreviatedOid": "7483556"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-09-28T12:52:16Z",
+          "updatedAt": "2020-09-28T12:52:37Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "I think that on the last interim call, we agreed to split off at the leaves of the tree, instead of at the root.  So you would have one secret tree per epoch, and the leaves would split into application and handshake hash chains.\r\n\r\n@Bren2010 if you could make that update, I think this is good to go.",
+              "createdAt": "2020-09-28T12:52:16Z",
+              "updatedAt": "2020-09-28T12:52:37Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 402,
@@ -27898,24 +28046,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDg4MTIyNjU5",
       "title": "Remove long term and explicitly prevent changing of identity",
       "url": "https://github.com/mlswg/mls-protocol/pull/404",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "kkohbrok",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Rotating keys is important and in some cases, Signature Keys are not going to be very \"long-term\". Instead they're going to be rotated periodically.\r\n\r\nI thus propose we simply remove the assumption that Signature Keys are of a \"long-term\" nature (or otherwise \"long-lived\"). \r\n\r\nThe second change in this PR is that I added a few words indicating explicitly that the identity must not change when updating a KeyPackage.",
       "createdAt": "2020-09-16T16:58:59Z",
-      "updatedAt": "2020-09-23T06:11:59Z",
+      "updatedAt": "2020-09-28T12:49:11Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "ca187c70d7a5a5ac38f027526e78a72fa043bdf5",
       "headRepository": "kkohbrok/mls-protocol",
       "headRefName": "remove_long_term",
       "headRefOid": "25a2cdc6c477efdfeec8180d7a966354b7456991",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-09-28T12:49:11Z",
+      "mergedAt": "2020-09-28T12:49:10Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "43a514125cfbd4fa00710babc6270b39139f1ef4"
+      },
       "comments": [],
       "reviews": [
         {
