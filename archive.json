@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-01T00:51:20.745086+00:00",
+  "timestamp": "2020-10-04T00:52:51.522810+00:00",
   "repo": "mlswg/mls-protocol",
   "labels": [
     {
@@ -28315,7 +28315,7 @@
       "labels": [],
       "body": "This PR adds clarification around X509 cert structure, the chain and its encoding X509.",
       "createdAt": "2020-09-23T21:22:59Z",
-      "updatedAt": "2020-09-29T19:54:39Z",
+      "updatedAt": "2020-10-03T19:40:18Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "ca187c70d7a5a5ac38f027526e78a72fa043bdf5",
@@ -28504,6 +28504,19 @@
               "updatedAt": "2020-09-29T19:52:14Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAxNTY5NjI5",
+          "commit": {
+            "abbreviatedOid": "8dec712"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-03T19:40:18Z",
+          "updatedAt": "2020-10-03T19:40:18Z",
+          "comments": []
         }
       ]
     }
