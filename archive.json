@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-04T00:52:51.522810+00:00",
+  "timestamp": "2020-10-06T00:51:13.612778+00:00",
   "repo": "mlswg/mls-protocol",
   "labels": [
     {
@@ -4057,6 +4057,77 @@
           "body": "Thanks for elaborating on this. I also prefer fields, but given those arguments, I'm happy to have them as extensions as well.",
           "createdAt": "2020-09-23T06:02:30Z",
           "updatedAt": "2020-09-23T06:02:30Z"
+        }
+      ]
+    },
+    {
+      "number": 409,
+      "id": "MDU6SXNzdWU3MTQ3MjAxMTY=",
+      "title": "Draft structure/Editorial Changes",
+      "url": "https://github.com/mlswg/mls-protocol/issues/409",
+      "state": "OPEN",
+      "author": "franziskuskiefer",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "editorial"
+      ],
+      "body": "This issue accompanies the e-mail [1] pointing out editorial issues with the draft and suggesting improvements.\r\n\r\nTL;DR: I don't think the draft currently is what is needed to implement MLS. It needs an editorial overhaul with a better structure.\r\n\r\n[1] https://mailarchive.ietf.org/arch/msg/mls/ZOy80Yp5bRhoM8fsQMGVwmFFEzY/",
+      "createdAt": "2020-10-05T10:31:58Z",
+      "updatedAt": "2020-10-05T12:58:12Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "beurdouche",
+          "authorAssociation": "MEMBER",
+          "body": "If we want an implementation document, which is a legitimate ask, we should write an implementation document.",
+          "createdAt": "2020-10-05T11:14:19Z",
+          "updatedAt": "2020-10-05T11:14:19Z"
+        },
+        {
+          "author": "franziskuskiefer",
+          "authorAssociation": "NONE",
+          "body": "What's the purpose of the document if not for implementation?\r\nIn order for this draft to become an RFC it needs implementations. I don't see a way this will happen with the draft as is.",
+          "createdAt": "2020-10-05T11:31:04Z",
+          "updatedAt": "2020-10-05T11:31:04Z"
+        },
+        {
+          "author": "beurdouche",
+          "authorAssociation": "MEMBER",
+          "body": "Specifying a functional behavior and providing a guide for implementation are two very different things.\r\n\r\nRe: what you suggested in your email: Internal representations of the tree, the way you number the indices, how you implement them or the fact that you store some hashes in the nodes are completely irrelevant to this document.\r\nAlso, there is nothing formal about this appendix. \r\n\r\nOn the other hand the information you need from this document is how to perform **computations** : things such as providing the arguments to the node_encap/node_decap functions which are required to generate a correct payload and a standard way to serialize abstract structures... etc.",
+          "createdAt": "2020-10-05T12:10:26Z",
+          "updatedAt": "2020-10-05T12:10:26Z"
+        },
+        {
+          "author": "franziskuskiefer",
+          "authorAssociation": "NONE",
+          "body": "> Specifying a functional behavior and providing a guide for implementation are two very different things.\r\n\r\nRight, the document is doing neither right now.",
+          "createdAt": "2020-10-05T12:58:11Z",
+          "updatedAt": "2020-10-05T12:58:11Z"
+        }
+      ]
+    },
+    {
+      "number": 410,
+      "id": "MDU6SXNzdWU3MTQ3NjEwMzM=",
+      "title": "Welcome message delivery",
+      "url": "https://github.com/mlswg/mls-protocol/issues/410",
+      "state": "OPEN",
+      "author": "franziskuskiefer",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "It is currently unclear how welcome messages are supposed to be delivered. They should be sent to the clients directly without sending them to the group. But welcome messages as described in `11.2.1. Welcoming New Members` have no information about recipients. Neither are they framed in a way that would allow delivery.\r\nEither the `Welcome` message should get a recipient field, or it should get framed as an `MLSPlaintext` and sent to the group instead.",
+      "createdAt": "2020-10-05T11:34:47Z",
+      "updatedAt": "2020-10-05T20:56:31Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The encoded `Welcome` struct is what's sent to the new user. The exact method of delivery is up to the application, but you have the user's identity in their credential which should be enough",
+          "createdAt": "2020-10-05T20:56:31Z",
+          "updatedAt": "2020-10-05T20:56:31Z"
         }
       ]
     }
@@ -24532,7 +24603,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-05-21T10:30:26Z",
-      "updatedAt": "2020-05-22T19:16:53Z",
+      "updatedAt": "2020-10-05T15:44:26Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "c0f69e7f6b96afdffd9f45a7c73d1ef81f9ea99a",
@@ -24676,7 +24747,7 @@
       "labels": [],
       "body": "The upper bound for the number of Proposals of each type in a Commit is currently 2^16.\r\n\r\nThis makes it impossible to create groups with more than 2^16 members in one go and it also limits the number of UpdateProposals and RemoveProposals that can happen between two Commits to 2^16.",
       "createdAt": "2020-05-30T12:44:18Z",
-      "updatedAt": "2020-06-13T19:42:56Z",
+      "updatedAt": "2020-10-05T15:44:28Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "48442a2491bfd8e044ddfb044d8db9f029204384",
@@ -27176,7 +27247,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-08-14T13:20:20Z",
-      "updatedAt": "2020-08-25T16:17:55Z",
+      "updatedAt": "2020-10-05T15:44:30Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "4fc8afa1f7548ebf56bde9e2d45d0352c66fcf5b",
@@ -27265,7 +27336,7 @@
       "labels": [],
       "body": " This PR gets rid of the explicit HMAC reference and uses KDF.Extract instead (which internally uses HMAC). Also `confirmation` is renamed to `confirmation_tag`.",
       "createdAt": "2020-08-14T13:33:50Z",
-      "updatedAt": "2020-08-14T19:14:25Z",
+      "updatedAt": "2020-10-05T15:44:31Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "4fc8afa1f7548ebf56bde9e2d45d0352c66fcf5b",
@@ -27750,13 +27821,13 @@
       "labels": [],
       "body": "Security considerations has gotten a little outdated. Updated with new info",
       "createdAt": "2020-09-12T00:10:01Z",
-      "updatedAt": "2020-09-15T06:59:43Z",
+      "updatedAt": "2020-10-05T17:55:44Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
-      "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
+      "baseRefOid": "eec3985d34dbb5a38fa45ec7edd3a0a1f2bd1fdc",
       "headRepository": "Bren2010/mls-protocol",
       "headRefName": "brendan/2020.9.0",
-      "headRefOid": "a0f96a57f443e149f2889063fdbc67a09ec0267d",
+      "headRefOid": "53b3a5ec05e7402febfc5626deb27800db555183",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -27779,31 +27850,31 @@
               "originalPosition": 52,
               "body": "Do you mean public here? Private keys are usually not used for encryption. \r\n\r\nA small nitpick: Also, in theory, the old key _can_ still be used. The update just signals that other members shouldn't use it.",
               "createdAt": "2020-09-14T07:38:44Z",
-              "updatedAt": "2020-09-14T17:14:36Z"
+              "updatedAt": "2020-10-05T17:55:44Z"
             },
             {
               "originalPosition": 96,
               "body": "`message_tag` -> `confirmation_tag`?",
               "createdAt": "2020-09-14T07:40:07Z",
-              "updatedAt": "2020-09-14T17:14:36Z"
+              "updatedAt": "2020-10-05T17:55:44Z"
             },
             {
               "originalPosition": 110,
               "body": "I think FS is a bit more nuanced, as you only get full FS if you update your own leaf key and delete the old private key afterwards. That means you only get proper FS between epochs where you update your own leaf.\r\n\r\nYou might get some weaker version of FS, because you still need the init secret of the past epoch, but, for example, a member that was just removed might still have that. I think FS for a given epoch should not depend on other epochs having been compromised in the past.\r\n\r\nYou also get some partial FS if someone else updates a key in your path, I think, but I'm not sure we should advertise this here.",
               "createdAt": "2020-09-14T07:46:44Z",
-              "updatedAt": "2020-09-14T17:14:36Z"
+              "updatedAt": "2020-10-05T17:55:44Z"
             },
             {
               "originalPosition": 112,
               "body": "In line with my comment above, I don't think you can get full FS \"within\" an epoch, as the key material used to derive the application secrets/keys in the first place might still be around. The AS Tree and the sender ratchets allow you to still provide optimal FS while keeping old keys around to decrypt out-of-order messages, but only _after_ you've deleted the other key material.",
               "createdAt": "2020-09-14T07:55:46Z",
-              "updatedAt": "2020-09-14T17:14:36Z"
+              "updatedAt": "2020-10-05T17:55:44Z"
             },
             {
               "originalPosition": 105,
               "body": "Maybe qualify that only the updating parties get PCS as opposed to the whole group? This is not explicit here, but just to be precise.",
               "createdAt": "2020-09-14T07:57:08Z",
-              "updatedAt": "2020-09-14T17:14:36Z"
+              "updatedAt": "2020-10-05T17:55:44Z"
             }
           ]
         },
@@ -27823,7 +27894,7 @@
               "originalPosition": 96,
               "body": "`membership_tag` actually, https://github.com/mlswg/mls-protocol/pull/396",
               "createdAt": "2020-09-14T16:54:26Z",
-              "updatedAt": "2020-09-14T17:14:36Z"
+              "updatedAt": "2020-10-05T17:55:44Z"
             }
           ]
         },
@@ -27843,7 +27914,7 @@
               "originalPosition": 105,
               "body": "I think it's fine to only discuss PCS wrt to an individual member. FS is talked about the same way, and it makes sense to me",
               "createdAt": "2020-09-14T17:00:53Z",
-              "updatedAt": "2020-09-14T17:14:36Z"
+              "updatedAt": "2020-10-05T17:55:44Z"
             }
           ]
         },
@@ -27863,7 +27934,7 @@
               "originalPosition": 112,
               "body": "That key material must be deleted per the protocol, so I don't feel the need to re-specify that in its entirety here",
               "createdAt": "2020-09-14T17:10:42Z",
-              "updatedAt": "2020-09-14T17:14:36Z"
+              "updatedAt": "2020-10-05T17:55:44Z"
             }
           ]
         },
@@ -27883,7 +27954,7 @@
               "originalPosition": 110,
               "body": "I think what I said is correct in principle, I'm just cutting corners. There's a disclaimer at the top of this section saying that this is just meant to give a high-level understanding of why MLS is secure but a full discussion is out of scope",
               "createdAt": "2020-09-14T17:12:47Z",
-              "updatedAt": "2020-09-14T17:14:36Z"
+              "updatedAt": "2020-10-05T17:55:44Z"
             }
           ]
         },
@@ -27903,7 +27974,7 @@
               "originalPosition": 39,
               "body": "```suggestion\r\nsubtree. This is called the *ratchet tree invariant* and it makes it possible to\r\n```",
               "createdAt": "2020-09-15T00:39:33Z",
-              "updatedAt": "2020-09-15T00:39:34Z"
+              "updatedAt": "2020-10-05T17:55:44Z"
             }
           ]
         },
@@ -27923,7 +27994,7 @@
               "originalPosition": 112,
               "body": "It's true that it must be deleted. It's just that deleting it doesn't give you FS within an epoch.",
               "createdAt": "2020-09-15T06:59:42Z",
-              "updatedAt": "2020-09-15T06:59:43Z"
+              "updatedAt": "2020-10-05T17:55:44Z"
             }
           ]
         }
@@ -28247,19 +28318,40 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-09-21T18:13:54Z",
-      "updatedAt": "2020-09-22T15:10:06Z",
+      "updatedAt": "2020-10-05T18:01:43Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
       "headRepository": "mlswg/mls-protocol",
       "headRefName": "external_commit",
-      "headRefOid": "71f630a67e4ecfca314050d6a87294addb12d537",
+      "headRefOid": "56c847f8335f1dabb68f745f9cf37b73e7534087",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAyMjkzMDAy",
+          "commit": {
+            "abbreviatedOid": "56c847f"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "- Please wrap lines at 80 characters\r\n- Please update to use an asymmetrically encrypted init secret (for *all* Commits, ideally)",
+          "createdAt": "2020-10-05T17:59:54Z",
+          "updatedAt": "2020-10-05T18:01:43Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n2. A member of the group or a new member broadcasts a Commit message that causes one or more\r\n```",
+              "createdAt": "2020-10-05T17:59:54Z",
+              "updatedAt": "2020-10-05T18:01:43Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 407,
@@ -28308,35 +28400,37 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDkyMDQ4MDI0",
       "title": "Clarify X509Credential structure",
       "url": "https://github.com/mlswg/mls-protocol/pull/408",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "suhasHere",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This PR adds clarification around X509 cert structure, the chain and its encoding X509.",
       "createdAt": "2020-09-23T21:22:59Z",
-      "updatedAt": "2020-10-03T19:40:18Z",
+      "updatedAt": "2020-10-05T14:59:56Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "ca187c70d7a5a5ac38f027526e78a72fa043bdf5",
       "headRepository": "suhasHere/mls-protocol",
       "headRefName": "master",
       "headRefOid": "8dec7125dfce6dd14f6d9494ca3c911b6b3eb876",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-10-05T14:59:56Z",
+      "mergedAt": "2020-10-05T14:59:56Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "eec3985d34dbb5a38fa45ec7edd3a0a1f2bd1fdc"
+      },
       "comments": [
         {
           "author": "suhasHere",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "@Bren2010  thanks for the suggestions. updated PR to reflect the changes . pls let me know .. ",
           "createdAt": "2020-09-24T23:14:06Z",
           "updatedAt": "2020-09-24T23:14:06Z"
         },
         {
           "author": "suhasHere",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "@Bren2010 i have pushed another commit .. can you please check. thanks",
           "createdAt": "2020-09-29T19:54:38Z",
           "updatedAt": "2020-09-29T19:54:38Z"
