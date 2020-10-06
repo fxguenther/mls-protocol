@@ -118,15 +118,15 @@ Internet-Draft                     MLS                      October 2020
      8.4.  Deletion Schedule . . . . . . . . . . . . . . . . . . . .  34
      8.5.  Exporters . . . . . . . . . . . . . . . . . . . . . . . .  36
    9.  Message Framing . . . . . . . . . . . . . . . . . . . . . . .  36
-     9.1.  Content Signing . . . . . . . . . . . . . . . . . . . . .  38
-     9.2.  Content Encryption  . . . . . . . . . . . . . . . . . . .  39
+     9.1.  Content Authentication  . . . . . . . . . . . . . . . . .  38
+     9.2.  Content Encryption  . . . . . . . . . . . . . . . . . . .  40
      9.3.  Sender Data Encryption  . . . . . . . . . . . . . . . . .  41
    10. Group Creation  . . . . . . . . . . . . . . . . . . . . . . .  42
    11. Group Evolution . . . . . . . . . . . . . . . . . . . . . . .  43
      11.1.  Proposals  . . . . . . . . . . . . . . . . . . . . . . .  44
        11.1.1.  Add  . . . . . . . . . . . . . . . . . . . . . . . .  44
        11.1.2.  Update . . . . . . . . . . . . . . . . . . . . . . .  45
-       11.1.3.  Remove . . . . . . . . . . . . . . . . . . . . . . .  45
+       11.1.3.  Remove . . . . . . . . . . . . . . . . . . . . . . .  46
        11.1.4.  External Proposals . . . . . . . . . . . . . . . . .  46
      11.2.  Commit . . . . . . . . . . . . . . . . . . . . . . . . .  47
        11.2.1.  Welcoming New Members  . . . . . . . . . . . . . . .  52
@@ -153,7 +153,7 @@ Internet-Draft                     MLS                      October 2020
    18. References  . . . . . . . . . . . . . . . . . . . . . . . . .  70
      18.1.  Normative References . . . . . . . . . . . . . . . . . .  70
      18.2.  Informative References . . . . . . . . . . . . . . . . .  71
-   Appendix A.  Tree Math  . . . . . . . . . . . . . . . . . . . . .  72
+   Appendix A.  Tree Math  . . . . . . . . . . . . . . . . . . . . .  73
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  76
 
 1.  Introduction
@@ -1725,10 +1725,10 @@ Internet-Draft                     MLS                      October 2020
                   +--------------------+---------------+
                   | confirmation_key   | "confirm"     |
                   +--------------------+---------------+
+                  | membership_key     | "membership"  |
+                  +--------------------+---------------+
 
                                  Table 2
-
-
 
 
 
@@ -2050,6 +2050,7 @@ Internet-Draft                     MLS                      October 2020
        }
 
        opaque signature<0..2^16-1>;
+       opaque membership_tag<0..2^8-1>;
    } MLSPlaintext;
 
    struct {
@@ -2063,7 +2064,6 @@ Internet-Draft                     MLS                      October 2020
 
    External sender types are sent as MLSPlaintext, see Section 11.1.4
    for their use.
-
 
 
 
@@ -2096,20 +2096,20 @@ Internet-Draft                     MLS                      October 2020
    The following sections describe the encryption and signing processes
    in detail.
 
-9.1.  Content Signing
+9.1.  Content Authentication
 
-   The "signature" field in an MLSPlaintext object is computed using the
-   signing private key corresponding to the credential at the leaf in
-   the tree indicated by the sender field.  The signature covers the
-   plaintext metadata and message content, which is all of MLSPlaintext
-   except for the "signature" field.  The signature also covers the
-   GroupContext for the current epoch, so that signatures are specific
-   to a given group and epoch.
+   The "signature" field in an MLSPlaintext object authenticates the
+   sender of the MLSPlaintext message.  The input to the signature is an
+   MLSPlaintextTBS structure, which encodes the content and metadata of
+   the message as well a context for the signature that associates to
+   the group messages sent within the group.
 
-
-
-
-
+   In cases where the sender is a member of the group, the context
+   contains the GroupContext for the current epoch and a "membership
+   tag" that authenticates that the sender is a member of the group.  As
+   a result, for messages sent within a group, the signature
+   authenticates the member's individual identity, and the membersip tag
+   authenticates their membership in the group.
 
 
 
@@ -2155,24 +2155,24 @@ Internet-Draft                     MLS                      October 2020
        }
    } MLSPlaintextTBS;
 
-9.2.  Content Encryption
+   struct {
+     MLSPlaintextTBS tbs;
+     opaque signature<0..2^16-1>;
+   } MLSPlaintextTBM;
 
-   The "ciphertext" field of the MLSCiphertext object is produced by
-   supplying the inputs described below to the AEAD function specified
-   by the ciphersuite in use.  The plaintext input contains content and
-   signature of the MLSPlaintext, plus optional padding.  These values
-   are encoded in the following form:
+   The "membership_tag" field in the MLSPlaintext object authenticates
+   the sender's membership in the group.  For an MLSPlaintext with a
+   sender type other than "member", this field MUST be set to the zero-
+   length octet string.  For messages sent by members, it MUST be set to
+   the following value:
 
+   membership_tag = MAC(membership_key, MLSPlaintextTBM);
 
-
-
-
-
-
-
-
-
-
+   When the sender type is "member", the "membership_tag" field MUST
+   contain a full-size MAC output, and MUST be verified before verifying
+   the signature or processing the message content.  For other sender
+   types, the "membership_tag" field MUST be set to the zero-length
+   octet string.
 
 
 
@@ -2185,6 +2185,16 @@ Barnes, et al.            Expires 9 April 2021                 [Page 39]
 
 Internet-Draft                     MLS                      October 2020
 
+
+9.2.  Content Encryption
+
+   The "ciphertext" field of the MLSCiphertext object is produced by
+   supplying the inputs described below to the AEAD function specified
+   by the ciphersuite in use.  The plaintext input contains the content
+   and signature of the MLSPlaintext, plus optional padding.  (The
+   membership token is not included in the encrypted content, because
+   the AEAD operation already authenticates the sender's membership in
+   the group.)  These values are encoded in the following form:
 
    struct {
        select (MLSCiphertext.content_type) {
@@ -2203,6 +2213,11 @@ Internet-Draft                     MLS                      October 2020
        opaque padding<0..2^16-1>;
    } MLSCiphertextContent;
 
+   Note that the "membership_tag" is not carried forward from
+   MLSPlaintext to MLSCiphertext.  In the context of an MLSCiphertext,
+   the AEAD authentication provides the function that the
+   "membership_tag" provides for MLSPlaintext.
+
    The key and nonce used for the encryption of the message depend on
    the content type of the message.  The sender chooses the handshake
    key for a handshake message or an unused generation from its (per-
@@ -2219,21 +2234,6 @@ Internet-Draft                     MLS                      October 2020
    To avoid this situation, the sender of a message MUST generate a
    fresh random 4-byte "reuse guard" value and XOR it with the first
    four bytes of the nonce from the key schedule before using the nonce
-   for encryption.  The sender MUST include the reuse guard in the
-   "reuse_guard" field of the sender data object, so that the recipient
-   of the message can use it to compute the nonce to be used for
-   decryption.
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2241,6 +2241,11 @@ Barnes, et al.            Expires 9 April 2021                 [Page 40]
 
 Internet-Draft                     MLS                      October 2020
 
+
+   for encryption.  The sender MUST include the reuse guard in the
+   "reuse_guard" field of the sender data object, so that the recipient
+   of the message can use it to compute the nonce to be used for
+   decryption.
 
    +-+-+-+-+---------...---+
    |   Key Schedule Nonce  |
@@ -2285,11 +2290,6 @@ Internet-Draft                     MLS                      October 2020
    verify Sender.sender_type is "member" and use Sender.sender for
    MLSSenderData.sender.
 
-   The "reuse_guard" field contains a fresh random value used to avoid
-   nonce reuse in the case of state loss or corruption, as described in
-   Section 9.2.
-
-
 
 
 
@@ -2297,6 +2297,10 @@ Barnes, et al.            Expires 9 April 2021                 [Page 41]
 
 Internet-Draft                     MLS                      October 2020
 
+
+   The "reuse_guard" field contains a fresh random value used to avoid
+   nonce reuse in the case of state loss or corruption, as described in
+   Section 9.2.
 
    The key and nonce provided to the AEAD are computed as the KDF of the
    first "KDF.Nh" bytes of the ciphertext generated in the previous
@@ -2341,11 +2345,7 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
       that the chosen version and ciphersuite is the best option
       supported by all members.
 
-   *  Initialize a one-member group with the following initial values
-      (where "0" represents an all-zero vector of size Hash.length):
 
-      -  Ratchet tree: A tree with a single node, a leaf containing an
-         HPKE public key and credential for the creator
 
 
 
@@ -2353,6 +2353,12 @@ Barnes, et al.            Expires 9 April 2021                 [Page 42]
 
 Internet-Draft                     MLS                      October 2020
 
+
+   *  Initialize a one-member group with the following initial values
+      (where "0" represents an all-zero vector of size Hash.length):
+
+      -  Ratchet tree: A tree with a single node, a leaf containing an
+         HPKE public key and credential for the creator
 
       -  Group ID: A value set by the creator
 
@@ -2395,12 +2401,6 @@ Internet-Draft                     MLS                      October 2020
    compromise security.  In MLS, each such change is accomplished by a
    two-step process:
 
-   1.  A proposal to make the change is broadcast to the group in a
-       Proposal message
-
-   2.  A member of the group broadcasts a Commit message that causes one
-       or more proposed changes to enter into effect
-
 
 
 
@@ -2409,6 +2409,12 @@ Barnes, et al.            Expires 9 April 2021                 [Page 43]
 
 Internet-Draft                     MLS                      October 2020
 
+
+   1.  A proposal to make the change is broadcast to the group in a
+       Proposal message
+
+   2.  A member of the group broadcasts a Commit message that causes one
+       or more proposed changes to enter into effect
 
    The group thus evolves from one cryptographic state to another each
    time a Commit message is sent and processed.  These states are
@@ -2451,12 +2457,6 @@ Internet-Draft                     MLS                      October 2020
    An Add proposal requests that a client with a specified KeyPackage be
    added to the group.
 
-   struct {
-       KeyPackage key_package;
-   } Add;
-
-
-
 
 
 
@@ -2465,6 +2465,10 @@ Barnes, et al.            Expires 9 April 2021                 [Page 44]
 
 Internet-Draft                     MLS                      October 2020
 
+
+   struct {
+       KeyPackage key_package;
+   } Add;
 
    The proposer of the Add does not control where in the group's ratchet
    tree the new member is added.  Instead, the sender of the Commit
@@ -2507,10 +2511,6 @@ Internet-Draft                     MLS                      October 2020
    *  Blank the intermediate nodes along the path from the sender's leaf
       to the root
 
-11.1.3.  Remove
-
-   A Remove proposal requests that the client at a specified index in
-   the tree be removed from the group.
 
 
 
@@ -2521,6 +2521,11 @@ Barnes, et al.            Expires 9 April 2021                 [Page 45]
 
 Internet-Draft                     MLS                      October 2020
 
+
+11.1.3.  Remove
+
+   A Remove proposal requests that the client at a specified index in
+   the tree be removed from the group.
 
    struct {
        uint32 removed;
@@ -2565,11 +2570,6 @@ Internet-Draft                     MLS                      October 2020
    An external proposal MUST be sent as an MLSPlaintext object, since
    the sender will not have the keys necessary to construct an
    MLSCiphertext object.
-
-
-
-
-
 
 
 
@@ -2842,8 +2842,8 @@ Internet-Draft                     MLS                      October 2020
    The confirmation tag value confirms that the members of the group
    have arrived at the same state of the group:
 
-MLSPlaintext.confirmation_tag =
-    KDF.Extract(confirmation_key, GroupContext.confirmed_transcript_hash)
+   MLSPlaintext.confirmation_tag =
+       MAC(confirmation_key, GroupContext.confirmed_transcript_hash)
 
 
 
@@ -3610,28 +3610,28 @@ Internet-Draft                     MLS                      October 2020
 
                                   Table 4
 
-   These ciphersuites map to HPKE primitives and TLS signature schemes
+   All of these ciphersuites use HMAC [RFC2104] as their MAC function,
+   with different hashes per ciphersuite.  The mapping of ciphersuites
+   to HPKE primitives, HMAC hash functions, and TLS signature schemes is
    as follows [I-D.irtf-cfrg-hpke] [RFC8446]:
 
-      +========+========+========+========+========================+
-      | Value  | KEM    | KDF    | AEAD   | Signature              |
-      +========+========+========+========+========================+
-      | 0x0001 | 0x0020 | 0x0001 | 0x0001 | ed25519                |
-      +--------+--------+--------+--------+------------------------+
-      | 0x0002 | 0x0010 | 0x0001 | 0x0001 | ecdsa_secp256r1_sha256 |
-      +--------+--------+--------+--------+------------------------+
-      | 0x0003 | 0x0020 | 0x0001 | 0x0003 | ed25519                |
-      +--------+--------+--------+--------+------------------------+
-      | 0x0004 | 0x0021 | 0x0003 | 0x0002 | ed448                  |
-      +--------+--------+--------+--------+------------------------+
-      | 0x0005 | 0x0012 | 0x0003 | 0x0002 | ecdsa_secp521r1_sha512 |
-      +--------+--------+--------+--------+------------------------+
-      | 0x0006 | 0x0021 | 0x0003 | 0x0003 | ed448                  |
-      +--------+--------+--------+--------+------------------------+
+   +======+========+========+========+========+========================+
+   |Value | KEM    | KDF    | AEAD   | Hash   | Signature              |
+   +======+========+========+========+========+========================+
+   |0x0001| 0x0020 | 0x0001 | 0x0001 | SHA256 | ed25519                |
+   +------+--------+--------+--------+--------+------------------------+
+   |0x0002| 0x0010 | 0x0001 | 0x0001 | SHA256 | ecdsa_secp256r1_sha256 |
+   +------+--------+--------+--------+--------+------------------------+
+   |0x0003| 0x0020 | 0x0001 | 0x0003 | SHA256 | ed25519                |
+   +------+--------+--------+--------+--------+------------------------+
+   |0x0004| 0x0021 | 0x0003 | 0x0002 | SHA512 | ed448                  |
+   +------+--------+--------+--------+--------+------------------------+
+   |0x0005| 0x0012 | 0x0003 | 0x0002 | SHA512 | ecdsa_secp521r1_sha512 |
+   +------+--------+--------+--------+--------+------------------------+
+   |0x0006| 0x0021 | 0x0003 | 0x0003 | SHA512 | ed448                  |
+   +------+--------+--------+--------+--------+------------------------+
 
-                                 Table 5
-
-
+                                  Table 5
 
 
 
@@ -3929,6 +3929,11 @@ Internet-Draft                     MLS                      October 2020
               <http://www.ietf.org/internet-drafts/draft-irtf-cfrg-hpke-
               05.txt>.
 
+   [RFC2104]  Krawczyk, H., Bellare, M., and R. Canetti, "HMAC: Keyed-
+              Hashing for Message Authentication", RFC 2104,
+              DOI 10.17487/RFC2104, February 1997,
+              <https://www.rfc-editor.org/info/rfc2104>.
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -3960,6 +3965,19 @@ Internet-Draft                     MLS                      October 2020
               Privacy Enhancing Technologies pp. 143-163, 2014,
               <https://doi.org/10.1007/978-3-319-08506-7_8>.
 
+
+
+
+
+
+
+
+
+Barnes, et al.            Expires 9 April 2021                 [Page 71]
+
+Internet-Draft                     MLS                      October 2020
+
+
    [doubleratchet]
               Cohn-Gordon, K., Cremers, C., Dowling, B., Garratt, L.,
               and D. Stebila, "A Formal Security Analysis of the Signal
@@ -3970,14 +3988,6 @@ Internet-Draft                     MLS                      October 2020
    [HCJ16]    Husák, M., Čermák, M., Jirsík, T., and P. Čeleda, "HTTPS
               traffic analysis and client identification using passive
               SSL/TLS fingerprinting", DOI 10.1186/s13635-016-0030-7,
-
-
-
-Barnes, et al.            Expires 9 April 2021                 [Page 71]
-
-Internet-Draft                     MLS                      October 2020
-
-
               EURASIP Journal on Information Security Vol. 2016,
               February 2016,
               <https://doi.org/10.1186/s13635-016-0030-7>.
@@ -4016,16 +4026,6 @@ Internet-Draft                     MLS                      October 2020
               <https://www.signal.org/docs/specifications/
               doubleratchet/>.
 
-Appendix A.  Tree Math
-
-   One benefit of using left-balanced trees is that they admit a simple
-   flat array representation.  In this representation, leaf nodes are
-   even-numbered nodes, with the n-th leaf at 2*n.  Intermediate nodes
-   are held in odd-numbered nodes.  For example, an 11-element tree has
-   the following structure:
-
-
-
 
 
 
@@ -4033,6 +4033,14 @@ Barnes, et al.            Expires 9 April 2021                 [Page 72]
 
 Internet-Draft                     MLS                      October 2020
 
+
+Appendix A.  Tree Math
+
+   One benefit of using left-balanced trees is that they admit a simple
+   flat array representation.  In this representation, leaf nodes are
+   even-numbered nodes, with the n-th leaf at 2*n.  Intermediate nodes
+   are held in odd-numbered nodes.  For example, an 11-element tree has
+   the following structure:
 
                                                 X
                         X
@@ -4074,6 +4082,14 @@ def level(x):
     k = 0
     while ((x >> k) & 0x01) == 1:
         k += 1
+
+
+
+Barnes, et al.            Expires 9 April 2021                 [Page 73]
+
+Internet-Draft                     MLS                      October 2020
+
+
     return k
 
 # The number of nodes needed to represent a tree with n leaves.
@@ -4082,13 +4098,6 @@ def node_width(n):
         return 0
     else:
         return 2*(n - 1) + 1
-
-
-
-Barnes, et al.            Expires 9 April 2021                 [Page 73]
-
-Internet-Draft                     MLS                      October 2020
-
 
 # The index of the root node of a tree with n leaves.
 def root(n):
@@ -4130,6 +4139,13 @@ def parent(x, n):
     if x == root(n):
         raise Exception('root node has no parent')
 
+
+
+Barnes, et al.            Expires 9 April 2021                 [Page 74]
+
+Internet-Draft                     MLS                      October 2020
+
+
     p = parent_step(x)
     while p >= node_width(n):
         p = parent_step(p)
@@ -4138,14 +4154,6 @@ def parent(x, n):
 # The other child of the node's parent.
 def sibling(x, n):
     p = parent(x, n)
-
-
-
-Barnes, et al.            Expires 9 April 2021                 [Page 74]
-
-Internet-Draft                     MLS                      October 2020
-
-
     if x < p:
         return right(p, n)
     else:
@@ -4186,14 +4194,6 @@ def common_ancestor_semantic(x, y, n):
 
 # The common ancestor of two nodes is the lowest node that is in the
 # direct paths of both leaves.
-def common_ancestor_direct(x, y, _):
-    # Handle cases where one is an ancestor of the other
-    lx, ly = level(x)+1, level(y)+1
-    if (lx <= ly) and (x>>ly == y>>ly):
-      return y
-    elif (ly <= lx) and (x>>lx == y>>lx):
-      return x
-
 
 
 
@@ -4201,6 +4201,14 @@ Barnes, et al.            Expires 9 April 2021                 [Page 75]
 
 Internet-Draft                     MLS                      October 2020
 
+
+def common_ancestor_direct(x, y, _):
+    # Handle cases where one is an ancestor of the other
+    lx, ly = level(x)+1, level(y)+1
+    if (lx <= ly) and (x>>ly == y>>ly):
+      return y
+    elif (ly <= lx) and (x>>lx == y>>lx):
+      return x
 
     # Handle other cases
     xn, yn = x, y
@@ -4242,6 +4250,14 @@ Authors' Addresses
    Email: me@katriel.co.uk
 
 
+
+
+
+Barnes, et al.            Expires 9 April 2021                 [Page 76]
+
+Internet-Draft                     MLS                      October 2020
+
+
    Raphael Robert
    Wire
 
@@ -4253,4 +4269,44 @@ Authors' Addresses
 
 
 
-Barnes, et al.            Expires 9 April 2021                 [Page 76]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Barnes, et al.            Expires 9 April 2021                 [Page 77]
