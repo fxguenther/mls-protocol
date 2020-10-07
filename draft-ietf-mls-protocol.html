@@ -1118,7 +1118,7 @@ in size ranging from two to thousands.<a href="#section-abstract-1" class="pilcr
                 <p id="section-toc.1-1.15.2.2.1"><a href="#section-15.2" class="xref">15.2</a>.  <a href="#name-authentication" class="xref">Authentication</a><a href="#section-toc.1-1.15.2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="ulEmpty toc compact" id="section-toc.1-1.15.2.3">
-                <p id="section-toc.1-1.15.2.3.1"><a href="#section-15.3" class="xref">15.3</a>.  <a href="#name-forward-and-post-compromise" class="xref">Forward and post-compromise security</a><a href="#section-toc.1-1.15.2.3.1" class="pilcrow">¶</a></p>
+                <p id="section-toc.1-1.15.2.3.1"><a href="#section-15.3" class="xref">15.3</a>.  <a href="#name-forward-secrecy-and-post-co" class="xref">Forward Secrecy and Post-Compromise Security</a><a href="#section-toc.1-1.15.2.3.1" class="pilcrow">¶</a></p>
 </li>
               <li class="ulEmpty toc compact" id="section-toc.1-1.15.2.4">
                 <p id="section-toc.1-1.15.2.4.1"><a href="#section-15.4" class="xref">15.4</a>.  <a href="#name-initkey-reuse" class="xref">InitKey Reuse</a><a href="#section-toc.1-1.15.2.4.1" class="pilcrow">¶</a></p>
@@ -2875,7 +2875,7 @@ and not encrypted.  Applications MUST use MLSCiphertext to encrypt
 application messages and SHOULD use MLSCiphertext to encode
 handshake messages, but MAY transmit handshake messages encoded
 as MLSPlaintext objects in cases where it is necessary for the
-delivery service to examine such messages.<a href="#section-9-2" class="pilcrow">¶</a></p>
+Delivery Service to examine such messages.<a href="#section-9-2" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-9-3">
 <pre>
 enum {
@@ -3893,7 +3893,7 @@ based on the same state.<a href="#section-13-2" class="pilcrow">¶</a></p>
 deconflict the simultaneous Commit messages.  There are two
 general approaches:<a href="#section-13-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-13-4.1">Have the delivery service enforce a total order<a href="#section-13-4.1" class="pilcrow">¶</a>
+<li class="normal" id="section-13-4.1">Have the Delivery Service enforce a total order<a href="#section-13-4.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-13-4.2">Have a signal in the message that clients can use to break ties<a href="#section-13-4.2" class="pilcrow">¶</a>
 </li>
@@ -3924,7 +3924,7 @@ the Commit message will succeed or not.<a href="#section-13-7" class="pilcrow">�
         <h3 id="name-server-enforced-ordering">
 <a href="#section-13.1" class="section-number selfRef">13.1. </a><a href="#name-server-enforced-ordering" class="section-name selfRef">Server-Enforced Ordering</a>
         </h3>
-<p id="section-13.1-1">With this approach, the delivery service ensures that incoming
+<p id="section-13.1-1">With this approach, the Delivery Service ensures that incoming
 messages are added to an ordered queue and outgoing messages are
 dispatched in the same order. The server is trusted to break ties
 when two members send a Commit message at the same time.<a href="#section-13.1-1" class="pilcrow">¶</a></p>
@@ -4071,16 +4071,17 @@ document.<a href="#section-15-1" class="pilcrow">¶</a></p>
         <h3 id="name-confidentiality-of-the-grou">
 <a href="#section-15.1" class="section-number selfRef">15.1. </a><a href="#name-confidentiality-of-the-grou" class="section-name selfRef">Confidentiality of the Group Secrets</a>
         </h3>
-<p id="section-15.1-1">Group secrets are derived from (i) previous group secrets, and (ii)
-the root key of a ratcheting tree. Only group members know their leaf
-private key in the group, therefore, the root key of the group's ratcheting
-tree is secret and thus so are all values derived from it.<a href="#section-15.1-1" class="pilcrow">¶</a></p>
-<p id="section-15.1-2">Initial leaf keys are known only by their owner and the group creator,
-because they are derived from an authenticated key exchange protocol.
-Subsequent leaf keys are known only by their owner.<a href="#section-15.1-2" class="pilcrow">¶</a></p>
-<p id="section-15.1-3">Note that the signature keys used by the protocol MUST be
-distributed by an "honest" authentication service for clients to
-authenticate their legitimate peers.<a href="#section-15.1-3" class="pilcrow">¶</a></p>
+<p id="section-15.1-1">Group secrets are partly derived from the output of a ratchet tree. Ratchet
+trees work by assigning each member of the group to a leaf in the tree and
+maintaining the following property: the private key of a node in the tree is
+known only to members of the group that are assigned a leaf in the node's
+subtree. This is called the <em>ratchet tree invariant</em> and it makes it possible to
+encrypt to all group members except one, with a number of ciphertexts that's
+logarithmic in the number of group members.<a href="#section-15.1-1" class="pilcrow">¶</a></p>
+<p id="section-15.1-2">The ability to efficiently encrypt to all members except one allows members to
+be securely removed from a group. It also allows a member to rotate their
+keypair such that the old private key can no longer be used to decrypt new
+messages.<a href="#section-15.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authentication">
@@ -4088,36 +4089,33 @@ authenticate their legitimate peers.<a href="#section-15.1-3" class="pilcrow">¶
         <h3 id="name-authentication">
 <a href="#section-15.2" class="section-number selfRef">15.2. </a><a href="#name-authentication" class="section-name selfRef">Authentication</a>
         </h3>
-<p id="section-15.2-1">There are two forms of authentication we consider. The first form
-considers authentication with respect to the group. That is, the group
-members can verify that a message originated from one of the members
-of the group. This is implicitly guaranteed by the secrecy of the
-shared key derived from the ratcheting trees: if all members of the
-group are honest, then the shared group key is only known to the group
-members. By using AEAD or appropriate MAC with this shared key, we can
-guarantee that a member in the group (who knows the shared secret
-key) has sent a message.<a href="#section-15.2-1" class="pilcrow">¶</a></p>
-<p id="section-15.2-2">The second form considers authentication with respect to the sender,
-meaning the group members can verify that a message originated from a
-particular member of the group. This property is provided by digital
-signatures on the messages under signature keys.<a href="#section-15.2-2" class="pilcrow">¶</a></p>
+<p id="section-15.2-1">The first form of authentication we provide is that group members can verify a
+message originated from one of the members of the group. For encrypted messages,
+this is guaranteed because messages are encrypted with an AEAD under a key
+derived from the group secrets. For plaintext messages, this is guaranteed by
+the use of a <code>membership_tag</code> which constitutes a MAC over the message, under a
+key derived from the group secrets.<a href="#section-15.2-1" class="pilcrow">¶</a></p>
+<p id="section-15.2-2">The second form of authentication is that group members can verify a message
+originated from a particular member of the group. This is guaranteed by a
+digital signature on each message from the sender's identity key.<a href="#section-15.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="forward-and-post-compromise-security">
+<div id="forward-secrecy-and-post-compromise-security">
 <section id="section-15.3">
-        <h3 id="name-forward-and-post-compromise">
-<a href="#section-15.3" class="section-number selfRef">15.3. </a><a href="#name-forward-and-post-compromise" class="section-name selfRef">Forward and post-compromise security</a>
+        <h3 id="name-forward-secrecy-and-post-co">
+<a href="#section-15.3" class="section-number selfRef">15.3. </a><a href="#name-forward-secrecy-and-post-co" class="section-name selfRef">Forward Secrecy and Post-Compromise Security</a>
         </h3>
-<p id="section-15.3-1">Message encryption keys are derived via a hash ratchet, which
-provides a form of forward secrecy: learning a message key does not
-reveal previous message or root keys. Post-compromise security is
-provided by Commit operations, in which a new root key is generated
-from the latest ratcheting tree. If the adversary cannot derive the
-updated root key after a Commit operation, it cannot compute any
-derived secrets.<a href="#section-15.3-1" class="pilcrow">¶</a></p>
-<p id="section-15.3-2">In the case where the client could have been compromised (device
-loss, for example), the client SHOULD signal the delivery service to expire
-all the previous KeyPackages and publish fresh ones for PCS.<a href="#section-15.3-2" class="pilcrow">¶</a></p>
+<p id="section-15.3-1">Post-compromise security is provided between epochs by members regularly
+updating their leaf key in the ratchet tree. Updating their leaf key prevents
+group secrets from continuing to be encrypted to previously compromised public
+keys.<a href="#section-15.3-1" class="pilcrow">¶</a></p>
+<p id="section-15.3-2">Forward-secrecy between epochs is provided by deleting private keys from past
+version of the ratchet tree, as this prevents old group secrets from being
+re-derived. Forward secrecy <em>within</em> an epoch is provided by deleting message
+encryption keys once they've been used to encrypt or decrypt a message.<a href="#section-15.3-2" class="pilcrow">¶</a></p>
+<p id="section-15.3-3">Post-compromise security is also provided for new groups by members regularly
+generating new InitKeys and uploading them to the Delivery Service, such that
+compromised key material won't be used when the member is added to a new group.<a href="#section-15.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="initkey-reuse">
