@@ -2222,18 +2222,18 @@ Internet-Draft                     MLS                      October 2020
 
 9.1.  Content Authentication
 
-   The "signature" field in an MLSPlaintext object authenticates the
-   sender of the MLSPlaintext message.  The input to the signature is an
-   MLSPlaintextTBS structure, which encodes the content and metadata of
-   the message as well a context for the signature that associates to
-   the group messages sent within the group.
+   The "signature" field in an MLSPlaintext object is computed using the
+   signing private key corresponding to the credential at the leaf of
+   the tree indicated by the sender field.  The signature covers the
+   plaintext metadata and message content, which is all of MLSPlaintext
+   except for the "signature" and "membership_tag" fields.  If the
+   sender is a member of the group, the signature also covers the
+   GroupContext for the current epoch, so that signatures are specific
+   to a given group and epoch.
 
-   In cases where the sender is a member of the group, the context
-   contains the GroupContext for the current epoch and a "membership
-   tag" that authenticates that the sender is a member of the group.  As
-   a result, for messages sent within a group, the signature
-   authenticates the member's individual identity, and the membersip tag
-   authenticates their membership in the group.
+
+
+
 
 
 
@@ -2267,24 +2267,24 @@ Internet-Draft                     MLS                      October 2020
        }
    } MLSPlaintextTBS;
 
-   struct {
-     MLSPlaintextTBS tbs;
-     opaque signature<0..2^16-1>;
-   } MLSPlaintextTBM;
-
    The "membership_tag" field in the MLSPlaintext object authenticates
    the sender's membership in the group.  For an MLSPlaintext with a
    sender type other than "member", this field MUST be omitted.  For
    messages sent by members, it MUST be present and set to the following
    value:
 
+   struct {
+     MLSPlaintextTBS tbs;
+     opaque signature<0..2^16-1>;
+   } MLSPlaintextTBM;
+
    membership_tag = MAC(membership_key, MLSPlaintextTBM);
 
-   When the sender type is "member", the "membership_tag" field MUST
-   contain a full-size MAC output, and MUST be verified before verifying
-   the signature or processing the message content.  For other sender
-   types, the "membership_tag" field MUST be set to the zero-length
-   octet string.
+   Note that the "membership_tag" only needs to be computed for
+   MLSPlaintext messages that will be sent over the wire, and isn't
+   needed for those that will be encrypted and transmitted as
+   MLSCiphertext messages.
+
 
 
 
@@ -2303,10 +2303,8 @@ Internet-Draft                     MLS                      October 2020
    The "ciphertext" field of the MLSCiphertext object is produced by
    supplying the inputs described below to the AEAD function specified
    by the ciphersuite in use.  The plaintext input contains the content
-   and signature of the MLSPlaintext, plus optional padding.  (The
-   membership token is not included in the encrypted content, because
-   the AEAD operation already authenticates the sender's membership in
-   the group.)  These values are encoded in the following form:
+   and signature of the MLSPlaintext, plus optional padding.  These
+   values are encoded in the following form:
 
    struct {
        select (MLSCiphertext.content_type) {
@@ -2325,11 +2323,6 @@ Internet-Draft                     MLS                      October 2020
        opaque padding<0..2^16-1>;
    } MLSCiphertextContent;
 
-   Note that the "membership_tag" is not carried forward from
-   MLSPlaintext to MLSCiphertext.  In the context of an MLSCiphertext,
-   the AEAD authentication provides the function that the
-   "membership_tag" provides for MLSPlaintext.
-
    The key and nonce used for the encryption of the message depend on
    the content type of the message.  The sender chooses the handshake
    key for a handshake message or an unused generation from its (per-
@@ -2346,6 +2339,13 @@ Internet-Draft                     MLS                      October 2020
    To avoid this situation, the sender of a message MUST generate a
    fresh random 4-byte "reuse guard" value and XOR it with the first
    four bytes of the nonce from the key schedule before using the nonce
+   for encryption.  The sender MUST include the reuse guard in the
+   "reuse_guard" field of the sender data object, so that the recipient
+   of the message can use it to compute the nonce to be used for
+   decryption.
+
+
+
 
 
 
@@ -2353,11 +2353,6 @@ Barnes, et al.            Expires 11 April 2021                [Page 42]
 
 Internet-Draft                     MLS                      October 2020
 
-
-   for encryption.  The sender MUST include the reuse guard in the
-   "reuse_guard" field of the sender data object, so that the recipient
-   of the message can use it to compute the nonce to be used for
-   decryption.
 
    +-+-+-+-+---------...---+
    |   Key Schedule Nonce  |
@@ -2402,6 +2397,11 @@ Internet-Draft                     MLS                      October 2020
    verify Sender.sender_type is "member" and use Sender.sender for
    MLSSenderData.sender.
 
+   The "reuse_guard" field contains a fresh random value used to avoid
+   nonce reuse in the case of state loss or corruption, as described in
+   Section 9.2.
+
+
 
 
 
@@ -2409,10 +2409,6 @@ Barnes, et al.            Expires 11 April 2021                [Page 43]
 
 Internet-Draft                     MLS                      October 2020
 
-
-   The "reuse_guard" field contains a fresh random value used to avoid
-   nonce reuse in the case of state loss or corruption, as described in
-   Section 9.2.
 
    The key and nonce provided to the AEAD are computed as the KDF of the
    first "KDF.Nh" bytes of the ciphertext generated in the previous
@@ -2457,7 +2453,11 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
       that the chosen version and ciphersuite is the best option
       supported by all members.
 
+   *  Initialize a one-member group with the following initial values
+      (where "0" represents an all-zero vector of size Hash.length):
 
+      -  Ratchet tree: A tree with a single node, a leaf containing an
+         HPKE public key and credential for the creator
 
 
 
@@ -2465,12 +2465,6 @@ Barnes, et al.            Expires 11 April 2021                [Page 44]
 
 Internet-Draft                     MLS                      October 2020
 
-
-   *  Initialize a one-member group with the following initial values
-      (where "0" represents an all-zero vector of size Hash.length):
-
-      -  Ratchet tree: A tree with a single node, a leaf containing an
-         HPKE public key and credential for the creator
 
       -  Group ID: A value set by the creator
 
@@ -2512,6 +2506,12 @@ Internet-Draft                     MLS                      October 2020
    consisting of re-initialization of an existing group, or branching of
    a sub-group.
 
+   Re-initialization of an existing group may be used, for example, to
+   re-start the group based on the current group state but under a
+   different ciphersuite.
+
+   Branching may be used to bootstrap a new group consisting of a subset
+   of current group members, based on the current group state.
 
 
 
@@ -2521,13 +2521,6 @@ Barnes, et al.            Expires 11 April 2021                [Page 45]
 
 Internet-Draft                     MLS                      October 2020
 
-
-   Re-initialization of an existing group may be used, for example, to
-   re-start the group based on the current group state but under a
-   different ciphersuite.
-
-   Branching may be used to bootstrap a new group consisting of a subset
-   of current group members, based on the current group state.
 
    In both cases, the "psk_nonce" included in the "PreSharedKeyID"
    object must be a randomly sampled nonce of length "KDF.Nh" to avoid
@@ -2568,6 +2561,13 @@ Internet-Draft                     MLS                      October 2020
    2.  A member of the group broadcasts a Commit message that causes one
        or more proposed changes to enter into effect
 
+   The group thus evolves from one cryptographic state to another each
+   time a Commit message is sent and processed.  These states are
+   referred to as "epochs" and are uniquely identified among states of
+   the group by eight-octet epoch values.  When a new group is
+   initialized, its initial state epoch is 0x0000000000000000.  Each
+   time a state transition occurs, the epoch number is incremented by
+   one.
 
 
 
@@ -2577,14 +2577,6 @@ Barnes, et al.            Expires 11 April 2021                [Page 46]
 
 Internet-Draft                     MLS                      October 2020
 
-
-   The group thus evolves from one cryptographic state to another each
-   time a Commit message is sent and processed.  These states are
-   referred to as "epochs" and are uniquely identified among states of
-   the group by eight-octet epoch values.  When a new group is
-   initialized, its initial state epoch is 0x0000000000000000.  Each
-   time a state transition occurs, the epoch number is incremented by
-   one.
 
 11.1.  Proposals
 
@@ -2627,17 +2619,20 @@ Internet-Draft                     MLS                      October 2020
        KeyPackage key_package;
    } Add;
 
+   The proposer of the Add does not control where in the group's ratchet
+   tree the new member is added.  Instead, the sender of the Commit
+   message chooses a location for each added member and states it in the
+   Commit message.
+
+
+
+
 
 
 Barnes, et al.            Expires 11 April 2021                [Page 47]
 
 Internet-Draft                     MLS                      October 2020
 
-
-   The proposer of the Add does not control where in the group's ratchet
-   tree the new member is added.  Instead, the sender of the Commit
-   message chooses a location for each added member and states it in the
-   Commit message.
 
    An Add is applied after being included in a Commit message.  The
    position of the Add in the list of proposals determines the leaf
@@ -2680,7 +2675,12 @@ Internet-Draft                     MLS                      October 2020
    A Remove proposal requests that the client at a specified index in
    the tree be removed from the group.
 
+   struct {
+       uint32 removed;
+   } Remove;
 
+   A member of the group applies a Remove message by taking the
+   following steps:
 
 
 
@@ -2689,13 +2689,6 @@ Barnes, et al.            Expires 11 April 2021                [Page 48]
 
 Internet-Draft                     MLS                      October 2020
 
-
-   struct {
-       uint32 removed;
-   } Remove;
-
-   A member of the group applies a Remove message by taking the
-   following steps:
 
    *  Replace the leaf node at position "removed" with a blank node
 
@@ -2738,6 +2731,13 @@ Internet-Draft                     MLS                      October 2020
    "PreSharedKey" with "psktype = reinit" and with "psk_group_id" and
    "psk_epoch" equal to the "group_id" and "epoch" of the existing group
    after the Commit containing the "reinit" Proposal was processed.
+
+
+
+
+
+
+
 
 
 
