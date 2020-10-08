@@ -2786,11 +2786,11 @@ Internet-Draft                     MLS                      October 2020
    and advancing the key schedule.
 
    Each proposal covered by the Commit is identified by a ProposalID
-   value, which contains the hash of the MLSPlaintext in which the
-   Proposal was sent, using the hash function from the group's
-   ciphersuite.
-
-
+   value, which identifies the proposal to be applied by value or by
+   reference.  Proposals supplied by value are included directly in the
+   Commit object.  Proposals supplied by reference are specified by
+   including the hash of the MLSPlaintext in which the Proposal was
+   sent, using the hash function from the group's ciphersuite.
 
 
 
@@ -2802,7 +2802,20 @@ Barnes, et al.            Expires 11 April 2021                [Page 50]
 Internet-Draft                     MLS                      October 2020
 
 
-   opaque ProposalID<0..255>;
+   enum {
+     reserved(0),
+     value(1)
+     plaintext_hash(2),
+     (255)
+   } ProposalIDType;
+
+   struct {
+     ProposalIDType type;
+     select (type) {
+       case value:          Proposal proposal;
+       case plaintext_hash: opaque hash<0..255>;
+     }
+   } ProposalID;
 
    struct {
        ProposalID proposals<0..2^32-1>;
@@ -2836,6 +2849,15 @@ Internet-Draft                     MLS                      October 2020
    unique "group_id" and parameters that are supported by all clients in
    the group.
 
+
+
+
+
+Barnes, et al.            Expires 11 April 2021                [Page 51]
+
+Internet-Draft                     MLS                      October 2020
+
+
    The Commit MUST NOT combine proposals sent within different epochs.
    In the event that a valid proposal is omitted from the next Commit,
    the sender of the proposal SHOULD retransmit it in the new epoch.
@@ -2847,16 +2869,6 @@ Internet-Draft                     MLS                      October 2020
    to the sender of the Commit.  An Update proposal can be regarded as a
    "lazy" version of this operation, where only the leaf changes and
    intermediate nodes are blanked out.
-
-
-
-
-
-
-Barnes, et al.            Expires 11 April 2021                [Page 51]
-
-Internet-Draft                     MLS                      October 2020
-
 
    The "path" field of a Commit message MUST be populated if the Commit
    covers at least one Update or Remove proposal.  The "path" field MUST
@@ -2893,18 +2905,6 @@ Internet-Draft                     MLS                      October 2020
        provides FS with regard to any removed members and PCS for the
        committer and any updated members.
 
-   A member of the group creates a Commit message and the corresponding
-   Welcome message at the same time, by taking the following steps:
-
-   *  Construct an initial Commit object with the "proposals" field
-      populated from Proposals received during the current epoch, and
-      empty "key_package" and "path" fields.
-
-
-
-
-
-
 
 
 
@@ -2913,6 +2913,13 @@ Barnes, et al.            Expires 11 April 2021                [Page 52]
 
 Internet-Draft                     MLS                      October 2020
 
+
+   A member of the group creates a Commit message and the corresponding
+   Welcome message at the same time, by taking the following steps:
+
+   *  Construct an initial Commit object with the "proposals" field
+      populated from Proposals received during the current epoch, and
+      empty "key_package" and "path" fields.
 
    *  Generate a provisional GroupContext object by applying the
       proposals referenced in the initial Commit object, as described in
@@ -2955,13 +2962,6 @@ Internet-Draft                     MLS                      October 2020
       Commit to the null optional.  Define "commit_secret" as the all-
       zero vector of the same length as a "path_secret" value would be.
 
-   *  Generate a new KeyPackage for the Committer's own leaf, with a
-      "parent_hash" extension.  Store it in the ratchet tree and assign
-      it to the "key_package" field in the Commit object.
-
-
-
-
 
 
 
@@ -2969,6 +2969,10 @@ Barnes, et al.            Expires 11 April 2021                [Page 53]
 
 Internet-Draft                     MLS                      October 2020
 
+
+   *  Generate a new KeyPackage for the Committer's own leaf, with a
+      "parent_hash" extension.  Store it in the ratchet tree and assign
+      it to the "key_package" field in the Commit object.
 
    *  If one or more PreSharedKey proposals are part of the commit,
       derive the "psk_secret" as specified in Section 8.1, where the
@@ -3014,10 +3018,6 @@ Internet-Draft                     MLS                      October 2020
       included in the commit.  The order of the "psks" MUST be the same
       as the order of PreSharedKey proposals in the "proposals" vector.
 
-   *  If a ReInit proposal was part of the Commit, the committer MUST
-      create a new group with the Group ID and the parameters specified
-      in the ReInit proposal and with the same members as the original
-      group after processing the current commit.  The Welcome message
 
 
 
@@ -3026,6 +3026,10 @@ Barnes, et al.            Expires 11 April 2021                [Page 54]
 Internet-Draft                     MLS                      October 2020
 
 
+   *  If a ReInit proposal was part of the Commit, the committer MUST
+      create a new group with the Group ID and the parameters specified
+      in the ReInit proposal and with the same members as the original
+      group after processing the current commit.  The Welcome message
       MUST include a "PreSharedKeyID" with "psktype" "reinit" and with
       "psk_group_id" and "psk_epoch" corresponding to the current group
       and the epoch after the commit was processed.
@@ -3071,16 +3075,16 @@ Internet-Draft                     MLS                      October 2020
       -  Apply the UpdatePath to the tree, as described in Section 5.5,
          and store "key_package" at the Committer's leaf.
 
-      -  Verify that the KeyPackage has a "parent_hash" extension and
-         that its value matches the new parent of the sender's leaf
-         node.
-
 
 
 Barnes, et al.            Expires 11 April 2021                [Page 55]
 
 Internet-Draft                     MLS                      October 2020
 
+
+      -  Verify that the KeyPackage has a "parent_hash" extension and
+         that its value matches the new parent of the sender's leaf
+         node.
 
       -  Define "commit_secret" as the value "path_secret[n+1]" derived
          from the "path_secret[n]" value assigned to the root node.
@@ -3125,11 +3129,7 @@ Internet-Draft                     MLS                      October 2020
          "group_id" are the fields of the original group after
          processing the commit.
 
-      If any of the conditions are not met, the Client SHOULD not
-      process the Welcome message.
 
-   The confirmation tag value confirms that the members of the group
-   have arrived at the same state of the group:
 
 
 
@@ -3137,6 +3137,12 @@ Barnes, et al.            Expires 11 April 2021                [Page 56]
 
 Internet-Draft                     MLS                      October 2020
 
+
+      If any of the conditions are not met, the Client SHOULD not
+      process the Welcome message.
+
+   The confirmation tag value confirms that the members of the group
+   have arrived at the same state of the group:
 
    MLSPlaintext.confirmation_tag =
        MAC(confirmation_key, GroupContext.confirmed_transcript_hash)
@@ -3167,12 +3173,6 @@ Internet-Draft                     MLS                      October 2020
    Welcome message is sent in the context of a group re-initialization
    and it SHOULD be included if the Welcome message is sent to create a
    sub-group of an existing group.
-
-
-
-
-
-
 
 
 
