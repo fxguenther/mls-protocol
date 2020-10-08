@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-06T00:51:13.612778+00:00",
+  "timestamp": "2020-10-08T00:43:16.488788+00:00",
   "repo": "mlswg/mls-protocol",
   "labels": [
     {
@@ -2897,7 +2897,7 @@
       "id": "MDU6SXNzdWU1NDEwNjA5NDg=",
       "title": "Editorial: structure of the document",
       "url": "https://github.com/mlswg/mls-protocol/issues/273",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "beurdouche",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -2907,9 +2907,17 @@
       ],
       "body": "We relocated multiple pieces recently which causes the general structure of the document to feel a bit disordered, we need to do a minimal editorial restructure before releasing the next draft.\r\nChanging the depth of some sections might be enough...",
       "createdAt": "2019-12-20T15:48:48Z",
-      "updatedAt": "2020-01-08T12:22:11Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2020-10-06T07:29:05Z",
+      "closedAt": "2020-10-06T07:29:05Z",
+      "comments": [
+        {
+          "author": "beurdouche",
+          "authorAssociation": "MEMBER",
+          "body": "I am gonna close this in favor of the newer issue where we started a bit more discussion:\r\nhttps://github.com/mlswg/mls-protocol/issues/409",
+          "createdAt": "2020-10-06T07:29:04Z",
+          "updatedAt": "2020-10-06T07:29:04Z"
+        }
+      ]
     },
     {
       "number": 276,
@@ -3712,10 +3720,12 @@
       "author": "bifurcation",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "editorial"
+      ],
       "body": "The not-protocol parts of the document, including security considerations and some of the operational considerations, are mostly untouched since the beginning of this work.  As we get the protocol firmed up, we should revisit these parts to make sure they're up to date and give an accurate reflection of the concerns around the protocol.",
       "createdAt": "2020-07-24T21:10:56Z",
-      "updatedAt": "2020-08-04T11:57:03Z",
+      "updatedAt": "2020-10-06T07:30:16Z",
       "closedAt": null,
       "comments": [
         {
@@ -3804,10 +3814,14 @@
       "assignees": [
         "kkohbrok"
       ],
-      "labels": [],
+      "labels": [
+        "enhancement",
+        "security",
+        "work in progress"
+      ],
       "body": "[This issue is part of a feature breakdown based on #336]\r\n\r\nThere are a few subissues here:\r\n\r\n# 1. Signaling which PSK(s) to add to the key schedule\r\n\r\nWhen a PSK is to be added to the key schedule in an epoch, the sender of the Commit needs to signal this to existing members in a Commit, and to any new members in the GroupInfo.  In both cases, there should be an extension to signal this.  This would work like the [TLS ServerHello PSK extension](https://tools.ietf.org/html/rfc8446#section-4.2.11), which simply indicates which PSK is being used.  In the MLS case, we would probably include the full ID instead of just an index, since there's not a clear list like in TLS.  And just like the server's ability to complete the TLS handshake proves that it has the PSK, the confirmation value in MLS would validate the same.\r\n\r\n```\r\nstruct {\r\n    opaque identity<1..2^16-1>;\r\n} PreSharedKeyExtension;\r\n```\r\n\r\n# 2. Signaling which PSKs are available\r\n\r\nIt might also be useful for clients to advertise in a KeyPackage extension what PSKs they have available.  This would be analogous to the ClientHello PSK extension, which includes a binding value to prove that the client has the PSK.  If we define such an extension, we will need to decide (a) whether we need such a binding and (b) what parts of the KeyPackage should be covered by the binding MAC.\r\n\r\nUnlike TLS, however, the set of available PSKs might change over the lifetime of the group.  Since the KeyPackages in the leaves of the tree can be modified, in principle, clients could signal the availability of new PSKs by updating, and you would get a clear assurance that everyone has the key before you try to use it.  But this seems pretty complex, and for not much benefit if the application can coordinate which PSKs are available.\r\n\r\n# 3. Structuring PSK input / multiple PSKs\r\n\r\nIt may be desirable for the input to the key schedule not to be a PSK directly, but some derived value that adds some context to the PSK.  This is the approach taken in the [TLS external PSK draft](https://tools.ietf.org/html/draft-ietf-tls-external-psk-importer-05) and in #336.  We might also want to support the application of multiple PSKs in a single epoch.\r\n\r\nFor the former need, we would need to define what context is added, how it is signaled in the relevant extensions, and how it is combined with the PSK itself to derive the ultimate PSK.  For the latter need, we need a way to signal multiple PSKs and their order, and an algorithm for combining them all into one value to be added to the key schedule.  (The schemes in both #336 and #337 are relevant here.)\r\n",
       "createdAt": "2020-07-24T22:24:00Z",
-      "updatedAt": "2020-08-25T19:50:41Z",
+      "updatedAt": "2020-10-06T07:31:12Z",
       "closedAt": null,
       "comments": [
         {
@@ -3830,10 +3844,14 @@
       "assignees": [
         "kkohbrok"
       ],
-      "labels": [],
+      "labels": [
+        "enhancement",
+        "security",
+        "work in progress"
+      ],
       "body": "[This issue is part of a feature breakdown based on #336]\r\n\r\nThere are two cases where the members of a group might want to authenticate that the other members of the group were present at another point in history:\r\n\r\n1. A user who has lost state re-joining the group\r\n2. Re-initializing the group with different parameters\r\n3. Initializing a subgroup from a master group\r\n\r\nIn the former case, the group would want to authenticate that the user re-joining is the same user who was present at some past point in the history of the group.  In the latter two cases, the members of the new, re-initialized group would be authenticating that everyone in the new group was also in the old group.\r\n\r\nThese use cases are similar to resumption in TLS, where a PSK is derived from the key schedule and used as for authentication in a different session.  A similar approach seems sensible here, roughly:\r\n\r\n1. At each epoch of the group derive a PSK and PSK ID to be used \r\n2. Use the general PSK signaling mechanism (#367) to signal that a prior epoch's PSK should be used\r\n\r\nThis approach is also a good indication that the PSK mechanism in #367 should allow for PSKs to have specified types.  In TLS, there has been some confusion about how applications can distinguish external PSKs from resumption PSKs.  If we have an explicit type here, we won't end up with that confusion.",
       "createdAt": "2020-07-24T22:34:54Z",
-      "updatedAt": "2020-08-25T19:51:03Z",
+      "updatedAt": "2020-10-06T07:31:57Z",
       "closedAt": null,
       "comments": [
         {
@@ -3861,10 +3879,14 @@
       "author": "tomtau",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "discussion",
+        "editorial",
+        "enhancement"
+      ],
       "body": "https://github.com/mlswg/mls-protocol/issues/21\r\n\r\nIn the current protocol draft:\r\n```\r\n<!-- OPEN ISSUE: It is not possible for the recipient of a handshake\r\nmessage to verify that ratchet tree information in the message is\r\naccurate, because each node can only compute the secret and private\r\nkey for nodes in its direct path.  This creates the possibility\r\nthat a malicious participant could cause a denial of service by sending a\r\nhandshake message with invalid values for public keys in the ratchet\r\ntree. -->\r\n```\r\n\r\nUnless I overlooked it, the current draft seems to be also missing a \"simple\" DoS case where a handshake message could omit / malform some `DirectPathNode` (e.g. by having an empty ciphertext or invalid kem_output) -- this should be easily detectable (either by members themselves or if handshake messages are transmitted as MLSPlaintext, the delivery service could reject that).\r\n\r\nFor that originally discussed case, I guess the sketched out solution with a \"Nack\" message containing a DLEQ proof could work. Besides the drawbacks described there, one will also need to extend HPKE definitions to allow for this \"directly decrypt from the revealed shared secret\" use case. ",
       "createdAt": "2020-07-27T04:04:21Z",
-      "updatedAt": "2020-07-29T01:58:02Z",
+      "updatedAt": "2020-10-06T07:33:40Z",
       "closedAt": null,
       "comments": [
         {
@@ -3892,10 +3914,12 @@
       "author": "bifurcation",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "functionality"
+      ],
       "body": "[This issue is part of a feature breakdown based on #336]\r\n\r\nAs noted in #336, it can be useful for members of the group to have a value they can compare to verify that they have the same view of the state of the group, similar to \"short authentication strings\" in [ZRTP](https://tools.ietf.org/html/rfc6189#section-7) or [TLS](https://tools.ietf.org/id/draft-miers-tls-sas-00.html) or \"safety numbers\" in [Signal](https://support.signal.org/hc/en-us/articles/360007060632-What-is-a-safety-number-and-why-do-I-see-that-it-changed-) and related protocols.\r\n\r\nIn MLS, values derived from the epoch secret via Derive-Secret can be used as confirmations of the relevant state, including the roster, the contents of the tree, and the transcript.  So at a cryptographic level, this should only require deriving an additional secret from the key schedule (as in #336).  We should expand on the text in #336 for how this secret is used and what authentication guarantees it provides.",
       "createdAt": "2020-07-27T22:36:40Z",
-      "updatedAt": "2020-07-31T22:39:42Z",
+      "updatedAt": "2020-10-06T07:34:00Z",
       "closedAt": null,
       "comments": []
     },
@@ -4116,10 +4140,12 @@
       "author": "franziskuskiefer",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "editorial"
+      ],
       "body": "It is currently unclear how welcome messages are supposed to be delivered. They should be sent to the clients directly without sending them to the group. But welcome messages as described in `11.2.1. Welcoming New Members` have no information about recipients. Neither are they framed in a way that would allow delivery.\r\nEither the `Welcome` message should get a recipient field, or it should get framed as an `MLSPlaintext` and sent to the group instead.",
       "createdAt": "2020-10-05T11:34:47Z",
-      "updatedAt": "2020-10-05T20:56:31Z",
+      "updatedAt": "2020-10-07T15:17:42Z",
       "closedAt": null,
       "comments": [
         {
@@ -4128,6 +4154,65 @@
           "body": "The encoded `Welcome` struct is what's sent to the new user. The exact method of delivery is up to the application, but you have the user's identity in their credential which should be enough",
           "createdAt": "2020-10-05T20:56:31Z",
           "updatedAt": "2020-10-05T20:56:31Z"
+        },
+        {
+          "author": "franziskuskiefer",
+          "authorAssociation": "NONE",
+          "body": "If message delivery and franking is something that's supposed to be left to the implementation, it should be removed for `MLSPlaintext` and `MLSCiphertext` as well. In fact description of the delivery service should be dropped all together from the architecture doc as well then.\r\nBut I don't think that's what you want. What's currently missing is a way to deliver `Welcome` messages only. All other messages are fine as far as I can see.\r\nSo if message delivery is something that should be described, as it is for all other messages, it should be done for `Welcome` messages as well.",
+          "createdAt": "2020-10-06T06:45:39Z",
+          "updatedAt": "2020-10-06T06:45:39Z"
+        },
+        {
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "body": "What you mean when you say there's no way to deliver Welcome messages? You just send the encoded struct to the new user.",
+          "createdAt": "2020-10-06T15:04:10Z",
+          "updatedAt": "2020-10-06T15:04:10Z"
+        },
+        {
+          "author": "franziskuskiefer",
+          "authorAssociation": "NONE",
+          "body": "> You just send the encoded struct to the new user.\r\n\r\nHow is the new user identified and how is the message supposed to get there? There's no real definition of users.",
+          "createdAt": "2020-10-07T07:11:58Z",
+          "updatedAt": "2020-10-07T07:11:58Z"
+        },
+        {
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "body": "You're correct that the Welcome message only needs to be sent to the new members, though of course there's no security impact if it is also broadcast to the group.\r\n\r\nI would argue that this is a problem for the DS to solve, for example by having the Welcome sender specify the routing identifiers for the recipients of the Welcome.  There's no need for these identifiers to be at all tied to the rest of the protocol, so there's no need for them to go in MLS; they can just be part of whatever framing is used to send MLS messages.\r\n\r\nAll that said, this could be a good topic for an issue on the architecture doc.  Basically, we want the DS to provide the following services:\r\n\r\n1. Routing of KeyPackages from (potential) joiners to group members who might add them\r\n2. Unicast/multicast routing of Welcome back to joiner(s)\r\n3. Multicast routing of Proposals/Commits to the group\r\n",
+          "createdAt": "2020-10-07T12:38:23Z",
+          "updatedAt": "2020-10-07T12:38:23Z"
+        },
+        {
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> How is the new user identified and how is the message supposed to get there? There's no real definition of users.\r\n\r\nWe have the new member's KeyPackage which contains a Credential which contains their identity.",
+          "createdAt": "2020-10-07T15:17:42Z",
+          "updatedAt": "2020-10-07T15:17:42Z"
+        }
+      ]
+    },
+    {
+      "number": 411,
+      "id": "MDU6SXNzdWU3MTYwODc0ODk=",
+      "title": "Track Expected Types of Deployments",
+      "url": "https://github.com/mlswg/mls-protocol/issues/411",
+      "state": "OPEN",
+      "author": "Bren2010",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This ticket is meant to collect all of the use-cases and types of deployments that we support, or types of deployments that we've chosen not to support. In the future, I'd like us to take some time to make a sorta taxonomy of deployments -- think through the architecture / protocol decisions you need to achieve each use-case, and the security properties you get.\r\n\r\nI'll start with a few:\r\n\r\n- **Centralized Deployment:** Optimally simple client-side implementation.\r\n  - Authentication Service: Endpoint run by service provider. Either trusted to act correctly or built with transparency technology.\r\n  - Delivery Service: Endpoint run by service provider. Ensures a linear ordering of Commits.\r\n  - Proposals and Commits are left as plaintext.\r\n  - *Properties:*\r\n    - The DS knows of all groups and which members are in each group, as well as the value of the group's ratchet tree.\r\n    - Since the DS ensures a linear ordering of Commits, members can process Commits in the naive way.\r\n    - The DS must process messages and maintain a copy of the ratchet tree.\r\n    - New members can get a copy of a group's ratchet tree from the DS, meaning Welcome messages can be smaller.\r\n    - Members are aware of all the other members in each group.\r\n- **Broadcast Channel Deployment:** Server-side implementation that doesn't require strong coordination.\r\n  - Authentication Service: Endpoint run by service provider. Either trusted to act correctly or built with transparency technology.\r\n  - Delivery Service: Broadcast channel that sends new messages to all group members indiscriminately, combined with a separate mechanism for KeyPackage distribution.\r\n  - Proposals and Commits are encrypted.\r\n  - *Properties:*\r\n    - The DS can infer which groups exist and which members are in each group, but this isn't required for it to operate. It does not know the ratchet tree.\r\n    - Members must use a consensus protocol to decide on which Commit to accept if multiple are sent at once. This may imply forking or reverting to a previous state.\r\n    - Since the ratchet tree isn't stored centrally, Welcome messages must be larger to accommodate the serialized tree.\r\n    - Members are aware of all the other members in each group.\r\n- **Anonymous Deployment:** Attempts to hide the membership of each group but does not attempt to hide the number of groups / number of members in each group.\r\n  - Authentication Service: Endpoint run by service provider. Either trusted to act correctly or built with transparency technology. Must be accessed anonymously.\r\n  - Delivery Service: Oblivious to *both* who writes a message to a given group, and who read that message. An onion network could be used, as long as a new circuit is created for each message. Ensures a linear ordering of Commits.\r\n  - Proposals and Commits are encrypted. No additional framing is used beyond what the onion network dictates.\r\n  - *Properties:*\r\n    - The DS knows of all groups and how many members are in each group. It does not know the ratchet tree or the identities of group members.\r\n    - Since the DS ensures a linear ordering of Commits, members can process Commits in the naive way.\r\n    - Since the ratchet tree isn't stored centrally, Welcome messages must be larger to accommodate the serialized tree.\r\n    - Members are aware of all the other members in each group.\r\n\r\nSome that I need to think more about:\r\n\r\n- **Hidden-Membership Deployment:** Allows groups where group members are unable to determine the identity of other members. All communication is either from/to the group creator.\r\n- **Deniable Deployment:** Avoids signing messages sent to a group with a binding private key.\r\n- **Federated Deployment:** Allows the users of multiple cooperating AS and DS providers to inter-communicate.\r\n",
+      "createdAt": "2020-10-06T23:29:26Z",
+      "updatedAt": "2020-10-07T12:39:12Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This seems worth thinking about, but more in the context of the architecture document than the protocol.",
+          "createdAt": "2020-10-07T12:39:12Z",
+          "updatedAt": "2020-10-07T12:39:12Z"
         }
       ]
     }
@@ -24935,21 +25020,21 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDM1Mzk1MDE3",
       "title": "Use opaque epoch IDs and encrypt content type",
       "url": "https://github.com/mlswg/mls-protocol/pull/349",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "bifurcation",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #269 \r\nFixes #142 ",
       "createdAt": "2020-06-16T18:27:12Z",
-      "updatedAt": "2020-09-08T20:36:20Z",
+      "updatedAt": "2020-10-06T15:23:10Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "e38aac72400f157bff29f96810234e39230753d1",
       "headRepository": "mlswg/mls-protocol",
       "headRefName": "opaque-epoch",
       "headRefOid": "23f64356a8fc949daab60d2a83e69a4de6e3c697",
-      "closedAt": null,
+      "closedAt": "2020-10-06T15:23:10Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -24974,6 +25059,13 @@
           "body": "@bifurcation Re-iterating my points from the mailing list discussion:\r\n- Implementations that can branch will still have to handle branching on their own, consistent with the way in which they branch.\r\n- The privacy properties of the opaque epoch id are very weak and privacy-preserving applications will still have to invent their own way to hide this metadata.\r\n\r\nPlease decline this PR!",
           "createdAt": "2020-09-08T20:36:20Z",
           "updatedAt": "2020-09-08T20:36:20Z"
+        },
+        {
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Closing because:\r\n* This behavior can be emulated by applications, e.g., by exporting an ID and keeping state locally\r\n* There's some operational simplicity to having things the way they are.",
+          "createdAt": "2020-10-06T15:23:10Z",
+          "updatedAt": "2020-10-06T15:23:10Z"
         }
       ],
       "reviews": [
@@ -27413,24 +27505,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDY5Njc4NjM2",
       "title": "Authenticate group membership in MLSPlaintext",
       "url": "https://github.com/mlswg/mls-protocol/pull/396",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bifurcation",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "[Jo\u00ebl pointed out on the list](https://mailarchive.ietf.org/arch/msg/mls/LFz5nC4BnNTf7-OGIac5_QdlCRs/) that MLSPlaintext does not currently authenticate the sender's membership on the group, and as a result, some important attacks arise.  Discussion on the list indicated that adding a MAC with a key derived from the key schedule would provide this authentication.  This PR implements that suggestion.",
       "createdAt": "2020-08-18T18:57:31Z",
-      "updatedAt": "2020-09-22T11:34:31Z",
+      "updatedAt": "2020-10-07T15:19:33Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
-      "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
+      "baseRefOid": "62c2b24f4c406eddd80e528ca07fb1dfca8b5505",
       "headRepository": "mlswg/mls-protocol",
       "headRefName": "member-pt",
-      "headRefOid": "0275142a6ae16d4268c8e6d1954efc084c543fae",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "ac35b2336d1cc8e668d552c7fcd19073416fb051",
+      "closedAt": "2020-10-07T15:18:36Z",
+      "mergedAt": "2020-10-07T15:18:36Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "81c3949040724725d76568887851dba7930238f9"
+      },
       "comments": [
         {
           "author": "Bren2010",
@@ -27464,25 +27558,25 @@
               "originalPosition": 13,
               "body": "You didn't fix this issue?",
               "createdAt": "2020-08-24T21:05:59Z",
-              "updatedAt": "2020-09-10T17:22:51Z"
+              "updatedAt": "2020-10-07T15:16:32Z"
             },
             {
               "originalPosition": 30,
               "body": "\"contains the content\"",
               "createdAt": "2020-08-24T21:11:12Z",
-              "updatedAt": "2020-09-10T17:22:51Z"
+              "updatedAt": "2020-10-07T15:16:32Z"
             },
             {
               "originalPosition": 32,
               "body": "\"the AEAD authenticates\"",
               "createdAt": "2020-08-24T21:12:04Z",
-              "updatedAt": "2020-09-10T17:22:51Z"
+              "updatedAt": "2020-10-07T15:16:32Z"
             },
             {
               "originalPosition": 25,
               "body": "Using a KDF output for authentication feels wrong",
               "createdAt": "2020-08-24T21:15:05Z",
-              "updatedAt": "2020-09-10T17:22:51Z"
+              "updatedAt": "2020-10-07T15:16:32Z"
             }
           ]
         },
@@ -27502,7 +27596,7 @@
               "originalPosition": 13,
               "body": "I thought about it, and decided not to worry about it.  If you feel strongly, we can keep it.",
               "createdAt": "2020-08-25T14:29:33Z",
-              "updatedAt": "2020-09-10T17:22:51Z"
+              "updatedAt": "2020-10-07T15:16:32Z"
             }
           ]
         },
@@ -27522,7 +27616,7 @@
               "originalPosition": 25,
               "body": "We already do this elsewhere:\r\n```\r\nMLSPlaintext.confirmation_tag =\r\n    KDF.Extract(confirmation_key, GroupContext.confirmed_transcript_hash)\r\n```\r\n\r\nThis seems OK with HKDF, since Extract is just HMAC.  But I agree that we should confirm that this generalizes properly.",
               "createdAt": "2020-08-25T14:31:28Z",
-              "updatedAt": "2020-09-10T17:22:51Z"
+              "updatedAt": "2020-10-07T15:16:32Z"
             }
           ]
         },
@@ -27542,7 +27636,7 @@
               "originalPosition": 25,
               "body": "Agreements on the 2020-08-25 call:\r\n* Use an explicit MAC here instead of KDF.Extract\r\n* Use a separate key from the key schedule, different from the confirmation_key\r\n\r\n```\r\nepoch\r\n  |\r\n  +-- confirmation_key\r\n  |\r\n  +-- membership_key\r\n  |\r\n  +-- authentication_secret (todo)\r\n```",
               "createdAt": "2020-08-25T16:41:54Z",
-              "updatedAt": "2020-09-10T17:22:51Z"
+              "updatedAt": "2020-10-07T15:16:32Z"
             }
           ]
         },
@@ -27575,7 +27669,7 @@
               "originalPosition": 37,
               "body": "Actually this isn't quite right because the signature doesn't cover the membership token",
               "createdAt": "2020-09-12T00:49:09Z",
-              "updatedAt": "2020-09-12T00:49:09Z"
+              "updatedAt": "2020-10-07T15:16:32Z"
             }
           ]
         },
@@ -27595,7 +27689,7 @@
               "originalPosition": 45,
               "body": "Please make this its own sub-section titled \"Plaintext Authentication\" or similar, and add an explainer that `membership_tag` is only necessary when sending MLSPlaintext over-the-wire",
               "createdAt": "2020-09-12T00:56:14Z",
-              "updatedAt": "2020-09-12T00:56:43Z"
+              "updatedAt": "2020-10-07T15:16:32Z"
             }
           ]
         },
@@ -27615,7 +27709,7 @@
               "originalPosition": 12,
               "body": "I think membership_tag field can be moved to the \"case proposal\"  section (line 1500). We only need it if the content type = proposal so including it in all MLSPlaintexts would waste bandwidth. Here's my reasoning:\r\n\r\n- content type = application should never be sent as MLSPlaintext and an MLSCiphertext already has a mechanism for authenticating that a sender knows the current key schedule\r\n\r\n- content type = commit already includes the confirmation_tag. That in turn is derived (in part) from the MLSPlaintext content of this packet and secrets in the application key schedule. So if I were to change any of that content then I'd have to derive a fresh confirmation_tag. That in turn means I need to know secrets from the key schedule which is what we wanted.",
               "createdAt": "2020-09-22T10:41:28Z",
-              "updatedAt": "2020-09-22T11:34:31Z"
+              "updatedAt": "2020-10-07T15:16:32Z"
             }
           ]
         }
@@ -27814,24 +27908,29 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDg1NTg1MjY3",
       "title": "Update security considerations.",
       "url": "https://github.com/mlswg/mls-protocol/pull/400",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "Bren2010",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "bifurcation",
+        "beurdouche"
+      ],
       "labels": [],
       "body": "Security considerations has gotten a little outdated. Updated with new info",
       "createdAt": "2020-09-12T00:10:01Z",
-      "updatedAt": "2020-10-05T17:55:44Z",
+      "updatedAt": "2020-10-07T15:21:25Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "eec3985d34dbb5a38fa45ec7edd3a0a1f2bd1fdc",
       "headRepository": "Bren2010/mls-protocol",
       "headRefName": "brendan/2020.9.0",
       "headRefOid": "53b3a5ec05e7402febfc5626deb27800db555183",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-10-07T15:21:25Z",
+      "mergedAt": "2020-10-07T15:21:25Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "5f06f08d001054b74ce40b95bf4b2949eac81dc4"
+      },
       "comments": [],
       "reviews": [
         {
@@ -27997,6 +28096,19 @@
               "updatedAt": "2020-10-05T17:55:44Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAzOTk3NTkw",
+          "commit": {
+            "abbreviatedOid": "53b3a5e"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-07T15:21:18Z",
+          "updatedAt": "2020-10-07T15:21:18Z",
+          "comments": []
         }
       ]
     },
@@ -28005,24 +28117,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDg2ODYyNDEz",
       "title": "Derive handshake keys from a secret tree as well.",
       "url": "https://github.com/mlswg/mls-protocol/pull/401",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "Bren2010",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2020-09-14T20:24:24Z",
-      "updatedAt": "2020-09-29T14:02:33Z",
+      "updatedAt": "2020-10-06T13:55:10Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
       "headRepository": "mlswg/mls-protocol",
       "headRefName": "brendan/2020.9.2",
       "headRefOid": "5a4bfcff4b5377438d02e2e4488c44ee5fc1c156",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-10-06T13:55:10Z",
+      "mergedAt": "2020-10-06T13:55:10Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "62c2b24f4c406eddd80e528ca07fb1dfca8b5505"
+      },
       "comments": [],
       "reviews": [
         {
@@ -28077,6 +28191,19 @@
           "createdAt": "2020-09-29T14:02:33Z",
           "updatedAt": "2020-09-29T14:02:33Z",
           "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAyOTg5NDAx",
+          "commit": {
+            "abbreviatedOid": "5a4bfcf"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-06T13:55:03Z",
+          "updatedAt": "2020-10-06T13:55:03Z",
+          "comments": []
         }
       ]
     },
@@ -28092,7 +28219,7 @@
       "labels": [],
       "body": "The credentials we have defined at the moment only contain a single public key and no information regarding what signature scheme that keypair works with (even though the Spec actually says it should include the signature scheme as well).\r\n\r\nIt would be nice, however, to support potential CredentialTypes that, similar to KeyPackages, include multiple supported signature schemes, each accompanied by a corresponding public key.\r\n\r\nThe Key that should be used in any given group is then determined by the CipherSuite of the group (which includes a Signature Scheme). When choosing a KeyPackage of a new member, it has to be one that contains a Credential which supports that Signature Scheme.\r\n\r\nNote, that I'm not suggesting that this be the case in all Credentials, or even that we change the BasicCredential.\r\n\r\nI understand that it's possible to have multiple credentials per identity, but in some authentication settings it can be beneficial to have a 1-to-1 mapping between Credential and identity.",
       "createdAt": "2020-09-16T16:53:31Z",
-      "updatedAt": "2020-09-21T16:39:38Z",
+      "updatedAt": "2020-10-06T15:48:49Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
@@ -28166,6 +28293,20 @@
           "body": "It would be ideal to have a ciphersuite specifying a single hybrid scheme, but even that does not imply use of a single credential, unfortunately. In fact, hybrid schemes may rely on two separate credentials, with the ciphersuite specifying the hybrid algorithm for combining them. Since the \"main\" method of building a solo hybrid credential is under patent, there is also additional motivation for applications to use two.",
           "createdAt": "2020-09-21T16:39:38Z",
           "updatedAt": "2020-09-21T16:39:38Z"
+        },
+        {
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I concur with Brendan here.  To be consistent with our earlier decisions to (a) keep KeyPackages to one ciphersuite and (b) include the signature algorithm in the ciphersuite, we should keep credentials to one signature algorithm as well.\r\n\r\nPropose closing this PR without merging.",
+          "createdAt": "2020-10-06T13:57:30Z",
+          "updatedAt": "2020-10-06T13:57:30Z"
+        },
+        {
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Discussed at 2020-10-06 interim, TODO:\r\n* Re-add SignatureScheme enum, re-using the TLS signature schemes\r\n* Clarify that the main job of a Credential is to provide a public key for verifying messages\r\n    * How it provides the credential might be different per credential type\r\n    * e.g., in BasicCredential, it's provided directly, X509Credential, have to parse the leaf certificate",
+          "createdAt": "2020-10-06T15:48:49Z",
+          "updatedAt": "2020-10-06T15:48:49Z"
         }
       ],
       "reviews": []
@@ -28318,13 +28459,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-09-21T18:13:54Z",
-      "updatedAt": "2020-10-05T18:01:43Z",
+      "updatedAt": "2020-10-06T07:22:05Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
       "headRepository": "mlswg/mls-protocol",
       "headRefName": "external_commit",
-      "headRefOid": "56c847f8335f1dabb68f745f9cf37b73e7534087",
+      "headRefOid": "29d7355008dc3adf95113bc2386e55eb77aefd66",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -28347,7 +28488,7 @@
               "originalPosition": 5,
               "body": "```suggestion\r\n2. A member of the group or a new member broadcasts a Commit message that causes one or more\r\n```",
               "createdAt": "2020-10-05T17:59:54Z",
-              "updatedAt": "2020-10-05T18:01:43Z"
+              "updatedAt": "2020-10-06T07:22:05Z"
             }
           ]
         }
