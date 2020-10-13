@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-11T00:55:33.468993+00:00",
+  "timestamp": "2020-10-13T00:54:12.128996+00:00",
   "repo": "mlswg/mls-protocol",
   "labels": [
     {
@@ -4215,6 +4215,22 @@
           "updatedAt": "2020-10-07T12:39:12Z"
         }
       ]
+    },
+    {
+      "number": 418,
+      "id": "MDU6SXNzdWU3MTkyNzgzNDM=",
+      "title": "Reuse guard mechanism is described in wrong section",
+      "url": "https://github.com/mlswg/mls-protocol/issues/418",
+      "state": "OPEN",
+      "author": "raphaelrobert",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "It is in \"Content Encryption\" but should be in \"Sender Data Encryption\".",
+      "createdAt": "2020-10-12T10:48:38Z",
+      "updatedAt": "2020-10-12T10:48:38Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -29046,13 +29062,13 @@
       "labels": [],
       "body": "Thanks @Bren2010 pointing out the imprecision. Is this what you were looking for?\r\n\r\nThanks @bifurcation for the pointer to the correct registry.\r\n\r\n",
       "createdAt": "2020-10-08T20:52:45Z",
-      "updatedAt": "2020-10-09T22:25:39Z",
+      "updatedAt": "2020-10-12T15:41:46Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "831ee5e61644246b3be5b4ef7d2c7d0eb93d6886",
       "headRepository": "kkohbrok/mls-protocol",
       "headRefName": "signature_scheme_reference",
-      "headRefOid": "41c36d34345d238b4731a82e987a54eba1ad3147",
+      "headRefOid": "2b4d5d4e846225cde0ee473c4ed4258d0ccc7e79",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -29090,15 +29106,41 @@
               "originalPosition": 5,
               "body": "```suggestion\r\n// See RFC 8446 and the IANA TLS SignatureScheme registry\r\n```",
               "createdAt": "2020-10-09T22:24:49Z",
-              "updatedAt": "2020-10-09T22:25:39Z"
+              "updatedAt": "2020-10-12T07:06:02Z"
             },
             {
               "originalPosition": 5,
               "body": "Please also update a few lines above here, \"private keys\" -> \"private key\"",
               "createdAt": "2020-10-09T22:25:19Z",
-              "updatedAt": "2020-10-09T22:25:39Z"
+              "updatedAt": "2020-10-12T07:06:02Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA2NTc0NTIx",
+          "commit": {
+            "abbreviatedOid": "2b4d5d4"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-12T12:29:38Z",
+          "updatedAt": "2020-10-12T12:29:38Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA2NzI5OTMy",
+          "commit": {
+            "abbreviatedOid": "2b4d5d4"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-12T15:41:46Z",
+          "updatedAt": "2020-10-12T15:41:46Z",
+          "comments": []
         }
       ]
     },
@@ -29114,7 +29156,7 @@
       "labels": [],
       "body": "As discussed in the mailing list, not having the signature contribute to the new epoch's key schedule leads to a one-off effect where parties stay in sync (with respect to keys) for one more epoch, before inevitably go out of sync. This pull request addresses this issue by including the signature in the confirmed transcript hash rather than the interim transcript hash. See the mailing list for a security consideration of this change.\r\n\r\nCredit: This pull request was primarily authored by Marta Mularczk; I'm just posting it here for administrative reasons. ",
       "createdAt": "2020-10-10T00:15:42Z",
-      "updatedAt": "2020-10-10T00:22:33Z",
+      "updatedAt": "2020-10-12T12:39:04Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "831ee5e61644246b3be5b4ef7d2c7d0eb93d6886",
@@ -29146,8 +29188,96 @@
               "updatedAt": "2020-10-10T00:22:33Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA2NTgwODQw",
+          "commit": {
+            "abbreviatedOid": "fe3658e"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-12T12:38:23Z",
+          "updatedAt": "2020-10-12T12:39:04Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "Not a bad idea; it would save an octet and give you \"syntactic\" enforcement.  I'm still inclined to go with the `optional<>` approach for two reasons:\r\n\r\n1. I'm not aware of TLS syntax implementatiosn that implement `select()` in any sort of automated fashion, so there would be manual logic here in any case.  It's just slightly easier to omit with `optional<>`.\r\n\r\n2. If we do `select` for `confirmation_tag`, we should probably also do it with `membership_tag` (selecting based on `sender_type`), which gets to be ugly.",
+              "createdAt": "2020-10-12T12:38:23Z",
+              "updatedAt": "2020-10-12T12:39:04Z"
+            }
+          ]
         }
       ]
+    },
+    {
+      "number": 417,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTAxNDIyODgx",
+      "title": "use `KDF.Nh` instead of `Hash.length`",
+      "url": "https://github.com/mlswg/mls-protocol/pull/417",
+      "state": "MERGED",
+      "author": "kkohbrok",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-10-12T08:45:51Z",
+      "updatedAt": "2020-10-12T13:40:47Z",
+      "baseRepository": "mlswg/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "831ee5e61644246b3be5b4ef7d2c7d0eb93d6886",
+      "headRepository": "kkohbrok/mls-protocol",
+      "headRefName": "hash_length",
+      "headRefOid": "40f7c4bf6e32aabdbe29f202ec5ba2922603ea0f",
+      "closedAt": "2020-10-12T12:28:40Z",
+      "mergedAt": "2020-10-12T12:28:40Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "9d9804017016325d26460aff96b548670daf173d"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA2NTczNzYy",
+          "commit": {
+            "abbreviatedOid": "40f7c4b"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "For the record: I asked @kkohbrok whether we could just update DeriveTreeSecret so that it always produces `KDF.Nh` octets.  But he pointed out that DeriveTreeSecret is also used to produce keys and nonces.  Might be something to clean up later.",
+          "createdAt": "2020-10-12T12:28:33Z",
+          "updatedAt": "2020-10-12T12:28:33Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 419,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTAxODgxMjA2",
+      "title": "Authentication Secret",
+      "url": "https://github.com/mlswg/mls-protocol/pull/419",
+      "state": "OPEN",
+      "author": "br-hale",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The authentication_secret was previously in a PR and agreed, but seems to have been removed from the key schedule (possibly during a merge). The discussion on its use is still present. This PR is just to add it back in to the key schedule.",
+      "createdAt": "2020-10-12T23:43:21Z",
+      "updatedAt": "2020-10-12T23:46:10Z",
+      "baseRepository": "mlswg/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "9d9804017016325d26460aff96b548670daf173d",
+      "headRepository": "br-hale/mls-protocol",
+      "headRefName": "exporters",
+      "headRefOid": "6b94f4a6ae7c20524ed201322197a4dba784f76f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
