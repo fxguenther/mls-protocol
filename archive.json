@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-13T00:54:12.128996+00:00",
+  "timestamp": "2020-10-15T00:54:44.816628+00:00",
   "repo": "mlswg/mls-protocol",
   "labels": [
     {
@@ -28586,13 +28586,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-09-21T18:13:54Z",
-      "updatedAt": "2020-10-06T07:22:05Z",
+      "updatedAt": "2020-10-14T07:43:05Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
-      "baseRefOid": "bb303085f3748a7ba171f9f12fdbeef22d063283",
+      "baseRefOid": "9d9804017016325d26460aff96b548670daf173d",
       "headRepository": "mlswg/mls-protocol",
       "headRefName": "external_commit",
-      "headRefOid": "29d7355008dc3adf95113bc2386e55eb77aefd66",
+      "headRefOid": "65e1a24300e676ccec9b22f03cc4b2150826286b",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -28615,7 +28615,7 @@
               "originalPosition": 5,
               "body": "```suggestion\r\n2. A member of the group or a new member broadcasts a Commit message that causes one or more\r\n```",
               "createdAt": "2020-10-05T17:59:54Z",
-              "updatedAt": "2020-10-06T07:22:05Z"
+              "updatedAt": "2020-10-14T07:43:05Z"
             }
           ]
         }
@@ -29149,24 +29149,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTAwODczOTYz",
       "title": "Inlclude the signature in the confirmation tag",
       "url": "https://github.com/mlswg/mls-protocol/pull/416",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "dajost",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "As discussed in the mailing list, not having the signature contribute to the new epoch's key schedule leads to a one-off effect where parties stay in sync (with respect to keys) for one more epoch, before inevitably go out of sync. This pull request addresses this issue by including the signature in the confirmed transcript hash rather than the interim transcript hash. See the mailing list for a security consideration of this change.\r\n\r\nCredit: This pull request was primarily authored by Marta Mularczk; I'm just posting it here for administrative reasons. ",
       "createdAt": "2020-10-10T00:15:42Z",
-      "updatedAt": "2020-10-12T12:39:04Z",
+      "updatedAt": "2020-10-14T14:21:22Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "831ee5e61644246b3be5b4ef7d2c7d0eb93d6886",
       "headRepository": "dajost/mls-protocol",
       "headRefName": "signature-in-conf-tag",
       "headRefOid": "fe3658eb8d8848ca0b7df4f8015934e41bc1238c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-10-14T14:21:22Z",
+      "mergedAt": "2020-10-14T14:21:22Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "fba989d1d17d9e4a543b0e30d53757f9fdb33b8b"
+      },
       "comments": [],
       "reviews": [
         {
@@ -29265,13 +29267,95 @@
       "labels": [],
       "body": "The authentication_secret was previously in a PR and agreed, but seems to have been removed from the key schedule (possibly during a merge). The discussion on its use is still present. This PR is just to add it back in to the key schedule.",
       "createdAt": "2020-10-12T23:43:21Z",
-      "updatedAt": "2020-10-12T23:46:10Z",
+      "updatedAt": "2020-10-13T19:37:57Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "9d9804017016325d26460aff96b548670daf173d",
       "headRepository": "br-hale/mls-protocol",
       "headRefName": "exporters",
       "headRefOid": "6b94f4a6ae7c20524ed201322197a4dba784f76f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "br-hale",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "True! Haha. I was working on getting on the dashes to line up nicely as a box for presentation, and the repo view does not show spaces in the same way as a text file.\r\n\r\nCheers,\r\n\r\n. . .\r\nProf. Britta Hale, PhD\r\nCryptography\r\nNaval Postgraduate School  | Computer Science\r\nhttp://faculty.nps.edu/haleb/\r\n\r\n\r\nFrom: Brendan McMillion <notifications@github.com>\r\nReply-To: mlswg/mls-protocol <reply@reply.github.com>\r\nDate: Tuesday, October 13, 2020 at 12:34 PM\r\nTo: mlswg/mls-protocol <mls-protocol@noreply.github.com>\r\nCc: \"Hale, Britta (CIV)\" <britta.hale@nps.edu>, Author <author@noreply.github.com>\r\nSubject: Re: [mlswg/mls-protocol] Authentication Secret (#419)\r\n\r\n\r\n\r\n@Bren2010 approved this pull request.\r\n\r\nWhoever merges this better squash, no way Britta is getting credit for 16 commits on a 2 line change\r\n\r\n\u2014\r\nYou are receiving this because you authored the thread.\r\nReply to this email directly, view it on GitHub<https://github.com/mlswg/mls-protocol/pull/419#pullrequestreview-507764956>, or unsubscribe<https://github.com/notifications/unsubscribe-auth/ALEYMX6AHBN2BF3VKOAYBQDSKSTUNANCNFSM4SNVIIHA>.\r\n",
+          "createdAt": "2020-10-13T19:37:56Z",
+          "updatedAt": "2020-10-13T19:37:56Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTA3NzY0OTU2",
+          "commit": {
+            "abbreviatedOid": "6b94f4a"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Whoever merges this better squash, no way Britta is getting credit for 16 commits on a 2 line change",
+          "createdAt": "2020-10-13T19:34:15Z",
+          "updatedAt": "2020-10-13T19:34:15Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 420,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTAzMzMzODAx",
+      "title": "make confirmation_tag a MAC just like membership_tag",
+      "url": "https://github.com/mlswg/mls-protocol/pull/420",
+      "state": "CLOSED",
+      "author": "kkohbrok",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-10-14T12:22:13Z",
+      "updatedAt": "2020-10-14T15:19:55Z",
+      "baseRepository": "mlswg/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "9d9804017016325d26460aff96b548670daf173d",
+      "headRepository": "kkohbrok/mls-protocol",
+      "headRefName": "confirmation_tag",
+      "headRefOid": "f6a5447b1342502dc37d5b40f086d9acd222598a",
+      "closedAt": "2020-10-14T15:19:55Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "kkohbrok",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Ah, I missed that this is apparently already underway in #416.",
+          "createdAt": "2020-10-14T15:19:55Z",
+          "updatedAt": "2020-10-14T15:19:55Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 421,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTAzNTAxMDU1",
+      "title": "Review PSK PR.",
+      "url": "https://github.com/mlswg/mls-protocol/pull/421",
+      "state": "OPEN",
+      "author": "Bren2010",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-10-14T16:37:27Z",
+      "updatedAt": "2020-10-14T16:38:11Z",
+      "baseRepository": "mlswg/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "fba989d1d17d9e4a543b0e30d53757f9fdb33b8b",
+      "headRepository": "Bren2010/mls-protocol",
+      "headRefName": "brendan/2020.10.3",
+      "headRefOid": "1ed74713ebf5802503c4605cc445ae3fb08073cd",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
