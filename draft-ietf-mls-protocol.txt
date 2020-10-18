@@ -1758,8 +1758,8 @@ Internet-Draft                     MLS                      October 2020
 
                                  Table 2
 
-   The "external secret" is used to derive a key pair whose private key
-   is held by the entire group:
+   The "external secret" is used to derive an HPKE key pair whose
+   private key is held by the entire group:
 
    external_priv, external_pub = KEM.DeriveKeyPair(external_secret)
 
@@ -1781,8 +1781,8 @@ Internet-Draft                     MLS                      October 2020
    external Commit to initialize their copy of the key schedule for the
    new epoch.
 
- kem_output, context = SetupBaseS(external_pub_[n], GroupKeyPackage_[n])
- init_secret = context.export("MLS 1.0 external init secret", KDF.Nh)
+   kem_output, context = SetupBaseS(external_pub, GroupKeyPackage)
+   init_secret = context.export("MLS 1.0 external init secret", KDF.Nh)
 
 
 
@@ -1798,8 +1798,11 @@ Internet-Draft                     MLS                      October 2020
    proposal and preform the corresponding calculation to retrieve the
    "init_secret" value.
 
- context = SetupBaseR(kem_outpu, external_priv_[n], GroupKeyPackage_[n])
- init_secret = context.export("MLS 1.0 external init secret", KDF.Nh)
+   context = SetupBaseR(kem_outpu, external_priv, GroupKeyPackage)
+   init_secret = context.export("MLS 1.0 external init secret", KDF.Nh)
+
+   In both cases, the "info" input to HPKE is set to the GroupKeyPackage
+   for the previous epoch, encoded using the TLS serialization.
 
 8.2.  Pre-Shared Keys
 
@@ -1839,9 +1842,6 @@ Internet-Draft                     MLS                      October 2020
    The injection of one or more PSKs into the key schedule is signaled
    in two ways: 1) as a "psk" proposal and 2) in the "GroupSecrets"
    object of a Welcome message sent to new members added in that epoch.
-
-
-
 
 
 
@@ -3223,14 +3223,15 @@ Internet-Draft                     MLS                      October 2020
 
    *  group extensions
 
-   *  Public group key
+   *  external public key
 
-   This information is aggregated in "GroupKeyPackage" as follows:
+   This information is aggregated in a "GroupKeyPackage" object as
+   follows:
 
    "struct { CipherSuite cipher_suite; opaque group_id<0..255>; uint64
    epoch; opaque tree_hash<0..255>; opaque
    confirmed_transcript_hash<0..255>; Extension extensions<0..2^32-1>;
-   HPKEPublicKey group_public_key; } GroupKeyPackage;"
+   HPKEPublicKey external_pub; } GroupKeyPackage;"
 
    Note that the "tree_hash" field is used the same way as in the
    Welcome message.  The full tree can be included via the
@@ -3241,7 +3242,6 @@ Internet-Draft                     MLS                      October 2020
    order to allow External Commits.
 
    External Commits work like regular Commits, with a few differences:
-
 
 
 
