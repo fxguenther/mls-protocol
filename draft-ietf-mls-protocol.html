@@ -2157,7 +2157,7 @@ used with:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <li class="normal" id="section-6.2-2.1">The public key of a signature key pair matching the SignatureScheme specified
 by the CipherSuite of the group<a href="#section-6.2-2.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-6.2-2.2">The identity of the holder of the private keys<a href="#section-6.2-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-6.2-2.2">The identity of the holder of the private key<a href="#section-6.2-2.2" class="pilcrow">¶</a>
 </li>
         </ul>
 <p id="section-6.2-3">Credentials MAY also include information that allows a relying party
@@ -2166,7 +2166,7 @@ to verify the identity / signing key binding.<a href="#section-6.2-3" class="pil
 each contained public key.<a href="#section-6.2-4" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-6.2-5">
 <pre>
-// See IANA registry for registered values
+// See RFC 8446 and the IANA TLS SignatureScheme registry
 uint16 SignatureScheme;
 
 // See IANA registry for registered values
