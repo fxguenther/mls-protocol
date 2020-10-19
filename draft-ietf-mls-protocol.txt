@@ -2785,15 +2785,15 @@ Internet-Draft                     MLS                      October 2020
    representation of the state of the group by applying the proposals
    and advancing the key schedule.
 
-
-
-
-
-
-
-
-
-
+   Each proposal covered by the Commit is identified by a ProposalID
+   value, which identifies the proposal to be applied by value or by
+   reference.  Proposals supplied by value are included directly in the
+   Commit object.  Proposals supplied by reference are specified by
+   including the hash of the MLSPlaintext in which the Proposal was
+   sent, using the hash function from the group's ciphersuite.  For
+   proposals supplied by value, the sender of the proposal is the same
+   as the sender of the Commit.  Conversely, proposals sent by people
+   other than the committer MUST be included by reference.
 
 
 
@@ -2801,17 +2801,6 @@ Barnes, et al.            Expires 22 April 2021                [Page 50]
 
 Internet-Draft                     MLS                      October 2020
 
-
-   Each proposal covered by the Commit is identified by a ProposalID
-   value, which identifies the proposal to be applied by value or by
-   reference.  Proposals supplied by value are included directly in the
-   Commit object.  Proposals supplied by reference are specified by
-   including the hash of the MLSPlaintext in which the Proposal was
-   sent, using the hash function from the group's ciphersuite.  For
-   proposals whose application depends on who sent them (e.g., Update),
-   the sender of the proposal is the same as the sender of the Commit.
-   Conversely, proposals sent by people other than the committer MUST be
-   included by reference.
 
    enum {
      reserved(0),
@@ -2851,13 +2840,6 @@ Internet-Draft                     MLS                      October 2020
    multiple Add proposals for the same client, the committer again
    chooses one to include and considers the rest invalid.
 
-
-
-Barnes, et al.            Expires 22 April 2021                [Page 51]
-
-Internet-Draft                     MLS                      October 2020
-
-
    If there are multiple ReInit proposals, the committer MUST choose
    exactly one to include in the Commit message.  The "version" field in
    the ReInit proposal MUST be no less than the version for the current
@@ -2866,6 +2848,15 @@ Internet-Draft                     MLS                      October 2020
    malformed.  The committer SHOULD choose a ReInit proposal with a
    unique "group_id" and parameters that are supported by all clients in
    the group.
+
+
+
+
+
+Barnes, et al.            Expires 22 April 2021                [Page 51]
+
+Internet-Draft                     MLS                      October 2020
+
 
    The Commit MUST NOT combine proposals sent within different epochs.
    In the event that a valid proposal is omitted from the next Commit,
@@ -2906,14 +2897,6 @@ Internet-Draft                     MLS                      October 2020
        committer's contribution to the group and provides PCS with
        regard to the committer.
 
-
-
-
-Barnes, et al.            Expires 22 April 2021                [Page 52]
-
-Internet-Draft                     MLS                      October 2020
-
-
    2.  An "add-only" Commit that references only Add proposals, in which
        the path is optional.  Such a commit provides PCS with regard to
        the committer only if the path field is present.
@@ -2921,6 +2904,15 @@ Internet-Draft                     MLS                      October 2020
    3.  A "full" Commit that references proposals of any type, which
        provides FS with regard to any removed members and PCS for the
        committer and any updated members.
+
+
+
+
+
+Barnes, et al.            Expires 22 April 2021                [Page 52]
+
+Internet-Draft                     MLS                      October 2020
+
 
    A member of the group creates a Commit message and the corresponding
    Welcome message at the same time, by taking the following steps:
@@ -2962,14 +2954,6 @@ Internet-Draft                     MLS                      October 2020
 
       -  Assign this UpdatePath to the "path" field in the Commit.
 
-
-
-
-Barnes, et al.            Expires 22 April 2021                [Page 53]
-
-Internet-Draft                     MLS                      October 2020
-
-
       -  Apply the UpdatePath to the tree, as described in Section 5.5.
          Define "commit_secret" as the value "path_secret[n+1]" derived
          from the "path_secret[n]" value assigned to the root node.
@@ -2977,6 +2961,14 @@ Internet-Draft                     MLS                      October 2020
    *  If not populating the "path" field: Set the "path" field in the
       Commit to the null optional.  Define "commit_secret" as the all-
       zero vector of the same length as a "path_secret" value would be.
+
+
+
+
+Barnes, et al.            Expires 22 April 2021                [Page 53]
+
+Internet-Draft                     MLS                      October 2020
+
 
    *  Generate a new KeyPackage for the Committer's own leaf, with a
       "parent_hash" extension.  Store it in the ratchet tree and assign
@@ -3017,15 +3009,6 @@ Internet-Draft                     MLS                      October 2020
       -  If the "path" field was populated above: Compute the path
          secret corresponding to the common ancestor node
 
-
-
-
-
-Barnes, et al.            Expires 22 April 2021                [Page 54]
-
-Internet-Draft                     MLS                      October 2020
-
-
       -  Compute an EncryptedGroupSecrets object that encapsulates the
          "init_secret" for the current epoch and the path secret (if
          present).
@@ -3034,6 +3017,14 @@ Internet-Draft                     MLS                      October 2020
       the encrypted key packages and any PSK for which a proposal was
       included in the commit.  The order of the "psks" MUST be the same
       as the order of PreSharedKey proposals in the "proposals" vector.
+
+
+
+
+Barnes, et al.            Expires 22 April 2021                [Page 54]
+
+Internet-Draft                     MLS                      October 2020
+
 
    *  If a ReInit proposal was part of the Commit, the committer MUST
       create a new group with the Group ID and the parameters specified
@@ -3073,15 +3064,6 @@ Internet-Draft                     MLS                      October 2020
          applied should be updated by the implementation to include any
          new proposals added by negotiated group extensions.
 
-
-
-
-
-Barnes, et al.            Expires 22 April 2021                [Page 55]
-
-Internet-Draft                     MLS                      October 2020
-
-
    *  Verify that the "path" value is populated if the "proposals"
       vector contains any Update or Remove proposals, or if it's empty.
       Otherwise, the "path" value MAY be omitted.
@@ -3092,6 +3074,13 @@ Internet-Draft                     MLS                      October 2020
 
       -  Apply the UpdatePath to the tree, as described in Section 5.5,
          and store "key_package" at the Committer's leaf.
+
+
+
+Barnes, et al.            Expires 22 April 2021                [Page 55]
+
+Internet-Draft                     MLS                      October 2020
+
 
       -  Verify that the KeyPackage has a "parent_hash" extension and
          that its value matches the new parent of the sender's leaf
@@ -3129,15 +3118,6 @@ Internet-Draft                     MLS                      October 2020
       the group to send messages.  Instead, if it receives a Welcome
       message from the Committer, it MUST check that
 
-
-
-
-
-Barnes, et al.            Expires 22 April 2021                [Page 56]
-
-Internet-Draft                     MLS                      October 2020
-
-
       -  The "version", "cipher_suite" and "extensions" fields of the
          new group corresponds to the ones in the "ReInit" proposal and
          the "version" is greater or equal to that of the original
@@ -3148,6 +3128,15 @@ Internet-Draft                     MLS                      October 2020
          "epoch" and "psk_group_id" = "group_id", where "epoch" and
          "group_id" are the fields of the original group after
          processing the commit.
+
+
+
+
+
+Barnes, et al.            Expires 22 April 2021                [Page 56]
+
+Internet-Draft                     MLS                      October 2020
+
 
       If any of the conditions are not met, the Client SHOULD not
       process the Welcome message.
@@ -3184,6 +3173,17 @@ Internet-Draft                     MLS                      October 2020
    Welcome message is sent in the context of a group re-initialization
    and it SHOULD be included if the Welcome message is sent to create a
    sub-group of an existing group.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
