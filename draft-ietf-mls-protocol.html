@@ -2537,10 +2537,11 @@ struct {
 } UpdatePath;
 </pre><a href="#section-7.7-2" class="pilcrow">¶</a>
 </div>
-<p id="section-7.7-3">The number of ciphertexts in the <code>encrypted_path_secret</code> vector MUST
-be equal to the length of the resolution of the corresponding copath
-node.  Each ciphertext in the list is the encryption to the
-corresponding node in the resolution.<a href="#section-7.7-3" class="pilcrow">¶</a></p>
+<p id="section-7.7-3">For each <code>UpdatePathNode</code>, the resolution of the corresponding copath node MUST
+be filtered by removing all new leaf nodes added as part of this MLS Commit
+message. The number of ciphertexts in the <code>encrypted_path_secret</code> vector MUST be
+equal to the length of the filtered resolution, with each ciphertext being the 
+encryption to the respective resolution node.<a href="#section-7.7-3" class="pilcrow">¶</a></p>
 <p id="section-7.7-4">The HPKECiphertext values are computed as<a href="#section-7.7-4" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-7.7-5">
 <pre>
@@ -3746,10 +3747,11 @@ based on the proposals that are in the commit (see above), then it MUST be
 populated.  Otherwise, the sender MAY omit the <code>path</code> field at its discretion.<a href="#section-11.2-14.3" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-11.2-14.4">
-            <p id="section-11.2-14.4.1">If populating the <code>path</code> field: Create a UpdatePath using the new tree (which
-includes any new members).  The GroupContext for this operation uses the
-<code>group_id</code>, <code>epoch</code>, <code>tree_hash</code>, and <code>confirmed_transcript_hash</code> values in
-the initial GroupContext object.<a href="#section-11.2-14.4.1" class="pilcrow">¶</a></p>
+            <p id="section-11.2-14.4.1">If populating the <code>path</code> field: Create a UpdatePath using the new tree. Any 
+new member (from an add proposal) MUST be exluded from the resolution during 
+the computation of the UpdatePath. The GroupContext for this operation uses 
+the <code>group_id</code>, <code>epoch</code>, <code>tree_hash</code>, and <code>confirmed_transcript_hash</code> values 
+in the initial GroupContext object.<a href="#section-11.2-14.4.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-11.2-14.4.2.1">Assign this UpdatePath to the <code>path</code> field in the Commit.<a href="#section-11.2-14.4.2.1" class="pilcrow">¶</a>
 </li>
