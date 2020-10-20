@@ -1523,11 +1523,11 @@ Internet-Draft                     MLS                      October 2020
        Sender sender;
        ContentType content_type = commit;
        Commit commit;
-       opaque signature<0..2^16-1>;
    } MLSPlaintextCommitContent;
 
    struct {
-       MAC confirmation_tag;
+       opaque confirmation_tag<0..255>;
+       opaque signature<0..2^16-1>;
    } MLSPlaintextCommitAuthData;
 
    interim_transcript_hash_[0] = ""; // zero-length octet string
@@ -1543,11 +1543,12 @@ Internet-Draft                     MLS                      October 2020
    Thus the "confirmed_transcript_hash" field in a GroupContext object
    represents a transcript over the whole history of MLSPlaintext Commit
    messages, up to the confirmation tag field in the current
-   MLSPlaintext message.  The confirmation tag is then included in the
-   transcript for the next epoch.  The interim transcript hash is passed
-   to new members in the GroupInfo struct, and enables existing members
-   to incorporate a Commit message into the transcript without having to
-   store the whole MLSPlaintextCommitAuthData structure.
+   MLSPlaintext message.  The confirmation tag and signature fields are
+   then included in the transcript for the next epoch.  The interim
+   transcript hash is passed to new members in the GroupInfo struct, and
+   enables existing members to incorporate a Commit message into the
+   transcript without having to store the whole
+   MLSPlaintextCommitAuthData structure.
 
    As shown above, when a new group is created, the
    "interim_transcript_hash" field is set to the zero-length octet
@@ -1561,7 +1562,6 @@ Internet-Draft                     MLS                      October 2020
    intermediate nodes in the path above the leaf.  The path is ordered
    from the closest node to the leaf to the root; each node MUST be the
    parent of its predecessor.
-
 
 
 
@@ -1891,10 +1891,10 @@ psk_secret     = psk_secret_[i] || ... || psk_secret_[n]
    tree_node_[N]_secret
            |
            |
-           +--> DeriveTreeSecret(., "tree", left(N), 0, KDF.Nh)
+           +--> DeriveTreeSecret(., "tree", left(N), 0, Hash.length)
            |    = tree_node_[left(N)]_secret
            |
-           +--> DeriveTreeSecret(., "tree", right(N), 0, KDF.Nh)
+           +--> DeriveTreeSecret(., "tree", right(N), 0, Hash.length)
                 = tree_node_[right(N)]_secret
 
 
@@ -1914,10 +1914,10 @@ Internet-Draft                     MLS                      October 2020
    tree_node_[N]_secret
            |
            |
-           +--> DeriveTreeSecret(., "handshake", N, 0, KDF.Nh)
+           +--> DeriveTreeSecret(., "handshake", N, 0, Hash.length)
            |    = handshake_ratchet_secret_[N]_[0]
            |
-           +--> DeriveTreeSecret(., "application", N, 0, KDF.Nh)
+           +--> DeriveTreeSecret(., "application", N, 0, Hash.length)
                 = application_ratchet_secret_[N]_[0]
 
 8.3.  Encryption Keys
@@ -1971,7 +1971,7 @@ Internet-Draft                     MLS                      October 2020
          |    = ratchet_key_[N]_[j]
          |
          V
-   DeriveTreeSecret(., "secret", N, j, KDF.Nh)
+   DeriveTreeSecret(., "secret", N, j, Hash.length)
    = ratchet_secret_[N]_[j+1]
 
    Here, AEAD.Nn and AEAD.Nk denote the lengths in bytes of the nonce
@@ -2171,10 +2171,10 @@ Internet-Draft                     MLS                      October 2020
 
            case commit:
              Commit commit;
+             opaque confirmation_tag<0..255>;
        }
 
        opaque signature<0..2^16-1>;
-       optional<MAC> confirmation_tag;
        optional<MAC> membership_tag;
    } MLSPlaintext;
 
@@ -2194,9 +2194,6 @@ Internet-Draft                     MLS                      October 2020
        opaque encrypted_sender_data<0..255>;
        opaque ciphertext<0..2^32-1>;
    } MLSCiphertext;
-
-   The field "confirmation_tag" MUST be present if "content_type" equals
-   commit.  Otherwise, it MUST NOT be present.
 
    External sender types are sent as MLSPlaintext, see Section 11.1.6
    for their use.
@@ -2229,10 +2226,13 @@ Internet-Draft                     MLS                      October 2020
    signing private key corresponding to the credential at the leaf of
    the tree indicated by the sender field.  The signature covers the
    plaintext metadata and message content, which is all of MLSPlaintext
-   except for the "signature", the "confirmation_tag" and
-   "membership_tag" fields.  If the sender is a member of the group, the
-   signature also covers the GroupContext for the current epoch, so that
-   signatures are specific to a given group and epoch.
+   except for the "signature" and "membership_tag" fields.  If the
+   sender is a member of the group, the signature also covers the
+   GroupContext for the current epoch, so that signatures are specific
+   to a given group and epoch.
+
+
+
 
 
 
@@ -2263,6 +2263,7 @@ Internet-Draft                     MLS                      October 2020
 
            case commit:
              Commit commit;
+             opaque confirmation_tag<0..255>;
        }
    } MLSPlaintextTBS;
 
@@ -2275,7 +2276,6 @@ Internet-Draft                     MLS                      October 2020
    struct {
      MLSPlaintextTBS tbs;
      opaque signature<0..2^16-1>;
-     optional<MAC> confirmation_tag;
    } MLSPlaintextTBM;
 
    membership_tag = MAC(membership_key, MLSPlaintextTBM);
@@ -2316,10 +2316,10 @@ Internet-Draft                     MLS                      October 2020
 
            case commit:
              Commit commit;
+             opaque confirmation_tag<0..255>;
        }
 
        opaque signature<0..2^16-1>;
-       optional<MAC> confirmation_tag;
        opaque padding<0..2^16-1>;
    } MLSCiphertextContent;
 
@@ -2454,7 +2454,7 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
       supported by all members.
 
    *  Initialize a one-member group with the following initial values
-      (where "0" represents an all-zero vector of size KDF.Nh):
+      (where "0" represents an all-zero vector of size Hash.length):
 
       -  Ratchet tree: A tree with a single node, a leaf containing an
          HPKE public key and credential for the creator
@@ -2607,8 +2607,8 @@ Internet-Draft                     MLS                      October 2020
    On receiving an MLSPlaintext containing a Proposal, a client MUST
    verify the signature on the enclosing MLSPlaintext.  If the signature
    verifies successfully, then the Proposal should be cached in such a
-   way that it can be retrieved using a ProposalID in a later Commit
-   message.
+   way that it can be retrieved by hash (as a ProposalOrRef object) in a
+   later Commit message.
 
 11.1.1.  Add
 
@@ -2785,15 +2785,15 @@ Internet-Draft                     MLS                      October 2020
    representation of the state of the group by applying the proposals
    and advancing the key schedule.
 
-   Each proposal covered by the Commit is identified by a ProposalID
-   value, which contains the hash of the MLSPlaintext in which the
-   Proposal was sent, using the hash function from the group's
-   ciphersuite.
-
-
-
-
-
+   Each proposal covered by the Commit is included by a ProposalOrRef
+   value, which identifies the proposal to be applied by value or by
+   reference.  Proposals supplied by value are included directly in the
+   Commit object.  Proposals supplied by reference are specified by
+   including the hash of the MLSPlaintext in which the Proposal was
+   sent, using the hash function from the group's ciphersuite.  For
+   proposals supplied by value, the sender of the proposal is the same
+   as the sender of the Commit.  Conversely, proposals sent by people
+   other than the committer MUST be included by reference.
 
 
 
@@ -2802,10 +2802,23 @@ Barnes, et al.            Expires 23 April 2021                [Page 50]
 Internet-Draft                     MLS                      October 2020
 
 
-   opaque ProposalID<0..255>;
+   enum {
+     reserved(0),
+     proposal(1)
+     reference(2),
+     (255)
+   } ProposalOrRefType;
 
    struct {
-       ProposalID proposals<0..2^32-1>;
+     ProposalOrRefType type;
+     select (ProposalOrRef.type) {
+       case proposal:  Proposal proposal;
+       case reference: opaque hash<0..255>;
+     }
+   } ProposalOrRef;
+
+   struct {
+       ProposalOrRef proposals<0..2^32-1>;
        optional<UpdatePath> path;
    } Commit;
 
@@ -2836,6 +2849,15 @@ Internet-Draft                     MLS                      October 2020
    unique "group_id" and parameters that are supported by all clients in
    the group.
 
+
+
+
+
+Barnes, et al.            Expires 23 April 2021                [Page 51]
+
+Internet-Draft                     MLS                      October 2020
+
+
    The Commit MUST NOT combine proposals sent within different epochs.
    In the event that a valid proposal is omitted from the next Commit,
    the sender of the proposal SHOULD retransmit it in the new epoch.
@@ -2847,16 +2869,6 @@ Internet-Draft                     MLS                      October 2020
    to the sender of the Commit.  An Update proposal can be regarded as a
    "lazy" version of this operation, where only the leaf changes and
    intermediate nodes are blanked out.
-
-
-
-
-
-
-Barnes, et al.            Expires 23 April 2021                [Page 51]
-
-Internet-Draft                     MLS                      October 2020
-
 
    The "path" field of a Commit message MUST be populated if the Commit
    covers at least one Update or Remove proposal.  The "path" field MUST
@@ -2893,18 +2905,6 @@ Internet-Draft                     MLS                      October 2020
        provides FS with regard to any removed members and PCS for the
        committer and any updated members.
 
-   A member of the group creates a Commit message and the corresponding
-   Welcome message at the same time, by taking the following steps:
-
-   *  Construct an initial Commit object with the "proposals" field
-      populated from Proposals received during the current epoch, and
-      empty "key_package" and "path" fields.
-
-
-
-
-
-
 
 
 
@@ -2913,6 +2913,13 @@ Barnes, et al.            Expires 23 April 2021                [Page 52]
 
 Internet-Draft                     MLS                      October 2020
 
+
+   A member of the group creates a Commit message and the corresponding
+   Welcome message at the same time, by taking the following steps:
+
+   *  Construct an initial Commit object with the "proposals" field
+      populated from Proposals received during the current epoch, and
+      empty "key_package" and "path" fields.
 
    *  Generate a provisional GroupContext object by applying the
       proposals referenced in the initial Commit object, as described in
@@ -2955,13 +2962,6 @@ Internet-Draft                     MLS                      October 2020
       Commit to the null optional.  Define "commit_secret" as the all-
       zero vector of the same length as a "path_secret" value would be.
 
-   *  Generate a new KeyPackage for the Committer's own leaf, with a
-      "parent_hash" extension.  Store it in the ratchet tree and assign
-      it to the "key_package" field in the Commit object.
-
-
-
-
 
 
 
@@ -2970,6 +2970,10 @@ Barnes, et al.            Expires 23 April 2021                [Page 53]
 Internet-Draft                     MLS                      October 2020
 
 
+   *  Generate a new KeyPackage for the Committer's own leaf, with a
+      "parent_hash" extension.  Store it in the ratchet tree and assign
+      it to the "key_package" field in the Commit object.
+
    *  If one or more PreSharedKey proposals are part of the commit,
       derive the "psk_secret" as specified in Section 8.1, where the
       order of PSKs in the derivation corresponds to the order of
@@ -2977,10 +2981,10 @@ Internet-Draft                     MLS                      October 2020
       "psk_secret" to 0.
 
    *  Construct an MLSPlaintext object containing the Commit object.
-      Sign the MLSPlaintext using the current epoch's GroupContext as
-      context.  Use the signature, the "commit_secret" and the
-      "psk_secret" to advance the key schedule and compute the
-      "confirmation_tag" value in the MLSPlaintext.
+      Use the "commit_secret" and the "psk_secret" to advance the key
+      schedule and compute the "confirmation_tag" value in the
+      MLSPlaintext.  Sign the MLSPlaintext using the current epoch's
+      GroupContext as context.
 
    *  Update the tree in the provisional state by applying the direct
       path
@@ -3014,10 +3018,6 @@ Internet-Draft                     MLS                      October 2020
       included in the commit.  The order of the "psks" MUST be the same
       as the order of PreSharedKey proposals in the "proposals" vector.
 
-   *  If a ReInit proposal was part of the Commit, the committer MUST
-      create a new group with the Group ID and the parameters specified
-      in the ReInit proposal and with the same members as the original
-      group after processing the current commit.  The Welcome message
 
 
 
@@ -3026,6 +3026,10 @@ Barnes, et al.            Expires 23 April 2021                [Page 54]
 Internet-Draft                     MLS                      October 2020
 
 
+   *  If a ReInit proposal was part of the Commit, the committer MUST
+      create a new group with the Group ID and the parameters specified
+      in the ReInit proposal and with the same members as the original
+      group after processing the current commit.  The Welcome message
       MUST include a "PreSharedKeyID" with "psktype" "reinit" and with
       "psk_group_id" and "psk_epoch" corresponding to the current group
       and the epoch after the commit was processed.
@@ -3071,16 +3075,16 @@ Internet-Draft                     MLS                      October 2020
       -  Apply the UpdatePath to the tree, as described in Section 5.5,
          and store "key_package" at the Committer's leaf.
 
-      -  Verify that the KeyPackage has a "parent_hash" extension and
-         that its value matches the new parent of the sender's leaf
-         node.
-
 
 
 Barnes, et al.            Expires 23 April 2021                [Page 55]
 
 Internet-Draft                     MLS                      October 2020
 
+
+      -  Verify that the KeyPackage has a "parent_hash" extension and
+         that its value matches the new parent of the sender's leaf
+         node.
 
       -  Define "commit_secret" as the value "path_secret[n+1]" derived
          from the "path_secret[n]" value assigned to the root node.
@@ -3125,11 +3129,7 @@ Internet-Draft                     MLS                      October 2020
          "group_id" are the fields of the original group after
          processing the commit.
 
-      If any of the conditions are not met, the Client SHOULD not
-      process the Welcome message.
 
-   The confirmation tag value confirms that the members of the group
-   have arrived at the same state of the group:
 
 
 
@@ -3137,6 +3137,12 @@ Barnes, et al.            Expires 23 April 2021                [Page 56]
 
 Internet-Draft                     MLS                      October 2020
 
+
+      If any of the conditions are not met, the Client SHOULD not
+      process the Welcome message.
+
+   The confirmation tag value confirms that the members of the group
+   have arrived at the same state of the group:
 
    MLSPlaintext.confirmation_tag =
        MAC(confirmation_key, GroupContext.confirmed_transcript_hash)
@@ -3183,12 +3189,6 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-
-
-
-
-
-
 Barnes, et al.            Expires 23 April 2021                [Page 57]
 
 Internet-Draft                     MLS                      October 2020
@@ -3199,8 +3199,9 @@ Internet-Draft                     MLS                      October 2020
      uint64 epoch;
      opaque tree_hash<0..255>;
      opaque confirmed_transcript_hash<0..255>;
+     opaque interim_transcript_hash<0..255>;
      Extension extensions<0..2^32-1>;
-     MAC confirmation_tag;
+     opaque confirmation_tag<0..255>;
      uint32 signer_index;
      opaque signature<0..2^16-1>;
    } GroupInfo;
@@ -3236,7 +3237,6 @@ Internet-Draft                     MLS                      October 2020
 
    On receiving a Welcome message, a client processes it using the
    following steps:
-
 
 
 
@@ -3336,9 +3336,6 @@ Internet-Draft                     MLS                      October 2020
       confirmation key and the "confirmed_transcript_hash" from the
       GroupInfo.
 
-   *  Use the confirmed transcript hash and confirmation tag to compute
-      the interim transcript hash in the new state.
-
 11.3.  Ratchet Tree Extension
 
    By default, a GroupInfo message only provides the joiner with a
@@ -3353,6 +3350,9 @@ Internet-Draft                     MLS                      October 2020
    external source, the whole public state of the ratchet tree can be
    provided in an extension of type "ratchet_tree", containing a
    "ratchet_tree" object of the following form:
+
+
+
 
 
 
