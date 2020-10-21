@@ -5,7 +5,7 @@
 Network Working Group                                          R. Barnes
 Internet-Draft                                                     Cisco
 Intended status: Informational                             B. Beurdouche
-Expires: 23 April 2021                                             Inria
+Expires: 24 April 2021                                             Inria
                                                              J. Millican
                                                                 Facebook
                                                                 E. Omara
@@ -14,7 +14,7 @@ Expires: 23 April 2021                                             Inria
                                                     University of Oxford
                                                                R. Robert
                                                                     Wire
-                                                         20 October 2020
+                                                         21 October 2020
 
 
               The Messaging Layer Security (MLS) Protocol
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Barnes, et al.            Expires 23 April 2021                 [Page 1]
+Barnes, et al.            Expires 24 April 2021                 [Page 1]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -63,7 +63,7 @@ Internet-Draft                     MLS                      October 2020
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2021.
+   This Internet-Draft will expire on 24 April 2021.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Barnes, et al.            Expires 23 April 2021                 [Page 2]
+Barnes, et al.            Expires 24 April 2021                 [Page 2]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -165,7 +165,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                 [Page 3]
+Barnes, et al.            Expires 24 April 2021                 [Page 3]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -221,7 +221,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                 [Page 4]
+Barnes, et al.            Expires 24 April 2021                 [Page 4]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -277,7 +277,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                 [Page 5]
+Barnes, et al.            Expires 24 April 2021                 [Page 5]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -333,7 +333,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                 [Page 6]
+Barnes, et al.            Expires 24 April 2021                 [Page 6]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -389,7 +389,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                 [Page 7]
+Barnes, et al.            Expires 24 April 2021                 [Page 7]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -445,7 +445,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                 [Page 8]
+Barnes, et al.            Expires 24 April 2021                 [Page 8]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -501,7 +501,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                 [Page 9]
+Barnes, et al.            Expires 24 April 2021                 [Page 9]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -557,7 +557,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 10]
+Barnes, et al.            Expires 24 April 2021                [Page 10]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -613,7 +613,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 11]
+Barnes, et al.            Expires 24 April 2021                [Page 11]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -669,7 +669,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 12]
+Barnes, et al.            Expires 24 April 2021                [Page 12]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -725,7 +725,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 13]
+Barnes, et al.            Expires 24 April 2021                [Page 13]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -781,7 +781,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 14]
+Barnes, et al.            Expires 24 April 2021                [Page 14]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -837,7 +837,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 15]
+Barnes, et al.            Expires 24 April 2021                [Page 15]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -893,7 +893,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 16]
+Barnes, et al.            Expires 24 April 2021                [Page 16]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -949,7 +949,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 17]
+Barnes, et al.            Expires 24 April 2021                [Page 17]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1005,7 +1005,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 18]
+Barnes, et al.            Expires 24 April 2021                [Page 18]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1061,7 +1061,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 19]
+Barnes, et al.            Expires 24 April 2021                [Page 19]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1117,7 +1117,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 20]
+Barnes, et al.            Expires 24 April 2021                [Page 20]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1173,7 +1173,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 21]
+Barnes, et al.            Expires 24 April 2021                [Page 21]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1229,7 +1229,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 22]
+Barnes, et al.            Expires 24 April 2021                [Page 22]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1285,7 +1285,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 23]
+Barnes, et al.            Expires 24 April 2021                [Page 23]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1341,7 +1341,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 24]
+Barnes, et al.            Expires 24 April 2021                [Page 24]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1397,7 +1397,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 25]
+Barnes, et al.            Expires 24 April 2021                [Page 25]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1453,7 +1453,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 26]
+Barnes, et al.            Expires 24 April 2021                [Page 26]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1509,7 +1509,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 27]
+Barnes, et al.            Expires 24 April 2021                [Page 27]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1565,7 +1565,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 28]
+Barnes, et al.            Expires 24 April 2021                [Page 28]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1621,7 +1621,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 29]
+Barnes, et al.            Expires 24 April 2021                [Page 29]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1677,7 +1677,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 30]
+Barnes, et al.            Expires 24 April 2021                [Page 30]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1733,7 +1733,7 @@ psk_secret (or 0) -> KDF.Extract = member_secret
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 31]
+Barnes, et al.            Expires 24 April 2021                [Page 31]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1789,7 +1789,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 32]
+Barnes, et al.            Expires 24 April 2021                [Page 32]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1845,7 +1845,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 33]
+Barnes, et al.            Expires 24 April 2021                [Page 33]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1901,7 +1901,7 @@ psk_secret     = psk_secret_[i] || ... || psk_secret_[n]
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 34]
+Barnes, et al.            Expires 24 April 2021                [Page 34]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -1957,7 +1957,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 35]
+Barnes, et al.            Expires 24 April 2021                [Page 35]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2013,7 +2013,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 36]
+Barnes, et al.            Expires 24 April 2021                [Page 36]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2069,7 +2069,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 37]
+Barnes, et al.            Expires 24 April 2021                [Page 37]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2125,7 +2125,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 38]
+Barnes, et al.            Expires 24 April 2021                [Page 38]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2181,7 +2181,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 39]
+Barnes, et al.            Expires 24 April 2021                [Page 39]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2237,7 +2237,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 40]
+Barnes, et al.            Expires 24 April 2021                [Page 40]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2293,7 +2293,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 41]
+Barnes, et al.            Expires 24 April 2021                [Page 41]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2349,7 +2349,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 42]
+Barnes, et al.            Expires 24 April 2021                [Page 42]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2405,7 +2405,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 43]
+Barnes, et al.            Expires 24 April 2021                [Page 43]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2461,7 +2461,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 44]
+Barnes, et al.            Expires 24 April 2021                [Page 44]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2517,7 +2517,7 @@ sender_data_nonce = ExpandWithLabel(sender_data_secret, "nonce", ciphertext_samp
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 45]
+Barnes, et al.            Expires 24 April 2021                [Page 45]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2573,7 +2573,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 46]
+Barnes, et al.            Expires 24 April 2021                [Page 46]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2629,7 +2629,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 47]
+Barnes, et al.            Expires 24 April 2021                [Page 47]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2685,7 +2685,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 48]
+Barnes, et al.            Expires 24 April 2021                [Page 48]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2741,7 +2741,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 49]
+Barnes, et al.            Expires 24 April 2021                [Page 49]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2797,7 +2797,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 50]
+Barnes, et al.            Expires 24 April 2021                [Page 50]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -2811,6 +2811,10 @@ Internet-Draft                     MLS                      October 2020
    representing a real-world team.  Proposals originating outside the
    group are identified by a "preconfigured" or "new_member" SenderType
    in MLSPlaintext.
+
+   ReInit proposals can also be sent to the group by a "preconfigured"
+   sender, for example to enforce a changed policy regarding MLS version
+   or ciphersuite.
 
    The "new_member" SenderType is used for clients proposing that they
    themselves be added.  For this ID type the sender value MUST be zero
@@ -2846,17 +2850,18 @@ Internet-Draft                     MLS                      October 2020
    reference.  Proposals supplied by value are included directly in the
    Commit object.  Proposals supplied by reference are specified by
    including the hash of the MLSPlaintext in which the Proposal was
+
+
+
+Barnes, et al.            Expires 24 April 2021                [Page 51]
+
+Internet-Draft                     MLS                      October 2020
+
+
    sent, using the hash function from the group's ciphersuite.  For
    proposals supplied by value, the sender of the proposal is the same
    as the sender of the Commit.  Conversely, proposals sent by people
    other than the committer MUST be included by reference.
-
-
-
-Barnes, et al.            Expires 23 April 2021                [Page 51]
-
-Internet-Draft                     MLS                      October 2020
-
 
    enum {
      reserved(0),
@@ -2901,18 +2906,17 @@ Internet-Draft                     MLS                      October 2020
    the ReInit proposal MUST be no less than the version for the current
    group.  A client processing a Commit that covers multiple ReInit
    proposals or a ReInit proposal with a lower version MUST reject it as
-   malformed.  The committer SHOULD choose a ReInit proposal with a
-   unique "group_id" and parameters that are supported by all clients in
-   the group.
 
 
 
-
-
-Barnes, et al.            Expires 23 April 2021                [Page 52]
+Barnes, et al.            Expires 24 April 2021                [Page 52]
 
 Internet-Draft                     MLS                      October 2020
 
+
+   malformed.  The committer SHOULD choose a ReInit proposal with a
+   unique "group_id" and parameters that are supported by all clients in
+   the group.
 
    The Commit MUST NOT combine proposals sent within different epochs.
    In the event that a valid proposal is omitted from the next Commit,
@@ -2957,18 +2961,18 @@ Internet-Draft                     MLS                      October 2020
        the path is optional.  Such a commit provides PCS with regard to
        the committer only if the path field is present.
 
-   3.  A "full" Commit that references proposals of any type, which
-       provides FS with regard to any removed members and PCS for the
-       committer and any updated members.
 
 
 
 
-
-Barnes, et al.            Expires 23 April 2021                [Page 53]
+Barnes, et al.            Expires 24 April 2021                [Page 53]
 
 Internet-Draft                     MLS                      October 2020
 
+
+   3.  A "full" Commit that references proposals of any type, which
+       provides FS with regard to any removed members and PCS for the
+       committer and any updated members.
 
    A member of the group creates a Commit message and the corresponding
    Welcome message at the same time, by taking the following steps:
@@ -3015,16 +3019,16 @@ Internet-Draft                     MLS                      October 2020
          Define "commit_secret" as the value "path_secret[n+1]" derived
          from the "path_secret[n]" value assigned to the root node.
 
-   *  If not populating the "path" field: Set the "path" field in the
-      Commit to the null optional.  Define "commit_secret" as the all-
-      zero vector of the same length as a "path_secret" value would be.
 
 
-
-Barnes, et al.            Expires 23 April 2021                [Page 54]
+Barnes, et al.            Expires 24 April 2021                [Page 54]
 
 Internet-Draft                     MLS                      October 2020
 
+
+   *  If not populating the "path" field: Set the "path" field in the
+      Commit to the null optional.  Define "commit_secret" as the all-
+      zero vector of the same length as a "path_secret" value would be.
 
    *  Generate a new KeyPackage for the Committer's own leaf, with a
       "parent_hash" extension.  Store it in the ratchet tree and assign
@@ -3069,18 +3073,19 @@ Internet-Draft                     MLS                      October 2020
          "init_secret" for the current epoch and the path secret (if
          present).
 
+
+
+
+
+Barnes, et al.            Expires 24 April 2021                [Page 55]
+
+Internet-Draft                     MLS                      October 2020
+
+
    *  Construct a Welcome message from the encrypted GroupInfo object,
       the encrypted key packages and any PSK for which a proposal was
       included in the commit.  The order of the "psks" MUST be the same
       as the order of PreSharedKey proposals in the "proposals" vector.
-
-
-
-
-Barnes, et al.            Expires 23 April 2021                [Page 55]
-
-Internet-Draft                     MLS                      October 2020
-
 
    *  If a ReInit proposal was part of the Commit, the committer MUST
       create a new group with the Group ID and the parameters specified
@@ -3124,19 +3129,21 @@ Internet-Draft                     MLS                      October 2020
       vector contains any Update or Remove proposals, or if it's empty.
       Otherwise, the "path" value MAY be omitted.
 
+
+
+
+
+Barnes, et al.            Expires 24 April 2021                [Page 56]
+
+Internet-Draft                     MLS                      October 2020
+
+
    *  If the "path" value is populated: Process the "path" value using
       the ratchet tree the provisional GroupContext, to update the
       ratchet tree and generate the "commit_secret":
 
       -  Apply the UpdatePath to the tree, as described in Section 5.5,
          and store "key_package" at the Committer's leaf.
-
-
-
-Barnes, et al.            Expires 23 April 2021                [Page 56]
-
-Internet-Draft                     MLS                      October 2020
-
 
       -  Verify that the KeyPackage has a "parent_hash" extension and
          that its value matches the new parent of the sender's leaf
@@ -3179,20 +3186,19 @@ Internet-Draft                     MLS                      October 2020
          the "version" is greater or equal to that of the original
          group.
 
+
+
+
+Barnes, et al.            Expires 24 April 2021                [Page 57]
+
+Internet-Draft                     MLS                      October 2020
+
+
       -  The "psks" field in the Welcome message includes a
          "PreSharedKeyID" with "psktype" = "reinit" "psk_epoch" =
          "epoch" and "psk_group_id" = "group_id", where "epoch" and
          "group_id" are the fields of the original group after
          processing the commit.
-
-
-
-
-
-Barnes, et al.            Expires 23 April 2021                [Page 57]
-
-Internet-Draft                     MLS                      October 2020
-
 
       If any of the conditions are not met, the Client SHOULD not
       process the Welcome message.
@@ -3239,13 +3245,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-
-
-
-
-
-
-Barnes, et al.            Expires 23 April 2021                [Page 58]
+Barnes, et al.            Expires 24 April 2021                [Page 58]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -3301,7 +3301,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 59]
+Barnes, et al.            Expires 24 April 2021                [Page 59]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -3357,7 +3357,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 60]
+Barnes, et al.            Expires 24 April 2021                [Page 60]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -3413,7 +3413,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 61]
+Barnes, et al.            Expires 24 April 2021                [Page 61]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -3469,7 +3469,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 62]
+Barnes, et al.            Expires 24 April 2021                [Page 62]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -3525,7 +3525,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 63]
+Barnes, et al.            Expires 24 April 2021                [Page 63]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -3581,7 +3581,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 64]
+Barnes, et al.            Expires 24 April 2021                [Page 64]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -3637,7 +3637,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 65]
+Barnes, et al.            Expires 24 April 2021                [Page 65]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -3693,7 +3693,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 66]
+Barnes, et al.            Expires 24 April 2021                [Page 66]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -3749,7 +3749,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 67]
+Barnes, et al.            Expires 24 April 2021                [Page 67]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -3805,7 +3805,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 68]
+Barnes, et al.            Expires 24 April 2021                [Page 68]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -3861,7 +3861,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 69]
+Barnes, et al.            Expires 24 April 2021                [Page 69]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -3917,7 +3917,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 70]
+Barnes, et al.            Expires 24 April 2021                [Page 70]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -3973,7 +3973,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 71]
+Barnes, et al.            Expires 24 April 2021                [Page 71]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -4029,7 +4029,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 72]
+Barnes, et al.            Expires 24 April 2021                [Page 72]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -4085,7 +4085,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 73]
+Barnes, et al.            Expires 24 April 2021                [Page 73]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -4141,7 +4141,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 74]
+Barnes, et al.            Expires 24 April 2021                [Page 74]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -4197,7 +4197,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 75]
+Barnes, et al.            Expires 24 April 2021                [Page 75]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -4253,7 +4253,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 76]
+Barnes, et al.            Expires 24 April 2021                [Page 76]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -4309,7 +4309,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 77]
+Barnes, et al.            Expires 24 April 2021                [Page 77]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -4365,7 +4365,7 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 78]
+Barnes, et al.            Expires 24 April 2021                [Page 78]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -4421,7 +4421,7 @@ def level(x):
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 79]
+Barnes, et al.            Expires 24 April 2021                [Page 79]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -4477,7 +4477,7 @@ def parent(x, n):
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 80]
+Barnes, et al.            Expires 24 April 2021                [Page 80]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -4533,7 +4533,7 @@ def common_ancestor_semantic(x, y, n):
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 81]
+Barnes, et al.            Expires 24 April 2021                [Page 81]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -4589,7 +4589,7 @@ Authors' Addresses
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 82]
+Barnes, et al.            Expires 24 April 2021                [Page 82]
 
 Internet-Draft                     MLS                      October 2020
 
@@ -4645,4 +4645,4 @@ Internet-Draft                     MLS                      October 2020
 
 
 
-Barnes, et al.            Expires 23 April 2021                [Page 83]
+Barnes, et al.            Expires 24 April 2021                [Page 83]
