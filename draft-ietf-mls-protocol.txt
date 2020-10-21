@@ -3219,7 +3219,7 @@ Internet-Draft                     MLS                      October 2020
 
    *  public tree hash
 
-   *  confirmed transcript hash
+   *  interim transcript hash
 
    *  group extensions
 
