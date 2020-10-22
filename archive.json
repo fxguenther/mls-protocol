@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-10-20T00:56:34.363067+00:00",
+  "timestamp": "2020-10-22T00:57:50.477788+00:00",
   "repo": "mlswg/mls-protocol",
   "labels": [
     {
@@ -1578,7 +1578,7 @@
       "id": "MDU6SXNzdWU0MjYzNjUyMDk=",
       "title": "Prevent suppression of Handshake messages",
       "url": "https://github.com/mlswg/mls-protocol/issues/142",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "bifurcation",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -1587,8 +1587,8 @@
       ],
       "body": "In current proposals, it is possible for the delivery service to distinguish handshake and application messages.  This enables the DS to lock in a compromise by forbidding key updates while allowing application messaging to continue.  We should make it harder to distinguish handshake and application messages, e.g., by encrypting the content type.",
       "createdAt": "2019-03-28T08:41:51Z",
-      "updatedAt": "2019-12-12T15:00:46Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-20T15:07:58Z",
+      "closedAt": "2020-10-20T15:07:58Z",
       "comments": []
     },
     {
@@ -1763,7 +1763,7 @@
       "id": "MDU6SXNzdWU0NDI5NjczNTc=",
       "title": "Advertize a global app generation for a sender",
       "url": "https://github.com/mlswg/mls-protocol/issues/160",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "beurdouche",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1776,8 +1776,8 @@
       ],
       "body": "We could use the sender_generation field of the MLS message to signal what was the global app generation of the sender.  Functionally, this allows receivers to know if they received all previous application messages from the sender. In the current design, if S sent M0, M1, M2 you can know if you missed M1 when receiving M2, but you cannot know if you missed M2. There are many ways of doing this: global sender counter, counter between two operations of the sender...",
       "createdAt": "2019-05-11T08:07:45Z",
-      "updatedAt": "2019-12-12T15:09:21Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-20T15:07:58Z",
+      "closedAt": "2020-10-20T15:07:58Z",
       "comments": [
         {
           "author": "beurdouche",
@@ -1854,12 +1854,13 @@
         "beurdouche"
       ],
       "labels": [
+        "editorial",
         "recommendation",
         "security"
       ],
       "body": "It has been noted that we don't discuss enough he influence of clients refusing to update in this document. The architecture document briefly explain why we minimally should evict clients that refuse to update to preserve FS or PCS. I think we actually enforce a MUST and provide a minimal recommendation. \r\n```\r\n### Membership and offline members\r\nBecause Forward Secrecy (FS) and Post-Compromise Security (PCS)\r\nrely on the deletion and replacement of keying material,\r\nany client which is persistently offline\r\nmay still be holding old keying material and thus be a threat\r\nto both FS and PCS if it is later compromised.\r\nMLS does not inherently defend against this problem, but\r\nMLS-using systems can enforce some mechanism for doing\r\nso. Typically this will consist of evicting clients which\r\nare idle for too long, thus containing the threat of\r\ncompromise. The precise details of such mechanisms are\r\na matter of local policy and beyond the scope of this document.\r\n```",
       "createdAt": "2019-05-18T15:37:32Z",
-      "updatedAt": "2020-07-27T19:45:32Z",
+      "updatedAt": "2020-10-20T15:03:31Z",
       "closedAt": null,
       "comments": []
     },
@@ -3896,7 +3897,7 @@
       "id": "MDU6SXNzdWU2NjU5NTgyMzQ=",
       "title": "Address DoS by malicious insiders",
       "url": "https://github.com/mlswg/mls-protocol/issues/373",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tomtau",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -3907,8 +3908,8 @@
       ],
       "body": "https://github.com/mlswg/mls-protocol/issues/21\r\n\r\nIn the current protocol draft:\r\n```\r\n<!-- OPEN ISSUE: It is not possible for the recipient of a handshake\r\nmessage to verify that ratchet tree information in the message is\r\naccurate, because each node can only compute the secret and private\r\nkey for nodes in its direct path.  This creates the possibility\r\nthat a malicious participant could cause a denial of service by sending a\r\nhandshake message with invalid values for public keys in the ratchet\r\ntree. -->\r\n```\r\n\r\nUnless I overlooked it, the current draft seems to be also missing a \"simple\" DoS case where a handshake message could omit / malform some `DirectPathNode` (e.g. by having an empty ciphertext or invalid kem_output) -- this should be easily detectable (either by members themselves or if handshake messages are transmitted as MLSPlaintext, the delivery service could reject that).\r\n\r\nFor that originally discussed case, I guess the sketched out solution with a \"Nack\" message containing a DLEQ proof could work. Besides the drawbacks described there, one will also need to extend HPKE definitions to allow for this \"directly decrypt from the revealed shared secret\" use case. ",
       "createdAt": "2020-07-27T04:04:21Z",
-      "updatedAt": "2020-10-06T07:33:40Z",
-      "closedAt": null,
+      "updatedAt": "2020-10-20T15:17:11Z",
+      "closedAt": "2020-10-20T15:17:11Z",
       "comments": [
         {
           "author": "bifurcation",
@@ -3923,6 +3924,13 @@
           "body": "> It shares with the DoS described that it is only detectable by affected nodes.\r\n\r\nFor that simpler case, it can be detected by other nodes by doing extra checks (e.g. checking all `DirectPathNode` cipher text lengths or public key formats match what one would expect in a particular ciphersuite).\r\n\r\n> As far as Nack/DLEQ -- I'm not sure what you have in mind there.\r\n\r\nI was referring to the final comments here: https://github.com/mlswg/mls-protocol/issues/21#issuecomment-455392023\r\nSo, the goal won't be to prevent malicious insiders, but allow affected nodes to report that they couldn't process Commit by revealing the corresponding ephemeral key. With HPKE / current draft, it may be:\r\n- for malformed path secrets, affected nodes reveal `dh` + `DLEQ(dh:kem_output :: node_public_key:G)`\r\n- others check DLEQ; then using `dh` compute `zz` for `SetupBaseR` and can go ahead to check the path secrets (either the ciphertext is malformed or the public keys derived from secrets don't match the received public keys in Commit)",
           "createdAt": "2020-07-29T01:58:01Z",
           "updatedAt": "2020-07-29T01:58:01Z"
+        },
+        {
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Discussed on virtual interim 2020-10-20: Closing pending a more detailed proposal.",
+          "createdAt": "2020-10-20T15:17:11Z",
+          "updatedAt": "2020-10-20T15:17:11Z"
         }
       ]
     },
@@ -4267,6 +4275,37 @@
       "updatedAt": "2020-10-16T14:04:59Z",
       "closedAt": "2020-10-16T14:04:59Z",
       "comments": []
+    },
+    {
+      "number": 426,
+      "id": "MDU6SXNzdWU3MjUyNTc1NzE=",
+      "title": "Adopt TLS-Style Key Schedule",
+      "url": "https://github.com/mlswg/mls-protocol/issues/426",
+      "state": "CLOSED",
+      "author": "kkohbrok",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Extracting from the `GroupContext_[n]` doesn't really make sense from a provable security standpoint. Instead, we should go with the TLS approach and use the `GroupContext_[n]` as context in a `KDF.Derive` step. This could be an extra step before we derive the individual keys off the key schedule or we include it in each individual derivation operation.",
+      "createdAt": "2020-10-20T06:44:12Z",
+      "updatedAt": "2020-10-20T15:41:44Z",
+      "closedAt": "2020-10-20T15:41:44Z",
+      "comments": [
+        {
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Discussed on virtual interim:\r\n\r\n```\r\nBEFORE:\r\n                   Derive-Secret(., \"epoch\") = ExpandWithLabel(Secret, \"epoch\", \"\", KDF.Nh)\r\n                         |\r\n                         V\r\n GroupContext_[n] -> KDF.Extract = epoch_secret\r\n                         |\r\n                         +--> Derive-Secret(., <label>)\r\n                         |    = <secret>\r\n\r\nAFTER:\r\n                   ExpandWithLabel(., \"epoch\", GroupContext_[n], KDF.Nh)\r\n                         |\r\n                         V\r\n                    epoch_secret\r\n                         |\r\n                         +--> Derive-Secret(., <label>)\r\n                         |    = <secret>\r\n```",
+          "createdAt": "2020-10-20T15:15:51Z",
+          "updatedAt": "2020-10-20T15:15:51Z"
+        },
+        {
+          "author": "kkohbrok",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Solved by merging #427 . Closing.",
+          "createdAt": "2020-10-20T15:41:44Z",
+          "updatedAt": "2020-10-20T15:41:44Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -28629,13 +28668,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2020-09-21T18:13:54Z",
-      "updatedAt": "2020-10-19T23:57:33Z",
+      "updatedAt": "2020-10-21T15:32:21Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "f6ff3e41c702dabcaa0721878fec337669dd459d",
       "headRepository": "mlswg/mls-protocol",
       "headRefName": "external_commit",
-      "headRefOid": "7edb721e2a29373e0f7b84c34430047c180bacd8",
+      "headRefOid": "8773fc3c027a1578f45fe45aef8d5b671cfb6f58",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -28658,7 +28697,7 @@
               "originalPosition": 5,
               "body": "```suggestion\r\n2. A member of the group or a new member broadcasts a Commit message that causes one or more\r\n```",
               "createdAt": "2020-10-05T17:59:54Z",
-              "updatedAt": "2020-10-19T17:57:28Z"
+              "updatedAt": "2020-10-21T15:31:15Z"
             }
           ]
         },
@@ -28678,7 +28717,7 @@
               "originalPosition": 180,
               "body": "```suggestion\r\n* An external commit MUST reference exactly one ExternalInit proposal, and the\r\n  sender of the proposal MUST be the same as the sender of the Commit. When\r\n  processing a Commit, both existing and new members MUST use the external init\r\n  secret as described in {{external-initialization}}.\r\n```",
               "createdAt": "2020-10-19T17:56:10Z",
-              "updatedAt": "2020-10-19T17:58:14Z"
+              "updatedAt": "2020-10-21T15:31:15Z"
             }
           ]
         },
@@ -28698,7 +28737,7 @@
               "originalPosition": 181,
               "body": "```suggestion\r\n* An external commit MUST reference no more than one ExternalInit proposal, and the\r\n  ExternalInit proposal MUST be supplied by value, not by reference. When\r\n  processing a Commit, both existing and new members MUST use the external init\r\n  secret as described in {{external-initialization}}.\r\n```",
               "createdAt": "2020-10-19T17:59:51Z",
-              "updatedAt": "2020-10-19T18:54:02Z"
+              "updatedAt": "2020-10-21T15:31:15Z"
             }
           ]
         },
@@ -28718,7 +28757,7 @@
               "originalPosition": 181,
               "body": "I think we said that `ExternalInit` can only be an inline proposal, but we didn't specify it. So I'd rather specify that requirement in the ExternalInit section.",
               "createdAt": "2020-10-19T18:45:30Z",
-              "updatedAt": "2020-10-19T18:45:31Z"
+              "updatedAt": "2020-10-21T15:31:15Z"
             }
           ]
         },
@@ -28738,7 +28777,7 @@
               "originalPosition": 181,
               "body": "(I updated your suggestion)",
               "createdAt": "2020-10-19T18:54:16Z",
-              "updatedAt": "2020-10-19T18:54:16Z"
+              "updatedAt": "2020-10-21T15:31:15Z"
             }
           ]
         },
@@ -28758,9 +28797,134 @@
               "originalPosition": 181,
               "body": "I was about to argue that I don't think it technically needs to be an inline proposal, but it does -- there's no way to send ExternalInit if you're not in the group.  (You can use `new-member` for Add, but not ExternalInit.)  So your tweak works for me.\r\n",
               "createdAt": "2020-10-19T22:38:45Z",
-              "updatedAt": "2020-10-19T22:38:45Z"
+              "updatedAt": "2020-10-21T15:31:15Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEyMjEyMzM0",
+          "commit": {
+            "abbreviatedOid": "7edb721"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-19T22:46:11Z",
+          "updatedAt": "2020-10-20T02:08:45Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "Table is messed up again",
+              "createdAt": "2020-10-19T22:46:11Z",
+              "updatedAt": "2020-10-21T15:31:15Z"
+            },
+            {
+              "originalPosition": 159,
+              "body": "The ratchet tree is also needed for external joiners, so let's remove `tree_hash` and replace with `ratchet_tree`, and rename to something more descriptive like `GroupPublicState`",
+              "createdAt": "2020-10-19T23:56:42Z",
+              "updatedAt": "2020-10-21T15:31:15Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEyNzY3NTYy",
+          "commit": {
+            "abbreviatedOid": "9cabc69"
+          },
+          "author": "raphaelrobert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-20T14:16:35Z",
+          "updatedAt": "2020-10-20T14:16:36Z",
+          "comments": [
+            {
+              "originalPosition": 159,
+              "body": "We should keep the same flexibility here. It makes no sense that clients upload a large tree for every epoch, if the tree is maintained by the server.",
+              "createdAt": "2020-10-20T14:16:36Z",
+              "updatedAt": "2020-10-21T15:31:15Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEyODE1Mzg0",
+          "commit": {
+            "abbreviatedOid": "0f24a78"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-20T14:58:40Z",
+          "updatedAt": "2020-10-20T14:58:40Z",
+          "comments": [
+            {
+              "originalPosition": 159,
+              "body": "This structure is already maintained by the server. Users don't have to re-upload the whole thing, they can just tell the DS the new external_pub",
+              "createdAt": "2020-10-20T14:58:40Z",
+              "updatedAt": "2020-10-21T15:31:15Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEyODQyMzI4",
+          "commit": {
+            "abbreviatedOid": "0f24a78"
+          },
+          "author": "raphaelrobert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-20T15:15:33Z",
+          "updatedAt": "2020-10-20T15:15:33Z",
+          "comments": [
+            {
+              "originalPosition": 159,
+              "body": "In that scenario, in addition to the pub key they also send the hash, so that the server can make sure it has the right public tree.",
+              "createdAt": "2020-10-20T15:15:33Z",
+              "updatedAt": "2020-10-21T15:31:15Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEzMDM3NzM5",
+          "commit": {
+            "abbreviatedOid": "0f24a78"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2020-10-20T18:51:40Z",
+          "updatedAt": "2020-10-20T18:53:18Z",
+          "comments": [
+            {
+              "originalPosition": 144,
+              "body": "```suggestion\r\n* interim transcript hash\r\n```",
+              "createdAt": "2020-10-20T18:51:40Z",
+              "updatedAt": "2020-10-21T15:31:15Z"
+            },
+            {
+              "originalPosition": 156,
+              "body": "```suggestion\r\n    opaque interim_transcript_hash<0..255>;\r\n```",
+              "createdAt": "2020-10-20T18:52:58Z",
+              "updatedAt": "2020-10-21T15:31:15Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEzODIwNDMw",
+          "commit": {
+            "abbreviatedOid": "8773fc3"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-21T15:32:21Z",
+          "updatedAt": "2020-10-21T15:32:21Z",
+          "comments": []
         }
       ]
     },
@@ -29098,24 +29262,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTAwMDE4OTg1",
       "title": "Allow proposals by value in Commit",
       "url": "https://github.com/mlswg/mls-protocol/pull/414",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bifurcation",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This avoids extra signatures and message overhead in the case where the committer is originating proposals.",
       "createdAt": "2020-10-08T15:44:09Z",
-      "updatedAt": "2020-10-19T22:34:01Z",
+      "updatedAt": "2020-10-20T20:53:19Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "831ee5e61644246b3be5b4ef7d2c7d0eb93d6886",
       "headRepository": "mlswg/mls-protocol",
       "headRefName": "inline-proposal",
-      "headRefOid": "d8baecc6d2e59ea6c5d0ff082553a075ae8edac4",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "cbffafdd3552d172a1d86fb863fa312bad8a180e",
+      "closedAt": "2020-10-20T20:53:19Z",
+      "mergedAt": "2020-10-20T20:53:19Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "d17b8ac7fb7b7c7d228398700fec11f9aee9d5b2"
+      },
       "comments": [],
       "reviews": [
         {
@@ -29134,7 +29300,7 @@
               "originalPosition": 23,
               "body": "```suggestion\r\n  select (ProposalID.type) {\r\n```",
               "createdAt": "2020-10-08T16:01:21Z",
-              "updatedAt": "2020-10-19T21:37:04Z"
+              "updatedAt": "2020-10-20T19:12:58Z"
             }
           ]
         },
@@ -29167,7 +29333,7 @@
               "originalPosition": 28,
               "body": "i wonder an informal note on when one variant is used vs another might be helpful for the implementors ..",
               "createdAt": "2020-10-09T03:39:35Z",
-              "updatedAt": "2020-10-19T21:37:04Z"
+              "updatedAt": "2020-10-20T19:12:58Z"
             }
           ]
         },
@@ -29187,7 +29353,7 @@
               "originalPosition": 24,
               "body": "It's strange that something called `ProposalID` contains an actual Proposal.",
               "createdAt": "2020-10-09T05:16:43Z",
-              "updatedAt": "2020-10-19T21:37:04Z"
+              "updatedAt": "2020-10-20T19:12:58Z"
             }
           ]
         },
@@ -29207,7 +29373,7 @@
               "originalPosition": 10,
               "body": " > For proposals whose application depends on who sent them\r\n\r\nI think this is true for all proposals, because they might get rejected depending on the application's policy.",
               "createdAt": "2020-10-19T15:29:11Z",
-              "updatedAt": "2020-10-19T21:37:04Z"
+              "updatedAt": "2020-10-20T19:12:58Z"
             }
           ]
         },
@@ -29227,7 +29393,7 @@
               "originalPosition": 3,
               "body": "Need to update a few references of ProposalID to ProposalOrRefType;",
               "createdAt": "2020-10-19T20:41:56Z",
-              "updatedAt": "2020-10-19T21:37:04Z"
+              "updatedAt": "2020-10-20T19:12:58Z"
             }
           ]
         },
@@ -29247,7 +29413,7 @@
               "originalPosition": 3,
               "body": "Good point, thanks.",
               "createdAt": "2020-10-19T21:37:35Z",
-              "updatedAt": "2020-10-19T21:37:35Z"
+              "updatedAt": "2020-10-20T19:12:58Z"
             }
           ]
         },
@@ -29267,21 +29433,34 @@
               "originalPosition": 5,
               "body": "```suggestion\r\nretrieved by hash (as a ProposalOrRef object) in a later Commit message.\r\n```",
               "createdAt": "2020-10-19T22:32:02Z",
-              "updatedAt": "2020-10-19T22:34:01Z"
+              "updatedAt": "2020-10-20T19:12:58Z"
             },
             {
               "originalPosition": 37,
               "body": "```suggestion\r\n    case 1: Proposal proposal;\r\n```",
               "createdAt": "2020-10-19T22:33:26Z",
-              "updatedAt": "2020-10-19T22:34:01Z"
+              "updatedAt": "2020-10-20T19:12:58Z"
             },
             {
               "originalPosition": 38,
               "body": "```suggestion\r\n    case 2: opaque hash<0..255>;\r\n```",
               "createdAt": "2020-10-19T22:33:35Z",
-              "updatedAt": "2020-10-19T22:34:01Z"
+              "updatedAt": "2020-10-20T19:12:58Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEzMTIwMDky",
+          "commit": {
+            "abbreviatedOid": "cbffafd"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-20T20:47:16Z",
+          "updatedAt": "2020-10-20T20:47:16Z",
+          "comments": []
         }
       ]
     },
@@ -29588,24 +29767,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTAzNTAxMDU1",
       "title": "Review PSK PR.",
       "url": "https://github.com/mlswg/mls-protocol/pull/421",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "Bren2010",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2020-10-14T16:37:27Z",
-      "updatedAt": "2020-10-19T20:39:30Z",
+      "updatedAt": "2020-10-21T18:58:55Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
-      "baseRefOid": "fba989d1d17d9e4a543b0e30d53757f9fdb33b8b",
+      "baseRefOid": "68d2ea0e5fbf3fc914c03d44d0249f873064378c",
       "headRepository": "Bren2010/mls-protocol",
       "headRefName": "brendan/2020.10.3",
-      "headRefOid": "2212df5ccfa3a688e835f7e0df1d3ae672ee9335",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "deae9c08e1ad848ebc8635bac0f709d7e45d4863",
+      "closedAt": "2020-10-21T18:58:55Z",
+      "mergedAt": "2020-10-21T18:58:55Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "54519449b09423bd2a44702f5be9388ebdf8bc48"
+      },
       "comments": [],
       "reviews": [
         {
@@ -29624,37 +29805,37 @@
               "originalPosition": 37,
               "body": "A re-initialization could also be proposed by a non-member.",
               "createdAt": "2020-10-15T12:35:57Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             },
             {
               "originalPosition": 66,
               "body": "We don't really have \"resumption\" psks. Also, I think that \"internal\" fits quite well here. Although to be fair, neither branching nor re-initialization PKSs are communicated via `PreSharedKey` proposals. However, it might still be useful to use with internal PSKs (e.g. to re-add member so the group that have lost group state for some reason).",
               "createdAt": "2020-10-15T12:38:54Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             },
             {
               "originalPosition": 94,
               "body": "Why remove this section? If I understand correctly, it fits well into the subsections explaining the use of the various keys derived from the key schedule.",
               "createdAt": "2020-10-19T06:23:09Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             },
             {
               "originalPosition": 147,
               "body": "Why remove this, but not the subsection below on Sub-group branching? I think both section serve the purpose of giving an overview over the respective process and should be left in.",
               "createdAt": "2020-10-19T06:25:18Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             },
             {
               "originalPosition": 167,
               "body": "@bifurcation wanted to have this spelled out. I'm happy with the abbreviation.",
               "createdAt": "2020-10-19T06:26:12Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             },
             {
               "originalPosition": 232,
               "body": "Why remove this? I think we should at least specify that only one re-init proposal can be included in a commit.",
               "createdAt": "2020-10-19T06:27:49Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             }
           ]
         },
@@ -29674,7 +29855,7 @@
               "originalPosition": 167,
               "body": "I can live with this.  ",
               "createdAt": "2020-10-19T14:18:16Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             }
           ]
         },
@@ -29694,7 +29875,7 @@
               "originalPosition": 28,
               "body": "```suggestion\r\nExternal PSKs are provided by the application, while recovery and re-init PSKs\r\n```",
               "createdAt": "2020-10-19T14:34:12Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             }
           ]
         },
@@ -29714,13 +29895,13 @@
               "originalPosition": 167,
               "body": "Or `pre_shared_key(4)`",
               "createdAt": "2020-10-19T14:35:40Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             },
             {
               "originalPosition": 199,
               "body": "\"MUST be `external`\" is too strong here; this proposal is also how \"recovery\" PSKs are injected, right?  I think all you want to say is \"MUST NOT be `reinit`\"",
               "createdAt": "2020-10-19T14:38:59Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             }
           ]
         },
@@ -29740,13 +29921,13 @@
               "originalPosition": 119,
               "body": "I think detecting attacks is a valid goal of the authentication keys, we shouldn't remove it.",
               "createdAt": "2020-10-19T17:31:27Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             },
             {
               "originalPosition": 223,
               "body": "This sounds like existing proposals should be dropped, which should not be the case. I think it better to mandate an extra Commit that is issued when there are no more pending proposals.",
               "createdAt": "2020-10-19T17:35:51Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             }
           ]
         },
@@ -29766,45 +29947,171 @@
               "originalPosition": 37,
               "body": "I don't see a provision for that in the External Proposals section. I think there's more to think through in that case, which we can do in another PR",
               "createdAt": "2020-10-19T20:15:54Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             },
             {
               "originalPosition": 94,
               "body": "You did not define how to do recovery. Define how to do recovery in another PR and you can add it back",
               "createdAt": "2020-10-19T20:26:59Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             },
             {
               "originalPosition": 119,
               "body": "It's redundant. The second clause of the sentence just says \"detect attacks\" again in a different way.",
               "createdAt": "2020-10-19T20:28:20Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             },
             {
               "originalPosition": 147,
               "body": "This is all (correctly) discussed in the section on ReInit proposals. Sub-group branching isn't discussed anywhere else",
               "createdAt": "2020-10-19T20:32:11Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             },
             {
               "originalPosition": 199,
               "body": "There are no recovery PSKs, `external` is currently the only valid PSK type to put here",
               "createdAt": "2020-10-19T20:33:36Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             },
             {
               "originalPosition": 223,
               "body": "Yes, the ReInit must be dropped or the rest of the proposals must be dropped. Applications can do what you say automatically: Commit outstanding proposals -> send new ReInit -> Commit ReInit. There's no reason to mandate it",
               "createdAt": "2020-10-19T20:36:44Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             },
             {
               "originalPosition": 232,
               "body": "This discussion was moved to the ReInit proposal section\r\n\r\n> If a ReInit proposal is included in a Commit, it MUST be the only proposal\r\nreferenced by the Commit.",
               "createdAt": "2020-10-19T20:37:43Z",
-              "updatedAt": "2020-10-19T20:39:30Z"
+              "updatedAt": "2020-10-21T18:23:51Z"
             }
           ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEyMzYyMTIw",
+          "commit": {
+            "abbreviatedOid": "2212df5"
+          },
+          "author": "kkohbrok",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-20T06:18:38Z",
+          "updatedAt": "2020-10-20T06:18:38Z",
+          "comments": [
+            {
+              "originalPosition": 37,
+              "body": "In my mind, that was one of the main features of having a ReInit proposal. But you are right, we should have mentioned it in the External Proposals section. I'll make a PR.",
+              "createdAt": "2020-10-20T06:18:38Z",
+              "updatedAt": "2020-10-21T18:23:51Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEyMzYzMzk0",
+          "commit": {
+            "abbreviatedOid": "2212df5"
+          },
+          "author": "kkohbrok",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-20T06:21:19Z",
+          "updatedAt": "2020-10-20T06:21:19Z",
+          "comments": [
+            {
+              "originalPosition": 94,
+              "body": "This Section is not about keys for recovery specifically, but about the `recovery_secret`, which is the basis for internal PSK derivation. I agree that the name is not ideal, though.",
+              "createdAt": "2020-10-20T06:21:19Z",
+              "updatedAt": "2020-10-21T18:23:51Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEyMzY1NzY3",
+          "commit": {
+            "abbreviatedOid": "2212df5"
+          },
+          "author": "kkohbrok",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-20T06:26:00Z",
+          "updatedAt": "2020-10-20T06:26:00Z",
+          "comments": [
+            {
+              "originalPosition": 199,
+              "body": "You are right, that the of the currently specified PSK types, only `external` can be used in a psk proposal. However, implementors could define proprietary PSK types (e.g. for recovery) that they would want to use with a psk proposal as well. Not sure how we should write the spec so that option remains open.",
+              "createdAt": "2020-10-20T06:26:00Z",
+              "updatedAt": "2020-10-21T18:23:51Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEyMzY2NTU5",
+          "commit": {
+            "abbreviatedOid": "2212df5"
+          },
+          "author": "kkohbrok",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-20T06:27:32Z",
+          "updatedAt": "2020-10-20T06:27:33Z",
+          "comments": [
+            {
+              "originalPosition": 223,
+              "body": "Why does it have to be the only proposal in the commit? I mean, updates are going to be useless, but Adds and Removes can still be processed.",
+              "createdAt": "2020-10-20T06:27:33Z",
+              "updatedAt": "2020-10-21T18:23:51Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEyOTA0MTU1",
+          "commit": {
+            "abbreviatedOid": "2212df5"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-10-20T16:09:58Z",
+          "updatedAt": "2020-10-20T16:09:58Z",
+          "comments": [
+            {
+              "originalPosition": 223,
+              "body": "Discussed at virtual interim 2020-10-20:\r\n* ReInit MUST be only proposal\r\n* If non-ReInit and ReInit received in same epoch, SHOULD prefer non-ReInit\r\n* Options for recovering from contention: committer re-originates or original proposer retries",
+              "createdAt": "2020-10-20T16:09:58Z",
+              "updatedAt": "2020-10-21T18:23:51Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE0MDY4MjM4",
+          "commit": {
+            "abbreviatedOid": "deae9c0"
+          },
+          "author": "raphaelrobert",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-21T18:37:12Z",
+          "updatedAt": "2020-10-21T18:37:12Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTE0MDg2OTk2",
+          "commit": {
+            "abbreviatedOid": "deae9c0"
+          },
+          "author": "kkohbrok",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Looks good! Thanks for cleaning up some of the bits we missed in the original PSK PR!",
+          "createdAt": "2020-10-21T18:57:32Z",
+          "updatedAt": "2020-10-21T18:57:32Z",
+          "comments": []
         }
       ]
     },
@@ -29813,24 +30120,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NTA0MTk3Nzk5",
       "title": "No redundant ciphertexts",
       "url": "https://github.com/mlswg/mls-protocol/pull/422",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "dajost",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "As briefly explained in the mailing list, commit messages currently contain encryptions for newly added group members that never even receive this commit message. This PR explicitely exlcudes them during the preparation of the UpdatePath.",
       "createdAt": "2020-10-15T15:38:35Z",
-      "updatedAt": "2020-10-19T16:25:02Z",
+      "updatedAt": "2020-10-20T15:40:12Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "fba989d1d17d9e4a543b0e30d53757f9fdb33b8b",
       "headRepository": "dajost/mls-protocol",
       "headRefName": "no-redundant-ciphertexts",
-      "headRefOid": "54854e9e42313ee07a0bb7cbaf616b5c1904e2df",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "705fd58705612c1171d0a98681ca6f95faccd417",
+      "closedAt": "2020-10-20T15:40:12Z",
+      "mergedAt": "2020-10-20T15:40:12Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "5acf3e402023eb3cab5675d188844a22f1a78563"
+      },
       "comments": [
         {
           "author": "raphaelrobert",
@@ -29840,31 +30149,47 @@
           "updatedAt": "2020-10-19T16:25:02Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEyODE1MTQy",
+          "commit": {
+            "abbreviatedOid": "705fd58"
+          },
+          "author": "raphaelrobert",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-20T14:58:27Z",
+          "updatedAt": "2020-10-20T14:58:27Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 423,
       "id": "MDExOlB1bGxSZXF1ZXN0NTA0OTM3NjUx",
       "title": "Remove encrypted sender data from ciphertext AAD.",
       "url": "https://github.com/mlswg/mls-protocol/pull/423",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "Bren2010",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2020-10-16T15:44:25Z",
-      "updatedAt": "2020-10-19T20:10:54Z",
+      "updatedAt": "2020-10-20T15:37:54Z",
       "baseRepository": "mlswg/mls-protocol",
       "baseRefName": "master",
       "baseRefOid": "fba989d1d17d9e4a543b0e30d53757f9fdb33b8b",
       "headRepository": "Bren2010/mls-protocol",
       "headRefName": "brendan/2020.10.4",
       "headRefOid": "c1b4bdef3e139d25428e1fe0e561b77802674400",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2020-10-20T15:37:54Z",
+      "mergedAt": "2020-10-20T15:37:54Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "d32287e85298b3c26c054f08c00f50e2462bd3cf"
+      },
       "comments": [
         {
           "author": "bifurcation",
@@ -29886,6 +30211,13 @@
           "body": "Well, we don't know how large `authenticated_data` will be. If it's large, doing multiple passes over it when they aren't necessary would be undesirable",
           "createdAt": "2020-10-19T20:10:54Z",
           "updatedAt": "2020-10-19T20:10:54Z"
+        },
+        {
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Discussed on virtual interim 2020-10-20:\r\n* Sender data AAD is almost not necessary, since the key/nonce are derived from the ciphertext, which includes the whole header as AAD\r\n* But sampling introduces some ambiguity here, and this argument could be difficult for composability\r\n* So the original path of having minimal AAD in sender data encryption is the right compromise",
+          "createdAt": "2020-10-20T15:37:23Z",
+          "updatedAt": "2020-10-20T15:37:23Z"
         }
       ],
       "reviews": []
@@ -29978,6 +30310,171 @@
               "updatedAt": "2020-10-19T14:22:59Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 427,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTA2ODk4NzAx",
+      "title": "Groupcontext as context",
+      "url": "https://github.com/mlswg/mls-protocol/pull/427",
+      "state": "MERGED",
+      "author": "kkohbrok",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This fixes issue #426 . This is originally the work of @chrisbrzuska . I'm only submitting it for administrative purposes.",
+      "createdAt": "2020-10-20T15:22:03Z",
+      "updatedAt": "2020-10-20T15:30:51Z",
+      "baseRepository": "mlswg/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "f6ff3e41c702dabcaa0721878fec337669dd459d",
+      "headRepository": "kkohbrok/mls-protocol",
+      "headRefName": "groupcontext_as_context",
+      "headRefOid": "9f2f9a7981e0c9d32a57fd6081ed30574d678e8d",
+      "closedAt": "2020-10-20T15:30:51Z",
+      "mergedAt": "2020-10-20T15:30:51Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "0a932a191070d1e534bbcc351dbadaf9a075ae25"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEyODY0Mzcx",
+          "commit": {
+            "abbreviatedOid": "9f2f9a7"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-20T15:30:25Z",
+          "updatedAt": "2020-10-20T15:30:25Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 428,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTA3MDI0Njc2",
+      "title": "Remove interim transcript hash from GroupInfo",
+      "url": "https://github.com/mlswg/mls-protocol/pull/428",
+      "state": "MERGED",
+      "author": "bifurcation",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As discussed on 2020-10-20, this field is not needed now that #416 moved the signature under the confirmation tag.",
+      "createdAt": "2020-10-20T18:50:32Z",
+      "updatedAt": "2020-10-21T18:06:42Z",
+      "baseRepository": "mlswg/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "5acf3e402023eb3cab5675d188844a22f1a78563",
+      "headRepository": "mlswg/mls-protocol",
+      "headRefName": "transcript-min",
+      "headRefOid": "b61a44874c7b713eebad6e1a83d15e9efbcdcf98",
+      "closedAt": "2020-10-21T18:06:42Z",
+      "mergedAt": "2020-10-21T18:06:42Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "68d2ea0e5fbf3fc914c03d44d0249f873064378c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEzMTI3NzIx",
+          "commit": {
+            "abbreviatedOid": "b61a448"
+          },
+          "author": "Bren2010",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-20T20:57:48Z",
+          "updatedAt": "2020-10-20T20:57:48Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEzODE1NDI2",
+          "commit": {
+            "abbreviatedOid": "b61a448"
+          },
+          "author": "raphaelrobert",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-21T15:27:36Z",
+          "updatedAt": "2020-10-21T15:27:36Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 429,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTA3MDg3OTY0",
+      "title": "Update changelog for draft-10",
+      "url": "https://github.com/mlswg/mls-protocol/pull/429",
+      "state": "OPEN",
+      "author": "bifurcation",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "We have a changelog for the document by I-D release, but haven't been updating it as we go.  This PR updates the changelog based on merged PRs and the few we expect to close before releasing draft-10.\r\n\r\nMarking this as draft right now, until the other PRs have merged.",
+      "createdAt": "2020-10-20T20:49:50Z",
+      "updatedAt": "2020-10-20T20:49:50Z",
+      "baseRepository": "mlswg/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "5acf3e402023eb3cab5675d188844a22f1a78563",
+      "headRepository": "mlswg/mls-protocol",
+      "headRefName": "change-log-10",
+      "headRefOid": "47f6c09bf7696849f27206aa9794e3261ce43d5f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 430,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTA3MzEzOTI2",
+      "title": "Allow ReInit proposals from preconfigured senders",
+      "url": "https://github.com/mlswg/mls-protocol/pull/430",
+      "state": "MERGED",
+      "author": "kkohbrok",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-10-21T07:16:33Z",
+      "updatedAt": "2020-10-21T14:40:52Z",
+      "baseRepository": "mlswg/mls-protocol",
+      "baseRefName": "master",
+      "baseRefOid": "d17b8ac7fb7b7c7d228398700fec11f9aee9d5b2",
+      "headRepository": "kkohbrok/mls-protocol",
+      "headRefName": "external_proposals",
+      "headRefOid": "49d8872a23dc525ec6880b187db977a7e5a6f95b",
+      "closedAt": "2020-10-21T14:40:52Z",
+      "mergedAt": "2020-10-21T14:40:52Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "10d58381d7a5d8a431c3d38fc1d917b74a8b3eb5"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTEzNzY0Nzgx",
+          "commit": {
+            "abbreviatedOid": "49d8872"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-21T14:40:47Z",
+          "updatedAt": "2020-10-21T14:40:47Z",
+          "comments": []
         }
       ]
     }
